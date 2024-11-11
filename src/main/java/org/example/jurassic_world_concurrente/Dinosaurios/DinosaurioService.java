@@ -9,8 +9,21 @@ import java.util.List;
 @Service
 public class DinosaurioService {
 
-    public Flux<Dinosaurio> gestionarVidaDinosaurios(List<Dinosaurio> dinosaurios) {
+    public Flux<Dinosaurio> gestionarVidaCarnivoros(List<Dinosaurio> carnivoros) {
+        return gestionarVidaDinosauriosPorTipo(carnivoros, "Carnivoro");
+    }
+
+    public Flux<Dinosaurio> gestionarVidaHerbivoros(List<Dinosaurio> herbivoros) {
+        return gestionarVidaDinosauriosPorTipo(herbivoros, "Herbivoro");
+    }
+
+    public Flux<Dinosaurio> gestionarVidaVoladores(List<Dinosaurio> voladores) {
+        return gestionarVidaDinosauriosPorTipo(voladores, "Volador");
+    }
+
+    private Flux<Dinosaurio> gestionarVidaDinosauriosPorTipo(List<Dinosaurio> dinosaurios, String tipo) {
         return Flux.fromIterable(dinosaurios)
+                .filter(dinosaurio -> dinosaurio.getTipo().equalsIgnoreCase(tipo))
                 .flatMap(this::gestionarVidaDinosaurio);
     }
 

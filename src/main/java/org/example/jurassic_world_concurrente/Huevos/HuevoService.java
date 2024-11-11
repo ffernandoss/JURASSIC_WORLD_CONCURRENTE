@@ -27,8 +27,20 @@ public class HuevoService {
                         sink.next(huevo);
                     } else {
                         Dinosaurio dinosaurio = huevo.transformarADinosaurio();
-                        dinosaurioService.gestionarVidaDinosaurios(List.of(dinosaurio))
-                                .subscribe(d -> System.out.println(d.getNombre() + " tiene " + d.getEdad() + " años."));
+                        switch (dinosaurio.getTipo().toLowerCase()) {
+                            case "carnivoro":
+                                dinosaurioService.gestionarVidaCarnivoros(List.of(dinosaurio))
+                                        .subscribe(d -> System.out.println(d.getNombre() + " tiene " + d.getEdad() + " años."));
+                                break;
+                            case "herbivoro":
+                                dinosaurioService.gestionarVidaHerbivoros(List.of(dinosaurio))
+                                        .subscribe(d -> System.out.println(d.getNombre() + " tiene " + d.getEdad() + " años."));
+                                break;
+                            case "volador":
+                                dinosaurioService.gestionarVidaVoladores(List.of(dinosaurio))
+                                        .subscribe(d -> System.out.println(d.getNombre() + " tiene " + d.getEdad() + " años."));
+                                break;
+                        }
                         sink.complete();
                     }
                 })
