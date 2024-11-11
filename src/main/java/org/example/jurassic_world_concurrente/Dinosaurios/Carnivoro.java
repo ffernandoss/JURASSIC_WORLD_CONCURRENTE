@@ -1,6 +1,10 @@
 package org.example.jurassic_world_concurrente.Dinosaurios;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Carnivoro implements Dinosaurio {
+    private static final Logger logger = LoggerFactory.getLogger(Carnivoro.class);
     private static long idCounter = 0;
     private Long id;
     private int edad;
@@ -11,6 +15,7 @@ public class Carnivoro implements Dinosaurio {
     public Carnivoro() {
         this.id = generateId();
         this.nombre = "Carnivoro_" + id;
+        logger.info("Dinosaurio creado: {}, tipo: {}, edad: {}", nombre, getTipo(), edad);
     }
 
     private synchronized long generateId() {
@@ -19,7 +24,7 @@ public class Carnivoro implements Dinosaurio {
 
     @Override
     public void mostrarTipo() {
-        System.out.println("Soy un dinosaurio carnívoro.");
+        logger.info("Soy un dinosaurio carnívoro.");
     }
 
     @Override
@@ -38,7 +43,7 @@ public class Carnivoro implements Dinosaurio {
 
     @Override
     public void morir() {
-        System.out.println(nombre + " ha muerto.");
+        logger.info("{} ha muerto.", nombre);
     }
 
     @Override

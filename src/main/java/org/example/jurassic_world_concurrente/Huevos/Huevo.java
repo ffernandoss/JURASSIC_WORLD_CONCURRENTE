@@ -1,8 +1,11 @@
 package org.example.jurassic_world_concurrente.Huevos;
 
 import org.example.jurassic_world_concurrente.Dinosaurios.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Huevo {
+    private static final Logger logger = LoggerFactory.getLogger(Huevo.class);
     private Long id;
     private String tipo;
     private String estado;
@@ -14,6 +17,7 @@ public class Huevo {
         this.periodoIncubacion = periodoIncubacion;
         this.estado = "Incubando";
         this.tiempoIncubacion = 0;
+        logger.info("Huevo creado: tipo: {}", tipo);
     }
 
     // Getters and Setters
@@ -61,8 +65,10 @@ public class Huevo {
     public void incubar() {
         if (tiempoIncubacion < periodoIncubacion) {
             tiempoIncubacion++;
+            logger.info("Huevo de tipo {} está incubando. Tiempo de incubación: {} días", tipo, tiempoIncubacion);
         } else {
             estado = "Eclosionado";
+            logger.info("Huevo de tipo {} ha eclosionado.", tipo);
         }
     }
 

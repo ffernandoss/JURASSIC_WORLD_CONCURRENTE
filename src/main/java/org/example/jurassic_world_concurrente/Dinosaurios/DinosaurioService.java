@@ -1,5 +1,7 @@
 package org.example.jurassic_world_concurrente.Dinosaurios;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,7 @@ import java.util.List;
 
 @Service
 public class DinosaurioService {
+    private static final Logger logger = LoggerFactory.getLogger(DinosaurioService.class);
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
@@ -36,6 +39,7 @@ public class DinosaurioService {
         return Flux.<Dinosaurio>generate(sink -> {
                     if (dinosaurio.getEdad() < dinosaurio.getMaxEdad()) {
                         dinosaurio.envejecer();
+                        logger.info("{} tiene {} años.", dinosaurio.getNombre(), dinosaurio.getEdad());
                         sink.next(dinosaurio);
                     } else {
                         dinosaurio.morir();
