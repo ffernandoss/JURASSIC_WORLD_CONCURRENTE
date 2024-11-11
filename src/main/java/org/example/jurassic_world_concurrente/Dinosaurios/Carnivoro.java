@@ -4,7 +4,7 @@ public class Carnivoro implements Dinosaurio {
     private int edad;
     private String nombre;
     private boolean estaEnfermo;
-    private final int maxEdad = 20;
+    private final int maxEdad = 30;
 
     @Override
     public void mostrarTipo() {
