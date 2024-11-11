@@ -11,4 +11,9 @@ public class RabbitMQConfig {
     public Queue dinosaurDeathQueue() {
         return new Queue("dinosaurDeathQueue", false);
     }
+
+    @Bean
+    public Queue worldChangeQueue() {
+        return new Queue("worldChangeQueue", false);
+    }
 }
