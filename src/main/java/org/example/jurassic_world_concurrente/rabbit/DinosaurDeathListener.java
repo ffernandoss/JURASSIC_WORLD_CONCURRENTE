@@ -1,4 +1,4 @@
-package org.example.jurassic_world_concurrente;
+package org.example.jurassic_world_concurrente.rabbit;
 
 import org.example.jurassic_world_concurrente.Huevos.FabricaHuevos;
 import org.example.jurassic_world_concurrente.Huevos.Huevo;

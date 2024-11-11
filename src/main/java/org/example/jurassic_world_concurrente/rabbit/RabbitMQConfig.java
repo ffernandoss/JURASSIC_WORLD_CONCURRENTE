@@ -1,4 +1,4 @@
-package org.example.jurassic_world_concurrente;
+package org.example.jurassic_world_concurrente.rabbit;
 
 import org.springframework.amqp.core.Queue;
 import org.springframework.context.annotation.Bean;
