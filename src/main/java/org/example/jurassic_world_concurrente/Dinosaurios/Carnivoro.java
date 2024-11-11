@@ -1,10 +1,21 @@
 package org.example.jurassic_world_concurrente.Dinosaurios;
 
 public class Carnivoro implements Dinosaurio {
+    private static long idCounter = 0;
+    private Long id;
     private int edad;
     private String nombre;
     private boolean estaEnfermo;
     private final int maxEdad = 30;
+
+    public Carnivoro() {
+        this.id = generateId();
+        this.nombre = "Carnivoro_" + id;
+    }
+
+    private synchronized long generateId() {
+        return idCounter++;
+    }
 
     @Override
     public void mostrarTipo() {
@@ -73,5 +84,10 @@ public class Carnivoro implements Dinosaurio {
     @Override
     public int getMaxEdad() {
         return maxEdad;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
     }
 }

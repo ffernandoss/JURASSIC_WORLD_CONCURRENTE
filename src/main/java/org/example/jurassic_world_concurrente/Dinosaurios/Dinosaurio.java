@@ -13,5 +13,6 @@ public interface Dinosaurio {
     void setEstaEnfermo(boolean estaEnfermo);
     String getTipo();
     void setTipo(String tipo);
-    int getMaxEdad(); // Add this method
+    int getMaxEdad();
+    Long getId(); // Add this method
 }
