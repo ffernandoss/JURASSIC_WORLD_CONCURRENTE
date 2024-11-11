@@ -20,31 +20,27 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
     @Autowired
     private HuevoService huevoService;
 
+    @Autowired
+    private FabricaDinosaurios fabricaDinosaurios;
+
+    @Autowired
+    private FabricaHuevos fabricaHuevos;
+
     public static void main(String[] args) {
         SpringApplication.run(JurassicWorldConcurrenteApplication.class, args);
     }
 
     @Override
     public void run(String... args) throws Exception {
-        Huevo huevoCarnivoro = new Huevo("Carnivoro", 2);
-        Huevo huevoHerbivoro = new Huevo("Herbivoro", 5);
-        Huevo huevoVolador = new Huevo("Volador", 3);
 
-        List<Huevo> huevos = Arrays.asList(huevoCarnivoro, huevoHerbivoro, huevoVolador);
 
-        Flux<Huevo> huevoFlux = huevoService.gestionarIncubacionHuevos(huevos);
-
-        huevoFlux.subscribe(huevo -> {
-            System.out.println("Huevo de tipo " + huevo.getTipo() + " está " + huevo.getEstado() + " con " + huevo.getTiempoIncubacion() + " días de incubación.");
-        });
-
-        // Create two dinosaurs of each type
-        Dinosaurio carnivoro1 = new Carnivoro();
-        Dinosaurio carnivoro2 = new Carnivoro();
-        Dinosaurio herbivoro1 = new Herbivoro();
-        Dinosaurio herbivoro2 = new Herbivoro();
-        Dinosaurio volador1 = new Volador();
-        Dinosaurio volador2 = new Volador();
+        // Create two dinosaurs of each type using the factory
+        Dinosaurio carnivoro1 = fabricaDinosaurios.crearDinosaurio("Carnivoro");
+        Dinosaurio carnivoro2 = fabricaDinosaurios.crearDinosaurio("Carnivoro");
+        Dinosaurio herbivoro1 = fabricaDinosaurios.crearDinosaurio("Herbivoro");
+        Dinosaurio herbivoro2 = fabricaDinosaurios.crearDinosaurio("Herbivoro");
+        Dinosaurio volador1 = fabricaDinosaurios.crearDinosaurio("Volador");
+        Dinosaurio volador2 = fabricaDinosaurios.crearDinosaurio("Volador");
 
         // Print details of the created dinosaurs
         System.out.println("Dinosaurio creado: " + carnivoro1.getNombre() + ", tipo: " + carnivoro1.getTipo());

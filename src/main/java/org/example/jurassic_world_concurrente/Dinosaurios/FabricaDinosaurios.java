@@ -1,5 +1,8 @@
 package org.example.jurassic_world_concurrente.Dinosaurios;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class FabricaDinosaurios {
     public Dinosaurio crearDinosaurio(String tipo) {
         switch (tipo.toLowerCase()) {

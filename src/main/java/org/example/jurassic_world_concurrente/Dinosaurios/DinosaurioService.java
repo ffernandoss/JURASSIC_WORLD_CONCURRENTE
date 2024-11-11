@@ -1,5 +1,7 @@
 package org.example.jurassic_world_concurrente.Dinosaurios;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
@@ -8,6 +10,9 @@ import java.util.List;
 
 @Service
 public class DinosaurioService {
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     public Flux<Dinosaurio> gestionarVidaCarnivoros(List<Dinosaurio> carnivoros) {
         return gestionarVidaDinosauriosPorTipo(carnivoros, "Carnivoro");
@@ -34,6 +39,7 @@ public class DinosaurioService {
                         sink.next(dinosaurio);
                     } else {
                         dinosaurio.morir();
+                        rabbitTemplate.convertAndSend("dinosaurDeathQueue", dinosaurio.getTipo());
                         sink.complete();
                     }
                 })
