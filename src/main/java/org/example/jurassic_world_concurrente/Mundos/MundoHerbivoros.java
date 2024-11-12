@@ -37,4 +37,9 @@ public class MundoHerbivoros implements Mundo {
     public int getId() {
         return id;
     }
+
+    @Override
+    public List<Dinosaurio> getDinosaurios() {
+        return dinosaurios;
+    }
 }

@@ -47,6 +47,11 @@ public class Carnivoro implements Dinosaurio {
     }
 
     @Override
+    public void morirAsesinado() {
+        logger.info("{} ha sido asesinado.", nombre);
+    }
+
+    @Override
     public int getEdad() {
         return edad;
     }

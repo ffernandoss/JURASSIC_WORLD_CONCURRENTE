@@ -5,6 +5,7 @@ public interface Dinosaurio {
     void cambiarEstado(boolean estaEnfermo);
     void envejecer();
     void morir();
+    void morirAsesinado();
     int getEdad();
     void setEdad(int edad);
     String getNombre();
@@ -14,5 +15,5 @@ public interface Dinosaurio {
     String getTipo();
     void setTipo(String tipo);
     int getMaxEdad();
-    Long getId(); // Add this method
+    Long getId();
 }
