@@ -16,15 +16,10 @@ public class EventoListener {
 
     @RabbitListener(queues = "eventoQueue")
     public void handleEvento(String message) {
-        switch (message) {
-            case "matar":
-                evento.matar();
-                break;
-            case "reproducirse":
-                evento.reproducirse();
-                break;
-            default:
-                logger.warn("Evento desconocido: {}", message);
+        if ("mataryreproducir".equals(message)) {
+            evento.matarYReproducir();
+        } else {
+            logger.warn("Acción desconocida: {}", message);
         }
     }
 }

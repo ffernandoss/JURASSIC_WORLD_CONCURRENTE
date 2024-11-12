@@ -23,9 +23,8 @@ public class ContadorAnios {
                 .map(tick -> {
                     int anioActual = anios.incrementAndGet();
                     logger.info("Han transcurrido {} años en la simulación.", anioActual);
-                    if (anioActual % 5 == 0) {
-                        rabbitTemplate.convertAndSend("eventoQueue", "matar");
-                        rabbitTemplate.convertAndSend("eventoQueue", "reproducirse");
+                    if (anioActual > 0 && anioActual % 5 == 0) {
+                        rabbitTemplate.convertAndSend("eventoQueue", "mataryreproducir");
                     }
                     return anioActual;
                 });

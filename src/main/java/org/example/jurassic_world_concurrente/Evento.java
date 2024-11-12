@@ -31,22 +31,51 @@ public class Evento {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    public void matar() {
-        Mundo mundo = mundos.get(random.nextInt(mundos.size()));
-        List<Dinosaurio> dinosaurios = mundo.getDinosaurios();
-        if (!dinosaurios.isEmpty()) {
-            Dinosaurio dinosaurio = dinosaurios.get(random.nextInt(dinosaurios.size()));
-            mundo.removeDinosaurio(dinosaurio);
-            dinosaurio.morirAsesinado();
-            rabbitTemplate.convertAndSend("dinosaurDeathQueue", dinosaurio.getTipo());
+    public void matarYReproducir() {
+        try {
+            matar();
+        } catch (Exception e) {
+            logger.error("Error al matar dinosaurio: ", e);
+        }
+
+        try {
+            reproducir();
+        } catch (Exception e) {
+            logger.error("Error al reproducir dinosaurio: ", e);
         }
     }
 
-    public void reproducirse() {
+private void matar() {
+    Dinosaurio dinosaurio = null;
+    Mundo mundo = null;
+
+    // Iterate through all mundos to find a dinosaur to kill
+    for (Mundo m : mundos) {
+        List<Dinosaurio> dinosaurios = m.getDinosaurios();
+        if (!dinosaurios.isEmpty()) {
+            mundo = m;
+            dinosaurio = dinosaurios.get(random.nextInt(dinosaurios.size()));
+            break;
+        }
+    }
+
+    if (dinosaurio != null && mundo != null) {
+        mundo.removeDinosaurio(dinosaurio);
+        dinosaurio.morirAsesinado();
+        logger.info("Dinosaurio {} ha sido asesinado.", dinosaurio.getNombre());
+        rabbitTemplate.convertAndSend("dinosaurDeathQueue", dinosaurio.getTipo());
+    } else {
+        logger.warn("No hay dinosaurios disponibles para matar en ningún mundo.");
+    }
+}
+
+    private void reproducir() {
         String[] tipos = {"carnivoro", "herbivoro", "volador"};
         String tipo = tipos[random.nextInt(tipos.length)];
         Huevo huevo = fabricaHuevos.crearHuevo(tipo);
-        huevoService.gestionarIncubacionHuevos(List.of(huevo)).subscribe();
-        logger.info("Huevo de tipo {} ha sido añadido al flujo.", tipo);
+        huevoService.gestionarIncubacionHuevos(List.of(huevo)).subscribe(
+            success -> logger.info("Un nuevo huevo de tipo {} ha sido creado por reproducción.", tipo),
+            error -> logger.error("Error al gestionar la incubación del huevo: ", error)
+        );
     }
 }
