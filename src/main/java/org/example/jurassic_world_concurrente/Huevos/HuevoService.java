@@ -44,34 +44,32 @@ public class HuevoService {
     }
 
     private Flux<Huevo> gestionarIncubacionHuevo(Huevo huevo) {
-        return Flux.<Huevo>generate(sink -> {
-            if (!"Eclosionado".equals(huevo.getEstado())) {
-                huevo.incubar();
-                sink.next(huevo);
-            } else {
-                Dinosaurio dinosaurio = huevo.transformarADinosaurio();
-                switch (dinosaurio.getTipo().toLowerCase()) {
-                    case "carnivoro":
-                        mundoCarnivoros.addDinosaurio(dinosaurio);
-                        dinosaurioService.gestionarVidaCarnivoros(List.of(dinosaurio))
-                                .subscribe(d -> logger.info("{} tiene {} años.", d.getNombre(), d.getEdad()));
-                        break;
-                    case "herbivoro":
-                        mundoHerbivoros.addDinosaurio(dinosaurio);
-                        dinosaurioService.gestionarVidaHerbivoros(List.of(dinosaurio))
-                                .subscribe(d -> logger.info("{} tiene {} años.", d.getNombre(), d.getEdad()));
-                        break;
-                    case "volador":
-                        mundoVoladores.addDinosaurio(dinosaurio);
-                        dinosaurioService.gestionarVidaVoladores(List.of(dinosaurio))
-                                .subscribe(d -> logger.info("{} tiene {} años.", d.getNombre(), d.getEdad()));
-                        break;
-                }
-                mundoHuevos.removeHuevo(huevo);
-                logger.info("Dinosaurio {} ha sido movido a su mundo correspondiente: {}", dinosaurio.getNombre(), dinosaurio.getTipo());
-                rabbitTemplate.convertAndSend("worldChangeQueue", "Dinosaurio " + dinosaurio.getNombre() + " movido a su mundo correspondiente");
-                sink.complete();
+    return Flux.<Huevo>generate(sink -> {
+        if (!"Eclosionado".equals(huevo.getEstado())) {
+            huevo.incubar();
+            sink.next(huevo);
+        } else {
+            Dinosaurio dinosaurio = huevo.transformarADinosaurio();
+            mundoHuevos.removeHuevo(huevo);
+            logger.info("Dinosaurio {} ha sido movido a su mundo correspondiente: {}", dinosaurio.getNombre(), dinosaurio.getTipo());
+            rabbitTemplate.convertAndSend("worldChangeQueue", "Dinosaurio " + dinosaurio.getNombre() + " movido a su mundo correspondiente");
+            sink.complete(); // Completa el Flux para desuscribir
+            // Iniciar la gestión del dinosaurio en su servicio correspondiente
+            switch (dinosaurio.getTipo().toLowerCase()) {
+                case "carnivoro":
+                    mundoCarnivoros.addDinosaurio(dinosaurio);
+                    dinosaurioService.gestionarVidaCarnivoros(List.of(dinosaurio)).subscribe();
+                    break;
+                case "herbivoro":
+                    mundoHerbivoros.addDinosaurio(dinosaurio);
+                    dinosaurioService.gestionarVidaHerbivoros(List.of(dinosaurio)).subscribe();
+                    break;
+                case "volador":
+                    mundoVoladores.addDinosaurio(dinosaurio);
+                    dinosaurioService.gestionarVidaVoladores(List.of(dinosaurio)).subscribe();
+                    break;
             }
-        }).delayElements(Duration.ofSeconds(1));
-    }
+        }
+    }).delayElements(Duration.ofSeconds(1));
+}
 }
