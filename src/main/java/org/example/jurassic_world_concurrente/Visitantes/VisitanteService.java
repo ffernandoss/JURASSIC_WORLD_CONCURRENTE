@@ -29,6 +29,7 @@ public class VisitanteService {
                     visitante.setId(idCounter.incrementAndGet());
                     visitante.setNombre("Visitante_" + visitante.getId());
                     visitante.setUbicacion("Entrada");
+                    visitante.setTiempoEnParque(0); // Inicializar tiempo en parque
                     logger.info("Nuevo visitante: {}", visitante.getNombre());
                     return visitante;
                 })
@@ -51,7 +52,11 @@ public class VisitanteService {
                             break;
                     }
                     logger.info("Visitante {} enviado a {}", visitante.getNombre(), routingKey);
-                    return Flux.empty(); // Complete the Flux for this visitor
-                });
+                    return Flux.just(visitante); // Return the visitor to ensure the correct type
+                })
+                .mergeWith(mundoService.flujoMundoCarnivoros())
+                .mergeWith(mundoService.flujoMundoHerbivoros())
+                .mergeWith(mundoService.flujoMundoVoladores())
+                .mergeWith(mundoService.flujoPrincipal());
     }
 }

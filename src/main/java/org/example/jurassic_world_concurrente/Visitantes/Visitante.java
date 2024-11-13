@@ -4,8 +4,9 @@ public class Visitante {
     private Long id;
     private String nombre;
     private String ubicacion;
+    private int tiempoEnParque; // Nuevo campo
 
-    // Getters and Setters
+    // Getters y Setters
     public Long getId() {
         return id;
     }
@@ -28,5 +29,13 @@ public class Visitante {
 
     public void setUbicacion(String ubicacion) {
         this.ubicacion = ubicacion;
+    }
+
+    public int getTiempoEnParque() {
+        return tiempoEnParque;
+    }
+
+    public void setTiempoEnParque(int tiempoEnParque) {
+        this.tiempoEnParque = tiempoEnParque;
     }
 }
