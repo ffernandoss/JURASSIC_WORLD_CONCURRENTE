@@ -16,4 +16,14 @@ public class RabbitMQConfig {
     public Queue worldChangeQueue() {
         return new Queue("worldChangeQueue", false);
     }
+
+    @Bean
+    public Queue yearCounterQueue() {
+        return new Queue("yearCounterQueue", false);
+    }
+
+    @Bean
+    public Queue eventoQueue() {
+        return new Queue("eventoQueue", false);
+    }
 }
