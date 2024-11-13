@@ -5,14 +5,16 @@ import org.example.jurassic_world_concurrente.Huevos.FabricaHuevos;
 import org.example.jurassic_world_concurrente.Huevos.Huevo;
 import org.example.jurassic_world_concurrente.Huevos.HuevoService;
 import org.example.jurassic_world_concurrente.Mundos.MundoGeneral;
+import org.example.jurassic_world_concurrente.Mundos.MundoCarnivoros;
+import org.example.jurassic_world_concurrente.Mundos.MundoHerbivoros;
+import org.example.jurassic_world_concurrente.Mundos.MundoVoladores;
+import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Flux;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -24,6 +26,15 @@ public class Evento {
     private MundoGeneral mundoGeneral;
 
     @Autowired
+    private MundoCarnivoros mundoCarnivoros;
+
+    @Autowired
+    private MundoHerbivoros mundoHerbivoros;
+
+    @Autowired
+    private MundoVoladores mundoVoladores;
+
+    @Autowired
     private FabricaHuevos fabricaHuevos;
 
     @Autowired
@@ -32,7 +43,8 @@ public class Evento {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    private List<Dinosaurio> dinosaurDeathQueue = new ArrayList<>();
+    @Autowired
+    private DinosaurioService dinosaurioService;
 
     public void matarYReproducir() {
         List<Dinosaurio> dinosaurios = mundoGeneral.getDinosaurios();
@@ -50,14 +62,33 @@ public class Evento {
         logger.info("Se ha asesinado a un dinosaurio de tipo: {}", tipoDinosaurio);
         logger.info("Dinosaurio {} ha sido asesinado.", dinosaurio.getNombre());
 
-        // Send a message to the dinosaurDeathQueue
-        rabbitTemplate.convertAndSend("dinosaurDeathQueue", dinosaurio.getTipo());
+        // Unsubscribe the dinosaur from its current Flux
+        dinosaurioService.unsubscribeDinosaur(dinosaurio);
 
-        // Add the dinosaur to the dinosaurDeathQueue list
-        dinosaurDeathQueue.add(dinosaurio);
+        // Send a message to the corresponding death queue based on the type of the dinosaur
+        rabbitTemplate.convertAndSend("dinosaurDeathQueue", dinosaurio.getTipo());
 
         // Remove the dinosaur from MundoGeneral
         mundoGeneral.removeDinosaurio(dinosaurio);
+
+        // Follow the same process as when a dinosaur dies
+        switch (dinosaurio.getTipo().toLowerCase()) {
+            case "carnivoro":
+                mundoCarnivoros.removeDinosaurio(dinosaurio);
+                logger.info("Total carnivoros: {}", mundoCarnivoros.getContadorCarnivoros());
+                break;
+            case "herbivoro":
+                mundoHerbivoros.removeDinosaurio(dinosaurio);
+                logger.info("Total herbivoros: {}", mundoHerbivoros.getContadorHerbivoros());
+                break;
+            case "volador":
+                mundoVoladores.removeDinosaurio(dinosaurio);
+                logger.info("Total voladores: {}", mundoVoladores.getContadorVoladores());
+                break;
+            default:
+                logger.warn("Tipo de dinosaurio desconocido: {}", tipoDinosaurio);
+                break;
+        }
 
         // Generate a new egg of the same type
         Huevo nuevoHuevo = fabricaHuevos.crearHuevo(tipoDinosaurio);

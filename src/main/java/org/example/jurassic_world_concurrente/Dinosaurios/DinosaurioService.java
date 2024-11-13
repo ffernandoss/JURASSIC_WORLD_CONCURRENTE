@@ -9,9 +9,12 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.SynchronousSink;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 @Service
 public class DinosaurioService {
@@ -28,6 +31,8 @@ public class DinosaurioService {
 
     @Autowired
     private MundoVoladores mundoVoladores;
+
+    private ConcurrentMap<String, SynchronousSink<Dinosaurio>> sinkMap = new ConcurrentHashMap<>();
 
     public Flux<Dinosaurio> gestionarVidaCarnivoros(List<Dinosaurio> carnivoros) {
         return gestionarVidaDinosauriosPorTipo(carnivoros, "Carnivoro");
@@ -47,8 +52,9 @@ public class DinosaurioService {
                 .flatMap(this::gestionarVidaDinosaurio);
     }
 
-    private Flux<Dinosaurio> gestionarVidaDinosaurio(Dinosaurio dinosaurio) {
+    public Flux<Dinosaurio> gestionarVidaDinosaurio(Dinosaurio dinosaurio) {
         return Flux.<Dinosaurio>generate(sink -> {
+            sinkMap.put(dinosaurio.getNombre(), sink);
             if (dinosaurio.getEdad() < dinosaurio.getMaxEdad()) {
                 dinosaurio.envejecer();
                 logger.info("{} tiene {} años.", dinosaurio.getNombre(), dinosaurio.getEdad());
@@ -70,8 +76,18 @@ public class DinosaurioService {
                         logger.info("Total voladores: {}", mundoVoladores.getContadorVoladores());
                         break;
                 }
+                unsubscribeDinosaur(dinosaurio);
                 sink.complete();
             }
         }).delayElements(Duration.ofSeconds(1));
+    }
+
+    public void unsubscribeDinosaur(Dinosaurio dinosaurio) {
+        SynchronousSink<Dinosaurio> sink = sinkMap.get(dinosaurio.getNombre());
+        if (sink != null) {
+            sink.complete();
+            sinkMap.remove(dinosaurio.getNombre());
+            logger.info("Dinosaurio {} ha sido desuscrito del flujo.", dinosaurio.getNombre());
+        }
     }
 }
