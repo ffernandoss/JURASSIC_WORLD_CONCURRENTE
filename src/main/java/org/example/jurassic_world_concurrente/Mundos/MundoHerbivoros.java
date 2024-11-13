@@ -14,6 +14,7 @@ import java.util.List;
 public class MundoHerbivoros implements Mundo {
     private static final Logger logger = LoggerFactory.getLogger(MundoHerbivoros.class);
     private List<Dinosaurio> dinosaurios = new ArrayList<>();
+    private List<String> nombresDinosaurios = new ArrayList<>();
     private final int id = 2;
     private int contadorHerbivoros = 0;
 
@@ -23,18 +24,22 @@ public class MundoHerbivoros implements Mundo {
     @Override
     public void addDinosaurio(Dinosaurio dinosaurio) {
         dinosaurios.add(dinosaurio);
+        nombresDinosaurios.add(dinosaurio.getNombre());
         contadorHerbivoros++;
         logger.info("Dinosaurio {} añadido al Mundo Herbivoros", dinosaurio.getNombre());
         logger.info("Total herbivoros: {}", contadorHerbivoros);
+        logger.info("Lista de dinosaurios: {}", nombresDinosaurios);
         rabbitTemplate.convertAndSend("worldChangeQueue", "Dinosaurio " + dinosaurio.getNombre() + " añadido al Mundo Herbivoros");
     }
 
     @Override
     public void removeDinosaurio(Dinosaurio dinosaurio) {
         dinosaurios.remove(dinosaurio);
+        nombresDinosaurios.remove(dinosaurio.getNombre());
         contadorHerbivoros--;
         logger.info("Dinosaurio {} removido del Mundo Herbivoros", dinosaurio.getNombre());
         logger.info("Total herbivoros: {}", contadorHerbivoros);
+        logger.info("Lista de dinosaurios: {}", nombresDinosaurios);
         rabbitTemplate.convertAndSend("worldChangeQueue", "Dinosaurio " + dinosaurio.getNombre() + " removido del Mundo Herbivoros");
     }
 

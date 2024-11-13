@@ -1,6 +1,5 @@
 package org.example.jurassic_world_concurrente.DataBase;
 
-
 import jakarta.persistence.*;
 
 @Entity
@@ -13,9 +12,6 @@ public class Dinosaurio {
     private String tipo;
     private int edad;
     private String salud;
-
-    @ManyToOne
-    private Isla isla;
 
     // Getters y Setters
     public Long getId() {
@@ -56,13 +52,5 @@ public class Dinosaurio {
 
     public void setSalud(String salud) {
         this.salud = salud;
-    }
-
-    public Isla getIsla() {
-        return isla;
-    }
-
-    public void setIsla(Isla isla) {
-        this.isla = isla;
     }
 }
