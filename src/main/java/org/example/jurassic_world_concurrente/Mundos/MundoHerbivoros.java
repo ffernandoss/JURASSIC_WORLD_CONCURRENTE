@@ -47,10 +47,10 @@ public void addVisitante(Visitante visitante) {
 }
 
     @Override
-    public void removeVisitante(Visitante visitante) {
-        visitantes.remove(visitante);
-        logger.info("Visitante {} removido del Mundo Herbivoros. Total visitantes: {}", visitante.getNombre(), visitantes.size());
-    }
+public void removeVisitante(Visitante visitante) {
+    visitantes.remove(visitante);
+    logger.info("Visitante {} abandona Mundo Herbivoros. Total visitantes: {}", visitante.getNombre(), visitantes.size());
+}
 
     @Override
     public int getVisitanteCount() {

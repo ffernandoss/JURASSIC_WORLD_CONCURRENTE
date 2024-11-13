@@ -47,10 +47,10 @@ public void addVisitante(Visitante visitante) {
 }
 
     @Override
-    public void removeVisitante(Visitante visitante) {
-        visitantes.remove(visitante);
-        logger.info("Visitante {} removido del Mundo Voladores. Total visitantes: {}", visitante.getNombre(), visitantes.size());
-    }
+public void removeVisitante(Visitante visitante) {
+    visitantes.remove(visitante);
+    logger.info("Visitante {} abandona Mundo Voladores. Total visitantes: {}", visitante.getNombre(), visitantes.size());
+}
 
     @Override
     public int getVisitanteCount() {

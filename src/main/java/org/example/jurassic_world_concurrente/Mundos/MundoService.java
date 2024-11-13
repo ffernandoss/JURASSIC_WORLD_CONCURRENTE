@@ -57,7 +57,7 @@ public class MundoService {
                     if (visitante.getTiempoEnParque() >= 2) {
                         mundoCarnivoros.removeVisitante(visitante);
                         flujoPrincipalSink.tryEmitNext(visitante);
-                        logger.info("Visitante {} ha abandonado Mundo Carnivoros y vuelve al flujo principal", visitante.getNombre());
+                        logger.info("Visitante {} vuelve al flujo principal desde Mundo Carnivoro", visitante.getNombre());
                     }
                     return Flux.just(visitante);
                 });
@@ -71,7 +71,7 @@ public class MundoService {
                     if (visitante.getTiempoEnParque() >= 2) {
                         mundoHerbivoros.removeVisitante(visitante);
                         flujoPrincipalSink.tryEmitNext(visitante);
-                        logger.info("Visitante {} ha abandonado Mundo Herbivoros y vuelve al flujo principal", visitante.getNombre());
+                        logger.info("Visitante {} vuelve al flujo principal desde Mundo Hervivoro", visitante.getNombre());
                     }
                     return Flux.just(visitante);
                 });
@@ -85,7 +85,7 @@ public class MundoService {
                     if (visitante.getTiempoEnParque() >= 2) {
                         mundoVoladores.removeVisitante(visitante);
                         flujoPrincipalSink.tryEmitNext(visitante);
-                        logger.info("Visitante {} ha abandonado Mundo Voladores y vuelve al flujo principal", visitante.getNombre());
+                        logger.info("Visitante {} vuelve al flujo principal desde Mundo Volador", visitante.getNombre());
                     }
                     return Flux.just(visitante);
                 });

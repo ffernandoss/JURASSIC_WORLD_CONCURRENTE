@@ -51,7 +51,6 @@ public class VisitanteService {
                             mundoService.handleMundoVoladoresVisitante(visitante);
                             break;
                     }
-                    logger.info("Visitante {} enviado a {}", visitante.getNombre(), routingKey);
                     return Flux.just(visitante); // Return the visitor to ensure the correct type
                 })
                 .mergeWith(mundoService.flujoMundoCarnivoros())

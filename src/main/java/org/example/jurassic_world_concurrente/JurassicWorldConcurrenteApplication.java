@@ -72,8 +72,19 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
         // Subscribe to visitor flows for each world
         visitanteService.flujoPrincipalVisitantes().subscribe();
 
-        mundoService.flujoMundoCarnivoros().subscribe(visitante -> logger.info("Procesando visitante en Mundo Carnivoros: {}", visitante.getNombre()));
-        mundoService.flujoMundoHerbivoros().subscribe(visitante -> logger.info("Procesando visitante en Mundo Herbivoros: {}", visitante.getNombre()));
-        mundoService.flujoMundoVoladores().subscribe(visitante -> logger.info("Procesando visitante en Mundo Voladores: {}", visitante.getNombre()));
+        mundoService.flujoMundoCarnivoros().subscribe(visitante -> {
+            logger.info("Procesando visitante en Mundo Carnivoros: {}", visitante.getNombre());
+            logger.info("Visitante {} abandona el parque", visitante.getNombre());
+        });
+
+        mundoService.flujoMundoHerbivoros().subscribe(visitante -> {
+            logger.info("Procesando visitante en Mundo Herbivoros: {}", visitante.getNombre());
+            logger.info("Visitante {} abandona el parque", visitante.getNombre());
+        });
+
+        mundoService.flujoMundoVoladores().subscribe(visitante -> {
+            logger.info("Procesando visitante en Mundo Voladores: {}", visitante.getNombre());
+            logger.info("Visitante {} abandona el parque", visitante.getNombre());
+        });
     }
 }
