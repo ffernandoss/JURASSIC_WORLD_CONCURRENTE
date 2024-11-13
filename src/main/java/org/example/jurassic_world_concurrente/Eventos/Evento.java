@@ -15,6 +15,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -46,6 +47,10 @@ public class Evento {
     @Autowired
     private DinosaurioService dinosaurioService;
 
+    public MundoGeneral getMundoGeneral() {
+        return mundoGeneral;
+    }
+
     public void matarYReproducir() {
         List<Dinosaurio> dinosaurios = mundoGeneral.getDinosaurios();
         if (dinosaurios.isEmpty()) {
@@ -56,41 +61,56 @@ public class Evento {
         // Select a random dinosaur
         Random random = new Random();
         Dinosaurio dinosaurio = dinosaurios.get(random.nextInt(dinosaurios.size()));
-        String tipoDinosaurio = dinosaurio.getTipo();
 
-        // Log the type of the dinosaur that was killed
-        logger.info("Se ha asesinado a un dinosaurio de tipo: {}", tipoDinosaurio);
-        logger.info("Dinosaurio {} ha sido asesinado.", dinosaurio.getNombre());
+        // Kill the dinosaur
+        matarDinosaurio(dinosaurio);
 
-        // Unsubscribe the dinosaur from its current Flux
-        dinosaurioService.unsubscribeDinosaur(dinosaurio);
+        // Reproduce a new dinosaur
+        reproducirDinosaurio();
+    }
 
-        // Send a message to the corresponding death queue based on the type of the dinosaur
-        rabbitTemplate.convertAndSend("dinosaurDeathQueue", dinosaurio.getTipo());
+public void matarDinosaurio(Dinosaurio dinosaurio) {
+    String tipoDinosaurio = dinosaurio.getTipo();
 
-        // Remove the dinosaur from MundoGeneral
-        mundoGeneral.removeDinosaurio(dinosaurio);
+    // Log the type of the dinosaur that was killed
+    logger.info("Se ha asesinado a un dinosaurio de tipo: {}", tipoDinosaurio);
+    logger.info("Dinosaurio {} ha sido asesinado.", dinosaurio.getNombre());
 
-        // Follow the same process as when a dinosaur dies
-        switch (dinosaurio.getTipo().toLowerCase()) {
-            case "carnivoro":
-                mundoCarnivoros.removeDinosaurio(dinosaurio);
-                logger.info("Total carnivoros: {}", mundoCarnivoros.getContadorCarnivoros());
-                break;
-            case "herbivoro":
-                mundoHerbivoros.removeDinosaurio(dinosaurio);
-                logger.info("Total herbivoros: {}", mundoHerbivoros.getContadorHerbivoros());
-                break;
-            case "volador":
-                mundoVoladores.removeDinosaurio(dinosaurio);
-                logger.info("Total voladores: {}", mundoVoladores.getContadorVoladores());
-                break;
-            default:
-                logger.warn("Tipo de dinosaurio desconocido: {}", tipoDinosaurio);
-                break;
-        }
+    // Unsubscribe the dinosaur from its current Flux
+    dinosaurioService.unsubscribeDinosaur(dinosaurio);
 
-        // Generate a new egg of the same type
+    // Remove the dinosaur from MundoGeneral
+    mundoGeneral.removeDinosaurio(dinosaurio);
+
+    // Follow the same process as when a dinosaur dies
+    switch (dinosaurio.getTipo().toLowerCase()) {
+        case "carnivoro":
+            mundoCarnivoros.removeDinosaurio(dinosaurio);
+            logger.info("Total carnivoros: {}", mundoCarnivoros.getContadorCarnivoros());
+            break;
+        case "herbivoro":
+            mundoHerbivoros.removeDinosaurio(dinosaurio);
+            logger.info("Total herbivoros: {}", mundoHerbivoros.getContadorHerbivoros());
+            break;
+        case "volador":
+            mundoVoladores.removeDinosaurio(dinosaurio);
+            logger.info("Total voladores: {}", mundoVoladores.getContadorVoladores());
+            break;
+        default:
+            logger.warn("Tipo de dinosaurio desconocido: {}", tipoDinosaurio);
+            break;
+    }
+}
+
+    public void reproducirDinosaurio() {
+        // List of possible dinosaur types
+        List<String> tiposDinosaurios = Arrays.asList("carnivoro", "herbivoro", "volador");
+
+        // Select a random type
+        Random random = new Random();
+        String tipoDinosaurio = tiposDinosaurios.get(random.nextInt(tiposDinosaurios.size()));
+
+        // Generate a new egg of the selected type
         Huevo nuevoHuevo = fabricaHuevos.crearHuevo(tipoDinosaurio);
 
         // Log the type of the dinosaur that was reproduced
