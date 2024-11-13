@@ -15,6 +15,7 @@ public class MundoVoladores implements Mundo {
     private static final Logger logger = LoggerFactory.getLogger(MundoVoladores.class);
     private List<Dinosaurio> dinosaurios = new ArrayList<>();
     private final int id = 3;
+    private int contadorVoladores = 0;
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
@@ -22,15 +23,23 @@ public class MundoVoladores implements Mundo {
     @Override
     public void addDinosaurio(Dinosaurio dinosaurio) {
         dinosaurios.add(dinosaurio);
-        logger.info("Dinosaurio {} añadido al Mundo Voladores", dinosaurio.getNombre());
+        contadorVoladores++;
+        logger.info("Dinosaurio {} añadido al Mundo Voladores. Total voladores: {}", dinosaurio.getNombre(), contadorVoladores);
         rabbitTemplate.convertAndSend("worldChangeQueue", "Dinosaurio " + dinosaurio.getNombre() + " añadido al Mundo Voladores");
     }
 
     @Override
     public void removeDinosaurio(Dinosaurio dinosaurio) {
         dinosaurios.remove(dinosaurio);
-        logger.info("Dinosaurio {} removido del Mundo Voladores", dinosaurio.getNombre());
+        if (contadorVoladores > 0) {
+            contadorVoladores--;
+        }
+        logger.info("Dinosaurio {} removido del Mundo Voladores. Total voladores: {}", dinosaurio.getNombre(), contadorVoladores);
         rabbitTemplate.convertAndSend("worldChangeQueue", "Dinosaurio " + dinosaurio.getNombre() + " removido del Mundo Voladores");
+    }
+
+    public int getContadorVoladores() {
+        return contadorVoladores;
     }
 
     @Override

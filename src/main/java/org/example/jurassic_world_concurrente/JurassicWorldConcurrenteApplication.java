@@ -2,6 +2,7 @@ package org.example.jurassic_world_concurrente;
 
 import org.example.jurassic_world_concurrente.Dinosaurios.*;
 import org.example.jurassic_world_concurrente.Huevos.*;
+import org.example.jurassic_world_concurrente.Mundos.MundoHerbivoros;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,13 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
     @Autowired
     private FabricaHuevos fabricaHuevos;
 
-    public static void main(String[] args)
+    @Autowired
+    private ContadorAnios contadorAnios;
 
-    {
+    @Autowired
+    private MundoHerbivoros mundoHerbivoros;
+
+    public static void main(String[] args) {
         SpringApplication.run(JurassicWorldConcurrenteApplication.class, args);
     }
 
@@ -39,21 +44,21 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         // Create two dinosaurs of each type using the factory
-        Dinosaurio carnivoro1 = fabricaDinosaurios.crearDinosaurio("Carnivoro");
-        Dinosaurio carnivoro2 = fabricaDinosaurios.crearDinosaurio("Carnivoro");
-        Dinosaurio herbivoro1 = fabricaDinosaurios.crearDinosaurio("Herbivoro");
-        Dinosaurio herbivoro2 = fabricaDinosaurios.crearDinosaurio("Herbivoro");
-        Dinosaurio volador1 = fabricaDinosaurios.crearDinosaurio("Volador");
-        Dinosaurio volador2 = fabricaDinosaurios.crearDinosaurio("Volador");
+        Dinosaurio h1 = fabricaDinosaurios.crearDinosaurio("Herbivoro");
+        Dinosaurio h2 = fabricaDinosaurios.crearDinosaurio("Herbivoro");
+        Dinosaurio h3 = fabricaDinosaurios.crearDinosaurio("Herbivoro");
 
+        // Add herbivore dinosaurs to MundoHerbivoros
+        mundoHerbivoros.addDinosaurio(h1);
+        mundoHerbivoros.addDinosaurio(h2);
+        mundoHerbivoros.addDinosaurio(h3);
 
         // Manage lifecycle of each type of dinosaur concurrently
-        Flux<Dinosaurio> carnivoroFlux = dinosaurioService.gestionarVidaCarnivoros(Arrays.asList(carnivoro1, carnivoro2));
-        Flux<Dinosaurio> herbivoroFlux = dinosaurioService.gestionarVidaHerbivoros(Arrays.asList(herbivoro1, herbivoro2));
-        Flux<Dinosaurio> voladorFlux = dinosaurioService.gestionarVidaVoladores(Arrays.asList(volador1, volador2));
+        Flux<Dinosaurio> herbivoroFlux = dinosaurioService.gestionarVidaHerbivoros(Arrays.asList(h1, h2, h3));
 
-        carnivoroFlux.subscribe(d -> logger.info("{} tiene {} años.", d.getNombre(), d.getEdad()));
         herbivoroFlux.subscribe(d -> logger.info("{} tiene {} años.", d.getNombre(), d.getEdad()));
-        voladorFlux.subscribe(d -> logger.info("{} tiene {} años.", d.getNombre(), d.getEdad()));
+
+        // Start the year counter
+        contadorAnios.iniciarContador().subscribe();
     }
 }
