@@ -1,6 +1,7 @@
 package org.example.jurassic_world_concurrente;
 
 import org.example.jurassic_world_concurrente.Dinosaurios.*;
+import org.example.jurassic_world_concurrente.Eventos.ContadorAnios;
 import org.example.jurassic_world_concurrente.Huevos.*;
 import org.example.jurassic_world_concurrente.Mundos.MundoCarnivoros;
 import org.example.jurassic_world_concurrente.Mundos.MundoHerbivoros;
