@@ -1,6 +1,7 @@
 package org.example.jurassic_world_concurrente.Mundos;
 
 import org.example.jurassic_world_concurrente.Dinosaurios.Dinosaurio;
+import org.example.jurassic_world_concurrente.Visitantes.Visitante;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -14,6 +15,7 @@ import java.util.List;
 public class MundoHerbivoros implements Mundo {
     private static final Logger logger = LoggerFactory.getLogger(MundoHerbivoros.class);
     private List<Dinosaurio> dinosaurios = new ArrayList<>();
+    private List<Visitante> visitantes = new ArrayList<>();
     private final int id = 2;
     private int contadorHerbivoros = 0;
 
@@ -38,12 +40,29 @@ public class MundoHerbivoros implements Mundo {
         rabbitTemplate.convertAndSend("worldChangeQueue", "Dinosaurio " + dinosaurio.getNombre() + " removido del Mundo Herbivoros");
     }
 
-    public int getContadorHerbivoros() {
-        return contadorHerbivoros;
+    @Override
+public void addVisitante(Visitante visitante) {
+    visitantes.add(visitante);
+    logger.info("Visitante {} añadido al Mundo Herbivoros. Total visitantes: {}", visitante.getNombre(), visitantes.size());
+}
+
+    @Override
+    public void removeVisitante(Visitante visitante) {
+        visitantes.remove(visitante);
+        logger.info("Visitante {} removido del Mundo Herbivoros. Total visitantes: {}", visitante.getNombre(), visitantes.size());
+    }
+
+    @Override
+    public int getVisitanteCount() {
+        return visitantes.size();
     }
 
     @Override
     public int getId() {
         return id;
+    }
+
+    public int getContadorHerbivoros() {
+        return contadorHerbivoros;
     }
 }

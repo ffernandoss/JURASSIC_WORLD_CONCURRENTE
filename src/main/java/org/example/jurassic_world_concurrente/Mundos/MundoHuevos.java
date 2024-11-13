@@ -2,6 +2,7 @@ package org.example.jurassic_world_concurrente.Mundos;
 
 import org.example.jurassic_world_concurrente.Dinosaurios.Dinosaurio;
 import org.example.jurassic_world_concurrente.Huevos.Huevo;
+import org.example.jurassic_world_concurrente.Visitantes.Visitante;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -40,6 +41,20 @@ public class MundoHuevos implements Mundo {
     @Override
     public void removeDinosaurio(Dinosaurio dinosaurio) {
         // Not applicable for MundoHuevos
+    }
+    @Override
+    public void addVisitante(Visitante visitante) {
+        throw new UnsupportedOperationException("MundoHuevos no soporta añadir visitantes.");
+    }
+
+    @Override
+    public void removeVisitante(Visitante visitante) {
+        throw new UnsupportedOperationException("MundoHuevos no soporta remover visitantes.");
+    }
+
+    @Override
+    public int getVisitanteCount() {
+        return 0;
     }
 
     @Override
