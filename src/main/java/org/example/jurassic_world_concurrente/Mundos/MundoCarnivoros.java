@@ -21,6 +21,9 @@ public class MundoCarnivoros implements Mundo {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
+    @Autowired
+    private MundoGeneral mundoGeneral;
+
     @Override
     public void addDinosaurio(Dinosaurio dinosaurio) {
         dinosaurios.add(dinosaurio);
@@ -30,6 +33,7 @@ public class MundoCarnivoros implements Mundo {
         logger.info("Total carnivoros: {}", contadorCarnivoros);
         logger.info("Lista de dinosaurios: {}", nombresDinosaurios);
         rabbitTemplate.convertAndSend("worldChangeQueue", "Dinosaurio " + dinosaurio.getNombre() + " añadido al Mundo Carnivoros");
+        mundoGeneral.addDinosaurio(dinosaurio);
     }
 
     @Override
@@ -41,6 +45,7 @@ public class MundoCarnivoros implements Mundo {
         logger.info("Total carnivoros: {}", contadorCarnivoros);
         logger.info("Lista de dinosaurios: {}", nombresDinosaurios);
         rabbitTemplate.convertAndSend("worldChangeQueue", "Dinosaurio " + dinosaurio.getNombre() + " removido del Mundo Carnivoros");
+        mundoGeneral.removeDinosaurio(dinosaurio);
     }
 
     public int getContadorCarnivoros() {

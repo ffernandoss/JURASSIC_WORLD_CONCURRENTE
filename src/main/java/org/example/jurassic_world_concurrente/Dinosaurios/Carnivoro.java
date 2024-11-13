@@ -10,7 +10,7 @@ public class Carnivoro implements Dinosaurio {
     private int edad;
     private String nombre;
     private boolean estaEnfermo;
-    private final int maxEdad = 11;
+    private final int maxEdad = 20;
 
     public Carnivoro() {
         this.id = generateId();

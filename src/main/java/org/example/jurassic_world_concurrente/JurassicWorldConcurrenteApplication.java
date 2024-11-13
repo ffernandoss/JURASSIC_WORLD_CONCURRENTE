@@ -40,7 +40,7 @@ JurassicWorldConcurrenteApplication implements CommandLineRunner {
     private MundoHerbivoros mundoHerbivoros;
 
     @Autowired
-    private MundoCarnivoros mun;
+    private MundoCarnivoros mundoCarnivoros;
 
     @Autowired
     private MundoVoladores mundoVoladores;
@@ -56,17 +56,25 @@ JurassicWorldConcurrenteApplication implements CommandLineRunner {
         // Create two dinosaurs of each type using the factory
         Dinosaurio h1 = fabricaDinosaurios.crearDinosaurio("Volador");
         Dinosaurio h2 = fabricaDinosaurios.crearDinosaurio("Volador");
-
+        Dinosaurio h3 = fabricaDinosaurios.crearDinosaurio("Carnivoro");
+        Dinosaurio h5 = fabricaDinosaurios.crearDinosaurio("Carnivoro");
+        Dinosaurio h4 = fabricaDinosaurios.crearDinosaurio("Herbivoro");
 
         // Add herbivore dinosaurs to MundoHerbivoros
         mundoVoladores.addDinosaurio(h1);
         mundoVoladores.addDinosaurio(h2);
+        mundoCarnivoros.addDinosaurio(h3);
+        mundoHerbivoros.addDinosaurio(h4);
 
 
         // Manage lifecycle of each type of dinosaur concurrently
         Flux<Dinosaurio> voladorFlux = dinosaurioService.gestionarVidaVoladores(Arrays.asList(h1, h2));
+        Flux<Dinosaurio> carnivoroFlux = dinosaurioService.gestionarVidaCarnivoros(Arrays.asList(h3,h5));
+        Flux<Dinosaurio> herbivoroFlux = dinosaurioService.gestionarVidaHerbivoros(Arrays.asList(h4));
 
         voladorFlux.subscribe(d -> logger.info("{} tiene {} años.", d.getNombre(), d.getEdad()));
+        carnivoroFlux.subscribe(d -> logger.info("{} tiene {} años.", d.getNombre(), d.getEdad()));
+        herbivoroFlux.subscribe(d -> logger.info("{} tiene {} años.", d.getNombre(), d.getEdad()));
 
         // Start the year counter
         contadorAnios.iniciarContador().subscribe();
