@@ -2,14 +2,13 @@ package org.example.jurassic_world_concurrente.Huevos;
 
 import org.example.jurassic_world_concurrente.Dinosaurios.Dinosaurio;
 import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.time.Duration;
-import java.util.List;
+import java.util.LinkedList;
+import java.util.Queue;
 
 @Service
 public class HuevoService {
@@ -18,35 +17,35 @@ public class HuevoService {
     @Autowired
     private DinosaurioService dinosaurioService;
 
-    public Flux<Huevo> gestionarIncubacionHuevos(List<Huevo> huevos) {
-        return Flux.fromIterable(huevos)
-                .flatMap(this::gestionarIncubacionHuevo);
+    private Queue<Huevo> colaHuevos = new LinkedList<>();
+
+    public void incubarHuevos() {
+        colaHuevos.forEach(huevo -> {
+            if (!"Eclosionado".equals(huevo.getEstado())) {
+                huevo.incubar();
+                logger.info("Huevo de tipo {} está incubando. Tiempo de incubación: {} días", huevo.getTipo(), huevo.getTiempoIncubacion());
+            } else {
+                Dinosaurio dinosaurio = huevo.transformarADinosaurio();
+                dinosaurioService.agregarDinosaurio(dinosaurio);
+                logger.info("Huevo de tipo {} ha eclosionado, creando dinosaurio {}", huevo.getTipo(), dinosaurio.getNombre());
+                colaHuevos.remove(huevo);
+            }
+        });
     }
 
-    private Flux<Huevo> gestionarIncubacionHuevo(Huevo huevo) {
-        return Flux.<Huevo>generate(sink -> {
-                    if (!"Eclosionado".equals(huevo.getEstado())) {
-                        huevo.incubar();
-                        sink.next(huevo);
-                    } else {
-                        Dinosaurio dinosaurio = huevo.transformarADinosaurio();
-                        switch (dinosaurio.getTipo().toLowerCase()) {
-                            case "carnivoro":
-                                dinosaurioService.gestionarVidaCarnivoros(List.of(dinosaurio))
-                                        .subscribe(d -> logger.info("{} tiene {} años.", d.getNombre(), d.getEdad()));
-                                break;
-                            case "herbivoro":
-                                dinosaurioService.gestionarVidaHerbivoros(List.of(dinosaurio))
-                                        .subscribe(d -> logger.info("{} tiene {} años.", d.getNombre(), d.getEdad()));
-                                break;
-                            case "volador":
-                                dinosaurioService.gestionarVidaVoladores(List.of(dinosaurio))
-                                        .subscribe(d -> logger.info("{} tiene {} años.", d.getNombre(), d.getEdad()));
-                                break;
-                        }
-                        sink.complete();
-                    }
-                })
-                .delayElements(Duration.ofSeconds(1));
+    public Huevo crearHuevo(String tipo) {
+        Huevo huevo = new Huevo(tipo, determinarPeriodoIncubacion(tipo));
+        colaHuevos.add(huevo);
+        logger.info("Generado nuevo huevo de tipo {}", tipo);
+        return huevo;
+    }
+
+    private int determinarPeriodoIncubacion(String tipo) {
+        switch (tipo.toLowerCase()) {
+            case "carnivoro": return 3;
+            case "herbivoro": return 2;
+            case "volador": return 1;
+            default: throw new IllegalArgumentException("Tipo de huevo no soportado.");
+        }
     }
 }

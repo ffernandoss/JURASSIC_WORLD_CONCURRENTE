@@ -9,10 +9,9 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class DinosaurDeathListener {
+
     private static final Logger logger = LoggerFactory.getLogger(DinosaurDeathListener.class);
 
     @Autowired
@@ -24,9 +23,7 @@ public class DinosaurDeathListener {
     @RabbitListener(queues = "dinosaurDeathQueue")
     public void handleDinosaurDeath(String tipo) {
         Huevo nuevoHuevo = fabricaHuevos.crearHuevo(tipo);
-        huevoService.gestionarIncubacionHuevos(List.of(nuevoHuevo))
-                .subscribe(huevo -> {
-                    logger.info("Nuevo huevo de tipo {} está {} con {} días de incubación.", huevo.getTipo(), huevo.getEstado(), huevo.getTiempoIncubacion());
-                });
+        huevoService.crearHuevo(tipo);
+        logger.info("Nuevo huevo de tipo {} generado tras muerte de dinosaurio", tipo);
     }
 }

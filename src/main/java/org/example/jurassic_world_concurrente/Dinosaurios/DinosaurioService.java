@@ -1,3 +1,4 @@
+// src/main/java/org/example/jurassic_world_concurrente/Dinosaurios/DinosaurioService.java
 package org.example.jurassic_world_concurrente.Dinosaurios;
 
 import org.slf4j.Logger;
@@ -5,10 +6,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
 
-import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class DinosaurioService {
@@ -17,36 +18,34 @@ public class DinosaurioService {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    public Flux<Dinosaurio> gestionarVidaCarnivoros(List<Dinosaurio> carnivoros) {
-        return gestionarVidaDinosauriosPorTipo(carnivoros, "Carnivoro");
+    private List<Dinosaurio> dinosaurios = new ArrayList<>();
+
+    public void envejecerDinosaurios() {
+        dinosaurios.forEach(dinosaurio -> {
+            if (dinosaurio.getEdad() < dinosaurio.getMaxEdad()) {
+                dinosaurio.envejecer();
+                logger.info("Dinosaurio {} tiene ahora {} años.", dinosaurio.getNombre(), dinosaurio.getEdad());
+            } else {
+                matarDinosaurio(dinosaurio);
+            }
+        });
     }
 
-    public Flux<Dinosaurio> gestionarVidaHerbivoros(List<Dinosaurio> herbivoros) {
-        return gestionarVidaDinosauriosPorTipo(herbivoros, "Herbivoro");
+    public void matarDinosaurio(Dinosaurio dinosaurio) {
+        logger.info("Dinosaurio {} ha muerto de viejo.", dinosaurio.getNombre());
+        dinosaurios.remove(dinosaurio);
+        rabbitTemplate.convertAndSend("dinosaurDeathQueue", dinosaurio.getTipo());
     }
 
-    public Flux<Dinosaurio> gestionarVidaVoladores(List<Dinosaurio> voladores) {
-        return gestionarVidaDinosauriosPorTipo(voladores, "Volador");
+    public void generarEventoMuerteAleatoria() {
+        if (!dinosaurios.isEmpty()) {
+            Dinosaurio randomDino = dinosaurios.get(new Random().nextInt(dinosaurios.size()));
+            matarDinosaurio(randomDino);
+            logger.info("Evento de muerte aleatoria: Dinosaurio {} ha sido eliminado.", randomDino.getNombre());
+        }
     }
 
-    private Flux<Dinosaurio> gestionarVidaDinosauriosPorTipo(List<Dinosaurio> dinosaurios, String tipo) {
-        return Flux.fromIterable(dinosaurios)
-                .filter(dinosaurio -> dinosaurio.getTipo().equalsIgnoreCase(tipo))
-                .flatMap(this::gestionarVidaDinosaurio);
-    }
-
-    private Flux<Dinosaurio> gestionarVidaDinosaurio(Dinosaurio dinosaurio) {
-        return Flux.<Dinosaurio>generate(sink -> {
-                    if (dinosaurio.getEdad() < dinosaurio.getMaxEdad()) {
-                        dinosaurio.envejecer();
-                        logger.info("{} tiene {} años.", dinosaurio.getNombre(), dinosaurio.getEdad());
-                        sink.next(dinosaurio);
-                    } else {
-                        dinosaurio.morir();
-                        rabbitTemplate.convertAndSend("dinosaurDeathQueue", dinosaurio.getTipo());
-                        sink.complete();
-                    }
-                })
-                .delayElements(Duration.ofSeconds(1));
+    public void agregarDinosaurio(Dinosaurio dinosaurio) {
+        dinosaurios.add(dinosaurio);
     }
 }

@@ -1,14 +1,16 @@
 package org.example.jurassic_world_concurrente;
 
-import org.example.jurassic_world_concurrente.Dinosaurios.*;
-import org.example.jurassic_world_concurrente.Huevos.*;
+import org.example.jurassic_world_concurrente.Dinosaurios.Dinosaurio;
+import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioService;
+import org.example.jurassic_world_concurrente.Huevos.FabricaHuevos;
+import org.example.jurassic_world_concurrente.Huevos.HuevoService;
+import org.example.jurassic_world_concurrente.Dinosaurios.FabricaDinosaurios;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import reactor.core.publisher.Flux;
 
 import java.util.Arrays;
 
@@ -29,6 +31,9 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
     @Autowired
     private FabricaHuevos fabricaHuevos;
 
+    @Autowired
+    private MasterScheduler masterScheduler;
+
     public static void main(String[] args) {
         SpringApplication.run(JurassicWorldConcurrenteApplication.class, args);
     }
@@ -36,7 +41,7 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        // Create two dinosaurs of each type using the factory
+        // Crear dinosaurios de cada tipo usando la fábrica y agregar al DinosaurioService
         Dinosaurio carnivoro1 = fabricaDinosaurios.crearDinosaurio("Carnivoro");
         Dinosaurio carnivoro2 = fabricaDinosaurios.crearDinosaurio("Carnivoro");
         Dinosaurio herbivoro1 = fabricaDinosaurios.crearDinosaurio("Herbivoro");
@@ -44,14 +49,13 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
         Dinosaurio volador1 = fabricaDinosaurios.crearDinosaurio("Volador");
         Dinosaurio volador2 = fabricaDinosaurios.crearDinosaurio("Volador");
 
+        // Agregar dinosaurios al servicio para ser gestionados en el flujo maestro
+        Arrays.asList(carnivoro1, carnivoro2, herbivoro1, herbivoro2, volador1, volador2)
+                .forEach(dinosaurioService::agregarDinosaurio);
 
-        // Manage lifecycle of each type of dinosaur concurrently
-        Flux<Dinosaurio> carnivoroFlux = dinosaurioService.gestionarVidaCarnivoros(Arrays.asList(carnivoro1, carnivoro2));
-        Flux<Dinosaurio> herbivoroFlux = dinosaurioService.gestionarVidaHerbivoros(Arrays.asList(herbivoro1, herbivoro2));
-        Flux<Dinosaurio> voladorFlux = dinosaurioService.gestionarVidaVoladores(Arrays.asList(volador1, volador2));
+        logger.info("Dinosaurios iniciales creados y agregados al servicio de gestión.");
 
-        carnivoroFlux.subscribe(d -> logger.info("{} tiene {} años.", d.getNombre(), d.getEdad()));
-        herbivoroFlux.subscribe(d -> logger.info("{} tiene {} años.", d.getNombre(), d.getEdad()));
-        voladorFlux.subscribe(d -> logger.info("{} tiene {} años.", d.getNombre(), d.getEdad()));
+        // Iniciar el flujo maestro que controla el tiempo de simulación
+        masterScheduler.iniciarSimulacion();
     }
 }
