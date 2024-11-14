@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "islas")
-public class Isla {
+public class IslaEnti {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,7 +18,7 @@ public class Isla {
     private String tipo;
 
     @OneToMany(mappedBy = "isla")
-    private List<DinosaurioInt> dinosaurios;
+    private List<DinosaurioEnti> dinosaurios;
 
     // Getters y Setters
     public Long getId() {
@@ -45,11 +45,11 @@ public class Isla {
         this.tipo = tipo;
     }
 
-    public List<DinosaurioInt> getDinosaurios() {
+    public List<DinosaurioEnti> getDinosaurios() {
         return dinosaurios;
     }
 
-    public void setDinosaurios(List<DinosaurioInt> dinosaurios) {
+    public void setDinosaurios(List<DinosaurioEnti> dinosaurios) {
         this.dinosaurios = dinosaurios;
     }
 }

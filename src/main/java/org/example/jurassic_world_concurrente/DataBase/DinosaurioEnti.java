@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "dinosaurios")
-public class DinosaurioInt {
+public class DinosaurioEnti {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,7 +15,7 @@ public class DinosaurioInt {
     private String salud;
 
     @ManyToOne
-    private Isla isla;
+    private IslaEnti isla;
 
     // Getters y Setters
     public Long getId() {
@@ -58,11 +58,11 @@ public class DinosaurioInt {
         this.salud = salud;
     }
 
-    public Isla getIsla() {
+    public IslaEnti getIsla() {
         return isla;
     }
 
-    public void setIsla(Isla isla) {
+    public void setIsla(IslaEnti isla) {
         this.isla = isla;
     }
 }
