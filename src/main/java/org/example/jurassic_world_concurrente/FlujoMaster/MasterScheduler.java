@@ -1,5 +1,5 @@
 // src/main/java/org/example/jurassic_world_concurrente/MasterScheduler.java
-package org.example.jurassic_world_concurrente;
+package org.example.jurassic_world_concurrente.FlujoMaster;
 
 import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioService;
 import org.example.jurassic_world_concurrente.Huevos.HuevoService;
