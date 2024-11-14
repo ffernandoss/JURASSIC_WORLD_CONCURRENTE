@@ -28,14 +28,14 @@ public class EnfermeriaScheduler {
     private DinosaurioEstadoService dinosaurioEstadoService;
 
     public void iniciarEnfermeria() {
-        Flux.interval(Duration.ofSeconds(1))
+        Flux.interval(Duration.ofSeconds(2))
                 .doOnNext(tic -> {
 
                     // Enviar dinosaurios enfermos a la cola de enfermería
                     List<Dinosaurio> dinosauriosEnfermos = dinosaurioService.getDinosauriosEnfermos();
                     dinosauriosEnfermos.forEach(dinosaurio -> {
                         if (dinosaurio.isEstaEnfermo()) {
-                            logger.info("PUTOS DINOSAURIOS: " + dinosaurio.getNombre());
+                            logger.info("Dinosaurio enfermo: " + dinosaurio.getNombre());
                             rabbitTemplate.convertAndSend("enfermeriaQueue", dinosaurio);
                         }
                     });
@@ -43,7 +43,6 @@ public class EnfermeriaScheduler {
                     // Mostrar array de dinosaurios enfermos
                     logger.info("Mostrando lista de dinosaurios enfermos:");
                     dinosaurioEstadoService.imprimirDinosauriosEnfermos();
-                    logger.info("Fin de la lista de dinosaurios enfermos.");
                 })
                 .subscribe();
     }

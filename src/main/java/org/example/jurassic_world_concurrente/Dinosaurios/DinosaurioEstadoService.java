@@ -1,4 +1,3 @@
-// src/main/java/org/example/jurassic_world_concurrente/Dinosaurios/DinosaurioEstadoService.java
 package org.example.jurassic_world_concurrente.Dinosaurios;
 
 import org.springframework.stereotype.Service;
