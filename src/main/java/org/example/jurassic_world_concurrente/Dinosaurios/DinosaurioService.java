@@ -1,4 +1,3 @@
-
 // src/main/java/org/example/jurassic_world_concurrente/Dinosaurios/DinosaurioService.java
 package org.example.jurassic_world_concurrente.Dinosaurios;
 
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 @Service
 public class DinosaurioService {
@@ -44,8 +42,8 @@ public class DinosaurioService {
     public void generarEventoMuerteAleatoria() {
         if (!dinosaurios.isEmpty()) {
             Dinosaurio randomDino = dinosaurios.get(new Random().nextInt(dinosaurios.size()));
-            matarDinosaurio(randomDino);
-            logger.info("Evento de muerte aleatoria: Dinosaurio {} ha sido eliminado.", randomDino.getNombre());
+            logger.info("Evento de muerte aleatoria: Dinosaurio {} fue asesinado.", randomDino.getNombre());
+            dinosaurios.remove(randomDino);
         }
     }
 

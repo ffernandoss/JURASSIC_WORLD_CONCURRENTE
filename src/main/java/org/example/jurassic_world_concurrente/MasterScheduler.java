@@ -39,9 +39,9 @@ public class MasterScheduler {
                     logger.info("Lista de dinosaurios: {}", dinosaurioService.getDinosaurios());
 
                     // Evento cada 5 tics (cada 10 segundos)
-                    //if (ticsTotales % 5 == 0) {
-                     //   dinosaurioService.generarEventoMuerteAleatoria();
-                    //}
+                    if (ticsTotales % 5 == 0) {
+                       dinosaurioService.generarEventoMuerteAleatoria();
+                    }
                 })
                 .subscribe();
     }
