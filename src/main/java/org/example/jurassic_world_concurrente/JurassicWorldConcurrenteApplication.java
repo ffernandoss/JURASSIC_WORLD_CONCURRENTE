@@ -42,15 +42,15 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         // Crear dinosaurios de cada tipo usando la fábrica y agregar al DinosaurioService
-        Dinosaurio carnivoro1 = fabricaDinosaurios.crearDinosaurio("Carnivoro");
+        /*Dinosaurio carnivoro1 = fabricaDinosaurios.crearDinosaurio("Carnivoro");
         Dinosaurio carnivoro2 = fabricaDinosaurios.crearDinosaurio("Carnivoro");
         Dinosaurio herbivoro1 = fabricaDinosaurios.crearDinosaurio("Herbivoro");
-        Dinosaurio herbivoro2 = fabricaDinosaurios.crearDinosaurio("Herbivoro");
+        Dinosaurio herbivoro2 = fabricaDinosaurios.crearDinosaurio("Herbivoro");*/
         Dinosaurio volador1 = fabricaDinosaurios.crearDinosaurio("Volador");
         Dinosaurio volador2 = fabricaDinosaurios.crearDinosaurio("Volador");
 
         // Agregar dinosaurios al servicio para ser gestionados en el flujo maestro
-        Arrays.asList(carnivoro1, carnivoro2, herbivoro1, herbivoro2, volador1, volador2)
+        Arrays.asList(volador1, volador2)
                 .forEach(dinosaurioService::agregarDinosaurio);
 
         logger.info("Dinosaurios iniciales creados y agregados al servicio de gestión.");

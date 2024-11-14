@@ -27,7 +27,7 @@ public class MasterScheduler {
         Flux.interval(Duration.ofSeconds(2))
                 .doOnNext(tic -> {
                     ticsTotales++;
-                    logger.info("Año de la simulación: {}", ticsTotales);
+                    logger.info("---------------------------Año de la simulación: {}---------------------------", ticsTotales);
 
                     // Envejecer dinosaurios y verificar muertes
                     dinosaurioService.envejecerDinosaurios();
@@ -35,10 +35,13 @@ public class MasterScheduler {
                     // Incubar huevos y verificar eclosión
                     huevoService.incubarHuevos();
 
+                    // Mostrar lista de dinosaurios
+                    logger.info("Lista de dinosaurios: {}", dinosaurioService.getDinosaurios());
+
                     // Evento cada 5 tics (cada 10 segundos)
-                    if (ticsTotales % 5 == 0) {
-                        dinosaurioService.generarEventoMuerteAleatoria();
-                    }
+                    //if (ticsTotales % 5 == 0) {
+                     //   dinosaurioService.generarEventoMuerteAleatoria();
+                    //}
                 })
                 .subscribe();
     }

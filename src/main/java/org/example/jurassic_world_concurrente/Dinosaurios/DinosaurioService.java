@@ -1,3 +1,4 @@
+
 // src/main/java/org/example/jurassic_world_concurrente/Dinosaurios/DinosaurioService.java
 package org.example.jurassic_world_concurrente.Dinosaurios;
 
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 public class DinosaurioService {
@@ -21,14 +23,16 @@ public class DinosaurioService {
     private List<Dinosaurio> dinosaurios = new ArrayList<>();
 
     public void envejecerDinosaurios() {
+        List<Dinosaurio> dinosauriosParaEliminar = new ArrayList<>();
         dinosaurios.forEach(dinosaurio -> {
             if (dinosaurio.getEdad() < dinosaurio.getMaxEdad()) {
                 dinosaurio.envejecer();
                 logger.info("Dinosaurio {} tiene ahora {} años.", dinosaurio.getNombre(), dinosaurio.getEdad());
             } else {
-                matarDinosaurio(dinosaurio);
+                dinosauriosParaEliminar.add(dinosaurio);
             }
         });
+        dinosauriosParaEliminar.forEach(this::matarDinosaurio);
     }
 
     public void matarDinosaurio(Dinosaurio dinosaurio) {
@@ -47,5 +51,9 @@ public class DinosaurioService {
 
     public void agregarDinosaurio(Dinosaurio dinosaurio) {
         dinosaurios.add(dinosaurio);
+    }
+
+    public List<Dinosaurio> getDinosaurios() {
+        return dinosaurios;
     }
 }

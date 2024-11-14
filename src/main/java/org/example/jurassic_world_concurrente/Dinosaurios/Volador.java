@@ -1,3 +1,4 @@
+// src/main/java/org/example/jurassic_world_concurrente/Dinosaurios/Volador.java
 package org.example.jurassic_world_concurrente.Dinosaurios;
 
 import org.slf4j.Logger;
@@ -10,7 +11,7 @@ public class Volador implements Dinosaurio {
     private int edad;
     private String nombre;
     private boolean estaEnfermo;
-    private final int maxEdad = 15;
+    private final int maxEdad = 10;
 
     public Volador() {
         this.id = generateId();
@@ -94,5 +95,10 @@ public class Volador implements Dinosaurio {
     @Override
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return nombre;
     }
 }
