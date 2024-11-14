@@ -64,4 +64,8 @@ public class HuevoService {
     public List<Huevo> getHuevos() {
         return new LinkedList<>(colaHuevos);
     }
+
+    public boolean existeHuevoDeTipo(String tipo) {
+        return colaHuevos.stream().anyMatch(huevo -> huevo.getTipo().equalsIgnoreCase(tipo));
+    }
 }

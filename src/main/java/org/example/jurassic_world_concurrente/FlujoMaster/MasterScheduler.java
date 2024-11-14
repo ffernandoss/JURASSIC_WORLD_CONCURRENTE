@@ -1,10 +1,11 @@
-// src/main/java/org/example/jurassic_world_concurrente/MasterScheduler.java
+// src/main/java/org/example/jurassic_world_concurrente/FlujoMaster/MasterScheduler.java
 package org.example.jurassic_world_concurrente.FlujoMaster;
 
 import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioService;
 import org.example.jurassic_world_concurrente.Huevos.HuevoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
@@ -22,6 +23,9 @@ public class MasterScheduler {
     @Autowired
     private HuevoService huevoService;
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
     private int ticsTotales = 0;
 
     public void iniciarSimulacion() {
@@ -35,6 +39,9 @@ public class MasterScheduler {
 
                     // Incubar huevos y verificar eclosión
                     huevoService.incubarHuevos();
+
+                    // Enviar mensaje a la cola para verificar dinosaurios
+                    rabbitTemplate.convertAndSend("verificarDinosauriosQueue", "Verificar");
 
                     // Mostrar lista de dinosaurios
                     logger.info("Lista de dinosaurios: {}", dinosaurioService.getDinosaurios());

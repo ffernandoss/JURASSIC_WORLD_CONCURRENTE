@@ -54,4 +54,8 @@ public class DinosaurioService {
     public List<Dinosaurio> getDinosaurios() {
         return dinosaurios;
     }
+
+    public boolean existeDinosaurioDeTipo(String tipo) {
+        return dinosaurios.stream().anyMatch(dino -> dino.getTipo().equalsIgnoreCase(tipo));
+    }
 }
