@@ -1,6 +1,7 @@
 // src/main/java/org/example/jurassic_world_concurrente/FlujoMaster/MasterScheduler.java
 package org.example.jurassic_world_concurrente.FlujoMaster;
 
+import org.example.jurassic_world_concurrente.Dinosaurios.Dinosaurio;
 import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioService;
 import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioEstadoService;
 import org.example.jurassic_world_concurrente.Huevos.HuevoService;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
 import java.time.Duration;
+import java.util.List;
 
 @Component
 public class MasterScheduler {
@@ -50,6 +52,8 @@ public class MasterScheduler {
                     // Actualizar estados de dinosaurios
                     rabbitTemplate.convertAndSend("actualizarDinosaurioEstadoQueue", "Actualizar");
 
+
+
                     // Evento cada 10 tics (excluyendo 0)
                     if (ticsTotales != 0 && ticsTotales % 10 == 0) {
                         dinosaurioService.generarEventoMuerteAleatoria();
@@ -66,7 +70,6 @@ public class MasterScheduler {
 
                     // Mostrar lista de huevos
                     logger.info("Lista de huevos: {}", huevoService.getHuevos());
-
 
                     // Imprimir dinosaurios enfermos
                     dinosaurioEstadoService.imprimirDinosauriosEnfermos();

@@ -2,6 +2,7 @@ package org.example.jurassic_world_concurrente;
 
 import org.example.jurassic_world_concurrente.Dinosaurios.Dinosaurio;
 import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioService;
+import org.example.jurassic_world_concurrente.FlujoMaster.EnfermeriaScheduler;
 import org.example.jurassic_world_concurrente.FlujoMaster.MasterScheduler;
 import org.example.jurassic_world_concurrente.Huevos.FabricaHuevos;
 import org.example.jurassic_world_concurrente.Huevos.HuevoService;
@@ -24,7 +25,6 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
     private DinosaurioService dinosaurioService;
 
     @Autowired
-
     private HuevoService huevoService;
 
     @Autowired
@@ -36,6 +36,9 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
     @Autowired
     private MasterScheduler masterScheduler;
 
+    @Autowired
+    private EnfermeriaScheduler enfermeriaScheduler;
+
     public static void main(String[] args) {
         SpringApplication.run(JurassicWorldConcurrenteApplication.class, args);
     }
@@ -44,20 +47,23 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         // Crear dinosaurios de cada tipo usando la fábrica y agregar al DinosaurioService
-        /*Dinosaurio carnivoro1 = fabricaDinosaurios.crearDinosaurio("Carnivoro");
+        Dinosaurio carnivoro1 = fabricaDinosaurios.crearDinosaurio("Carnivoro");
         Dinosaurio carnivoro2 = fabricaDinosaurios.crearDinosaurio("Carnivoro");
         Dinosaurio herbivoro1 = fabricaDinosaurios.crearDinosaurio("Herbivoro");
-        Dinosaurio herbivoro2 = fabricaDinosaurios.crearDinosaurio("Herbivoro");*/
+        Dinosaurio herbivoro2 = fabricaDinosaurios.crearDinosaurio("Herbivoro");
         Dinosaurio volador1 = fabricaDinosaurios.crearDinosaurio("Volador");
         Dinosaurio volador2 = fabricaDinosaurios.crearDinosaurio("Volador");
 
         // Agregar dinosaurios al servicio para ser gestionados en el flujo maestro
-        Arrays.asList(volador1, volador2)
+        Arrays.asList(carnivoro1, carnivoro2, herbivoro1, herbivoro2, volador1, volador2)
                 .forEach(dinosaurioService::agregarDinosaurio);
 
         logger.info("Dinosaurios iniciales creados y agregados al servicio de gestión.");
 
         // Iniciar el flujo maestro que controla el tiempo de simulación
         masterScheduler.iniciarSimulacion();
+
+        // Iniciar el flujo de enfermería
+        enfermeriaScheduler.iniciarEnfermeria();
     }
 }

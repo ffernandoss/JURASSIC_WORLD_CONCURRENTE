@@ -35,7 +35,7 @@ public class DinosaurioEstadoService {
         if (enfermos.isEmpty()) {
             System.out.println("No hay dinosaurios enfermos.");
         } else {
-            System.out.println("Dinosaurios enfermos:");
+            System.out.println("LOS FOKIN DINOSAURIOS:");
             enfermos.forEach(System.out::println);
         }
     }

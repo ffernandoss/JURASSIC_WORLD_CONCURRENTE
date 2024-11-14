@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 public class DinosaurioService {
@@ -26,6 +27,9 @@ public class DinosaurioService {
             if (dinosaurio.getEdad() < dinosaurio.getMaxEdad()) {
                 dinosaurio.envejecer();
                 logger.info("Dinosaurio {} tiene ahora {} años.", dinosaurio.getNombre(), dinosaurio.getEdad());
+                if (dinosaurio.isEstaEnfermo()) {
+                    rabbitTemplate.convertAndSend("enfermeriaQueue", dinosaurio);
+                }
             } else {
                 dinosauriosParaEliminar.add(dinosaurio);
             }
@@ -57,5 +61,11 @@ public class DinosaurioService {
 
     public boolean existeDinosaurioDeTipo(String tipo) {
         return dinosaurios.stream().anyMatch(dino -> dino.getTipo().equalsIgnoreCase(tipo));
+    }
+
+    public List<Dinosaurio> getDinosauriosEnfermos() {
+        return dinosaurios.stream()
+                .filter(Dinosaurio::isEstaEnfermo)
+                .collect(Collectors.toList());
     }
 }
