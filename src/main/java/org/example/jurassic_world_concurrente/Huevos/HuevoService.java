@@ -1,3 +1,4 @@
+// src/main/java/org/example/jurassic_world_concurrente/Huevos/HuevoService.java
 package org.example.jurassic_world_concurrente.Huevos;
 
 import org.example.jurassic_world_concurrente.Dinosaurios.Dinosaurio;
@@ -8,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 @Service
@@ -47,5 +49,9 @@ public class HuevoService {
             case "volador": return 1;
             default: throw new IllegalArgumentException("Tipo de huevo no soportado.");
         }
+    }
+
+    public List<Huevo> getHuevos() {
+        return new LinkedList<>(colaHuevos);
     }
 }

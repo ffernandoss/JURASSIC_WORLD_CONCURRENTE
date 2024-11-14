@@ -18,7 +18,7 @@ public class Isla {
     private String tipo;
 
     @OneToMany(mappedBy = "isla")
-    private List<Dinosaurio> dinosaurios;
+    private List<DinosaurioInt> dinosaurios;
 
     // Getters y Setters
     public Long getId() {
@@ -45,11 +45,11 @@ public class Isla {
         this.tipo = tipo;
     }
 
-    public List<Dinosaurio> getDinosaurios() {
+    public List<DinosaurioInt> getDinosaurios() {
         return dinosaurios;
     }
 
-    public void setDinosaurios(List<Dinosaurio> dinosaurios) {
+    public void setDinosaurios(List<DinosaurioInt> dinosaurios) {
         this.dinosaurios = dinosaurios;
     }
 }

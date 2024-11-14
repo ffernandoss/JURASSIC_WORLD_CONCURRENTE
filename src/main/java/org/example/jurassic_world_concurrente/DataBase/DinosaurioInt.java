@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "dinosaurios")
-public class Dinosaurio {
+public class DinosaurioInt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

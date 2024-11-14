@@ -1,3 +1,4 @@
+// src/main/java/org/example/jurassic_world_concurrente/MasterScheduler.java
 package org.example.jurassic_world_concurrente;
 
 import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioService;
@@ -38,10 +39,13 @@ public class MasterScheduler {
                     // Mostrar lista de dinosaurios
                     logger.info("Lista de dinosaurios: {}", dinosaurioService.getDinosaurios());
 
+                    // Mostrar lista de huevos
+                    logger.info("Lista de huevos: {}", huevoService.getHuevos());
+
                     // Evento cada 5 tics (cada 10 segundos)
-                    if (ticsTotales % 5 == 0) {
-                       dinosaurioService.generarEventoMuerteAleatoria();
-                    }
+                if (ticsTotales != 0 && ticsTotales % 10 == 0) {
+                    dinosaurioService.generarEventoMuerteAleatoria();
+                }
                 })
                 .subscribe();
     }
