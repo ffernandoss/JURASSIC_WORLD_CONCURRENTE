@@ -42,10 +42,16 @@ public class MasterScheduler {
                     // Mostrar lista de huevos
                     logger.info("Lista de huevos: {}", huevoService.getHuevos());
 
-                    // Evento cada 5 tics (cada 10 segundos)
-                if (ticsTotales != 0 && ticsTotales % 10 == 0) {
-                    dinosaurioService.generarEventoMuerteAleatoria();
-                }
+                    // Evento cada 10 tics (excluyendo 0)
+                    if (ticsTotales != 0 && ticsTotales % 10 == 0) {
+                        dinosaurioService.generarEventoMuerteAleatoria();
+                    }
+
+                    // Evento de reproducción cada 5 tics (excluyendo 0)
+                    if (ticsTotales != 0 && ticsTotales % 5 == 0) {
+                        huevoService.crearHuevoAleatorio();
+                        logger.info("Evento de reproducción: se ha creado un nuevo huevo.");
+                    }
                 })
                 .subscribe();
     }

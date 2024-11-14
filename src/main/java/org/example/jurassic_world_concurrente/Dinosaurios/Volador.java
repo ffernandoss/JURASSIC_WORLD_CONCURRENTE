@@ -11,7 +11,7 @@ public class Volador implements Dinosaurio {
     private int edad;
     private String nombre;
     private boolean estaEnfermo;
-    private final int maxEdad = 5;
+    private final int maxEdad = 15;
 
     public Volador() {
         this.id = generateId();

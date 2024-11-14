@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Random;
 
 @Service
 public class HuevoService {
@@ -20,8 +21,11 @@ public class HuevoService {
     private DinosaurioService dinosaurioService;
 
     private Queue<Huevo> colaHuevos = new LinkedList<>();
+    private static final String[] TIPOS_DINOSAURIOS = {"Carnivoro", "Herbivoro", "Volador"};
+    private Random random = new Random();
 
     public void incubarHuevos() {
+        List<Huevo> huevosEclosionados = new LinkedList<>();
         colaHuevos.forEach(huevo -> {
             if (!"Eclosionado".equals(huevo.getEstado())) {
                 huevo.incubar();
@@ -30,9 +34,10 @@ public class HuevoService {
                 Dinosaurio dinosaurio = huevo.transformarADinosaurio();
                 dinosaurioService.agregarDinosaurio(dinosaurio);
                 logger.info("Huevo de tipo {} ha eclosionado, creando dinosaurio {}", huevo.getTipo(), dinosaurio.getNombre());
-                colaHuevos.remove(huevo);
+                huevosEclosionados.add(huevo);
             }
         });
+        colaHuevos.removeAll(huevosEclosionados);
     }
 
     public Huevo crearHuevo(String tipo) {
@@ -40,6 +45,11 @@ public class HuevoService {
         colaHuevos.add(huevo);
         logger.info("Generado nuevo huevo de tipo {}", tipo);
         return huevo;
+    }
+
+    public Huevo crearHuevoAleatorio() {
+        String tipoAleatorio = TIPOS_DINOSAURIOS[random.nextInt(TIPOS_DINOSAURIOS.length)];
+        return crearHuevo(tipoAleatorio);
     }
 
     private int determinarPeriodoIncubacion(String tipo) {

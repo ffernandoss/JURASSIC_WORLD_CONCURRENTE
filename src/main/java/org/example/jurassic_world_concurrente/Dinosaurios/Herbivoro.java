@@ -1,3 +1,4 @@
+// src/main/java/org/example/jurassic_world_concurrente/Dinosaurios/Herbivoro.java
 package org.example.jurassic_world_concurrente.Dinosaurios;
 
 import org.slf4j.Logger;
@@ -94,5 +95,10 @@ public class Herbivoro implements Dinosaurio {
     @Override
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return nombre;
     }
 }
