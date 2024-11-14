@@ -1,4 +1,3 @@
-// src/main/java/org/example/jurassic_world_concurrente/Dinosaurios/DinosaurioEstado.java
 package org.example.jurassic_world_concurrente.Dinosaurios;
 
 public class DinosaurioEstado {
@@ -8,13 +7,13 @@ public class DinosaurioEstado {
 
     public DinosaurioEstado(Dinosaurio dinosaurio) {
         this.dinosaurio = dinosaurio;
-        this.estaEnfermo = Math.random() < 0.5; // Randomly set to true or false
         this.temperatura = (int) (Math.random() * 41);
+        this.estaEnfermo = this.temperatura >= 30; // Set to true if temperature is 30 or more
     }
 
     public void actualizarEstado() {
-        this.estaEnfermo = Math.random() < 0.5; // Randomly set to true or false
         this.temperatura = (int) (Math.random() * 41);
+        this.estaEnfermo = this.temperatura >= 30; // Set to true if temperature is 30 or more
     }
 
     @Override
