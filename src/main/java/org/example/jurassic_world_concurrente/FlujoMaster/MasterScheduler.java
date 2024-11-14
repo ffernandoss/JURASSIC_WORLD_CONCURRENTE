@@ -1,6 +1,8 @@
+// src/main/java/org/example/jurassic_world_concurrente/FlujoMaster/MasterScheduler.java
 package org.example.jurassic_world_concurrente.FlujoMaster;
 
 import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioService;
+import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioEstadoService;
 import org.example.jurassic_world_concurrente.Huevos.HuevoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +25,9 @@ public class MasterScheduler {
     private HuevoService huevoService;
 
     @Autowired
+    private DinosaurioEstadoService dinosaurioEstadoService;
+
+    @Autowired
     private RabbitTemplate rabbitTemplate;
 
     private int ticsTotales = 0;
@@ -42,11 +47,8 @@ public class MasterScheduler {
                     // Enviar mensaje a la cola para verificar dinosaurios
                     rabbitTemplate.convertAndSend("verificarDinosauriosQueue", "Verificar");
 
-                    // Mostrar lista de dinosaurios
-                    logger.info("Lista de dinosaurios: {}", dinosaurioService.getDinosaurios());
-
-                    // Mostrar lista de huevos
-                    logger.info("Lista de huevos: {}", huevoService.getHuevos());
+                    // Actualizar estados de dinosaurios
+                    rabbitTemplate.convertAndSend("actualizarDinosaurioEstadoQueue", "Actualizar");
 
                     // Evento cada 10 tics (excluyendo 0)
                     if (ticsTotales != 0 && ticsTotales % 10 == 0) {
@@ -58,6 +60,16 @@ public class MasterScheduler {
                         huevoService.crearHuevoAleatorio();
                         logger.info("Evento de reproducción: se ha creado un nuevo huevo.");
                     }
+
+                    // Mostrar lista de dinosaurios
+                    logger.info("Lista de dinosaurios: {}", dinosaurioService.getDinosaurios());
+
+                    // Mostrar lista de huevos
+                    logger.info("Lista de huevos: {}", huevoService.getHuevos());
+
+
+                    // Imprimir dinosaurios enfermos
+                    dinosaurioEstadoService.imprimirDinosauriosEnfermos();
                 })
                 .subscribe();
     }

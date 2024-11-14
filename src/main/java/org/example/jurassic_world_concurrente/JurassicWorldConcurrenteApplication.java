@@ -24,6 +24,7 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
     private DinosaurioService dinosaurioService;
 
     @Autowired
+
     private HuevoService huevoService;
 
     @Autowired
