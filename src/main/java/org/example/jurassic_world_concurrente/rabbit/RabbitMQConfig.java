@@ -22,4 +22,10 @@ public class RabbitMQConfig {
     public Queue actualizarDinosaurioEstadoQueue() {
         return new Queue("actualizarDinosaurioEstadoQueue", false);
     }
+
+    @Bean
+    public Queue visitantesQueue() {
+        return new Queue("visitantesQueue", false);
+    }
 }
+

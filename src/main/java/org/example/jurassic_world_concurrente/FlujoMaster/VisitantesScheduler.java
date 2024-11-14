@@ -1,9 +1,10 @@
-// src/main/java/org/example/jurassic_world_concurrente/FlujoMaster/MasterScheduler.java
+// src/main/java/org/example/jurassic_world_concurrente/FlujoMaster/VisitantesScheduler.java
 package org.example.jurassic_world_concurrente.FlujoMaster;
 
 import org.example.jurassic_world_concurrente.Visitante.VisitanteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
@@ -13,10 +14,13 @@ import java.time.Duration;
 @Component
 public class VisitantesScheduler {
 
-    private static final Logger logger = LoggerFactory.getLogger(MasterScheduler.class);
+    private static final Logger logger = LoggerFactory.getLogger(VisitantesScheduler.class);
 
     @Autowired
     private VisitanteService visitanteService;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     private int ticsTotales = 0;
 
@@ -28,6 +32,9 @@ public class VisitantesScheduler {
 
                     // Obtener y mostrar lista de visitantes
                     logger.info("Lista de visitantes: {}", visitanteService.obtenerTodosLosVisitantes());
+
+                    // Enviar mensaje a la cola de visitantes
+                    rabbitTemplate.convertAndSend("visitantesQueue", "Actualizar visitantes");
 
                     // Evento cada 10 tics (excluyendo 0)
                     if (ticsTotales != 0 && ticsTotales % 10 == 0) {
