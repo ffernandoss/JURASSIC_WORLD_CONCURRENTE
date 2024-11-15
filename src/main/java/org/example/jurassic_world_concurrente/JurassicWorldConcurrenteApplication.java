@@ -1,8 +1,10 @@
+// src/main/java/org/example/jurassic_world_concurrente/JurassicWorldConcurrenteApplication.java
 package org.example.jurassic_world_concurrente;
 
 import org.example.jurassic_world_concurrente.Dinosaurios.Dinosaurio;
 import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioService;
 import org.example.jurassic_world_concurrente.FlujoMaster.MasterScheduler;
+import org.example.jurassic_world_concurrente.FlujoMaster.VisitantesScheduler;
 import org.example.jurassic_world_concurrente.Huevos.FabricaHuevos;
 import org.example.jurassic_world_concurrente.Huevos.HuevoService;
 import org.example.jurassic_world_concurrente.Dinosaurios.FabricaDinosaurios;
@@ -24,7 +26,6 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
     private DinosaurioService dinosaurioService;
 
     @Autowired
-
     private HuevoService huevoService;
 
     @Autowired
@@ -36,18 +37,16 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
     @Autowired
     private MasterScheduler masterScheduler;
 
+    @Autowired
+    private VisitantesScheduler visitantesScheduler;
+
     public static void main(String[] args) {
         SpringApplication.run(JurassicWorldConcurrenteApplication.class, args);
     }
 
     @Override
     public void run(String... args) throws Exception {
-
         // Crear dinosaurios de cada tipo usando la fábrica y agregar al DinosaurioService
-        /*Dinosaurio carnivoro1 = fabricaDinosaurios.crearDinosaurio("Carnivoro");
-        Dinosaurio carnivoro2 = fabricaDinosaurios.crearDinosaurio("Carnivoro");
-        Dinosaurio herbivoro1 = fabricaDinosaurios.crearDinosaurio("Herbivoro");
-        Dinosaurio herbivoro2 = fabricaDinosaurios.crearDinosaurio("Herbivoro");*/
         Dinosaurio volador1 = fabricaDinosaurios.crearDinosaurio("Volador");
         Dinosaurio volador2 = fabricaDinosaurios.crearDinosaurio("Volador");
 
@@ -59,5 +58,8 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
 
         // Iniciar el flujo maestro que controla el tiempo de simulación
         masterScheduler.iniciarSimulacion();
+
+        // Iniciar el flujo de visitantes que controla el tiempo de simulación
+        visitantesScheduler.iniciarSimulacion();
     }
 }
