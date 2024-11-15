@@ -15,16 +15,8 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-        }
-
-        .video-background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
+            background: url('/static/rz97rU_MQh2BT9oL6Of32g.webp') no-repeat center center fixed;
+            background-size: cover;
         }
 
         .content {
@@ -36,10 +28,12 @@
 
         h1 {
             font-size: 3em;
+            text-shadow: 2px 2px 4px #000; /* Contorno negro */
         }
 
         p {
             font-size: 1.2em;
+            text-shadow: 2px 2px 4px #000; /* Contorno negro */
         }
 
         .logo {
@@ -71,10 +65,6 @@
     </style>
 </head>
 <body>
-    <video autoplay muted loop class="video-background">
-        <source src="/static/5f24867e-a691-4ed5-a6c9-59a7a625d504.mp4" type="video/mp4">
-        Tu navegador no soporta la etiqueta de video.
-    </video>
     <div class="content">
         <img src="/static/jurassic-park-seeklogo.png" alt="Jurassic Park Logo" class="logo">
         <h1>Bienvenido a Jurassic World </h1>
