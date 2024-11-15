@@ -21,12 +21,18 @@ public class VerificarDinosauriosListener {
 
     @RabbitListener(queues = "verificarDinosauriosQueue")
     public void handleVerificarDinosaurios(String message) {
-        String[] tiposDinosaurios = {"Carnivoro", "Herbivoro", "Volador"};
-        for (String tipo : tiposDinosaurios) {
-            if (!dinosaurioService.existeDinosaurioDeTipo(tipo) && !huevoService.existeHuevoDeTipo(tipo)) {
-                huevoService.crearHuevo(tipo);
-                logger.info("No hay dinosaurios ni huevos de tipo {}. Se ha creado un nuevo huevo.", tipo);
+        logger.info("Iniciando verificación de dinosaurios con mensaje: {}", message);
+        try {
+            String[] tiposDinosaurios = {"Carnivoro", "Herbivoro", "Volador"};
+            for (String tipo : tiposDinosaurios) {
+                if (!dinosaurioService.existeDinosaurioDeTipo(tipo) && !huevoService.existeHuevoDeTipo(tipo)) {
+                    huevoService.crearHuevo(tipo);
+                    logger.info("No hay dinosaurios ni huevos de tipo {}. Se ha creado un nuevo huevo.", tipo);
+                }
             }
+        } catch (Exception e) {
+            logger.error("Error al verificar dinosaurios", e);
         }
+        logger.info("Verificación de dinosaurios completada.");
     }
 }

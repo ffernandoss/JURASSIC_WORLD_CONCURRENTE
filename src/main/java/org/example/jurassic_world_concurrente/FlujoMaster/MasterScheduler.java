@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
@@ -33,6 +34,7 @@ public class MasterScheduler {
     private RabbitTemplate rabbitTemplate;
 
     private int ticsTotales = 0;
+
 
     public void iniciarSimulacion() {
         Flux.interval(Duration.ofSeconds(2))

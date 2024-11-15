@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
@@ -42,9 +43,16 @@ public class EnfermeriaScheduler {
                         }
                     });
 
+                    // Actualizar estados de dinosaurios
+                    rabbitTemplate.convertAndSend("actualizarDinosaurioEstadoQueue", "Actualizar");
+
                     // Mostrar array de dinosaurios enfermos
                     logger.info("Mostrando lista de dinosaurios enfermos:");
                     dinosaurioEstadoService.imprimirDinosauriosEnfermos();
+
+                    // Log the updated states of the sick dinosaurs
+                    logger.info("Actualización dinosaurios enfermos:");
+                    logger.info("Estados de dinosaurios enfermos actualizados: {}", dinosaurioEstadoService.getEstados());
                 })
                 .subscribe();
     }

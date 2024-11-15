@@ -1,6 +1,8 @@
 // src/main/java/org/example/jurassic_world_concurrente/Dinosaurios/DinosaurioEstadoService.java
 package org.example.jurassic_world_concurrente.Dinosaurios;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class DinosaurioEstadoService {
+    private static final Logger logger = LoggerFactory.getLogger(DinosaurioEstadoService.class);
     private List<DinosaurioEstado> estados = new ArrayList<>();
 
     @Autowired
@@ -45,10 +48,10 @@ public class DinosaurioEstadoService {
     public void imprimirDinosauriosEnfermos() {
         List<DinosaurioEstado> enfermos = getDinosauriosEnfermos();
         if (enfermos.isEmpty()) {
-            System.out.println("No hay dinosaurios enfermos.");
+            logger.info("No hay dinosaurios enfermos.");
         } else {
-            System.out.println("LOS FOKIN DINOSAURIOS:");
-            enfermos.forEach(System.out::println);
+            logger.info("LOS FOKIN DINOSAURIOS:");
+            enfermos.forEach(dinosaurioEstado -> logger.info(dinosaurioEstado.toString()));
         }
     }
 }

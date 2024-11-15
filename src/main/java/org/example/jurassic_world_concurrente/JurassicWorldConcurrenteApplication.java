@@ -1,3 +1,4 @@
+// src/main/java/org/example/jurassic_world_concurrente/JurassicWorldConcurrenteApplication.java
 package org.example.jurassic_world_concurrente;
 
 import org.example.jurassic_world_concurrente.Dinosaurios.Dinosaurio;
@@ -13,8 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.util.Arrays;
+
 
 @SpringBootApplication
 public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
@@ -45,7 +48,6 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-
         // Crear dinosaurios de cada tipo usando la fábrica y agregar al DinosaurioService
         Dinosaurio carnivoro1 = fabricaDinosaurios.crearDinosaurio("Carnivoro");
         Dinosaurio carnivoro2 = fabricaDinosaurios.crearDinosaurio("Carnivoro");
@@ -63,6 +65,7 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
         // Iniciar el flujo maestro que controla el tiempo de simulación
         masterScheduler.iniciarSimulacion();
 
+        Thread.sleep(100);
         // Iniciar el flujo de enfermería
         enfermeriaScheduler.iniciarEnfermeria();
     }

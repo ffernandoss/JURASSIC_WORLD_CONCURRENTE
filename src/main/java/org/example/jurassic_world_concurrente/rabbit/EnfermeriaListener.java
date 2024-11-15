@@ -21,6 +21,7 @@ public class EnfermeriaListener {
     public void handleEnfermeriaMessage(Dinosaurio dinosaurio) {
         logger.info("Mensaje recibido en la cola de enfermería: " + dinosaurio);
         if (dinosaurio == null) {
+            logger.warn("Dinosaurio nulo recibido en la cola de enfermería.");
             return;
         }
         try {
@@ -32,6 +33,7 @@ public class EnfermeriaListener {
                 dinosaurioService.suscribirDinosaurio(dinosaurio);
                 logger.info("Dinosaurio recuperado: " + dinosaurio.getNombre());
             }
+            logger.info("Estado del dinosaurio actualizado: {}", dinosaurio);
         } catch (Exception e) {
             logger.error("Error al procesar el mensaje de la cola de enfermería", e);
         }
