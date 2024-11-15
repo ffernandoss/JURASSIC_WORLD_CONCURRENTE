@@ -47,12 +47,14 @@ public class MasterScheduler {
                     // Enviar mensaje a la cola para verificar dinosaurios
                     rabbitTemplate.convertAndSend("verificarDinosauriosQueue", "Verificar");
 
-                    // Enviar mensajes a las colas de RabbitMQ para visitantes y islas
-                    rabbitTemplate.convertAndSend("visitantesQueue", "Actualizar");
+                    // Enviar mensajes a las colas de RabbitMQ para islas
                     rabbitTemplate.convertAndSend("islaHuevoQueue", "Actualizar");
                     rabbitTemplate.convertAndSend("islaCarnivoroQueue", "Actualizar");
                     rabbitTemplate.convertAndSend("islaHerbivoroQueue", "Actualizar");
                     rabbitTemplate.convertAndSend("islaVoladorQueue", "Actualizar");
+
+                    // Enviar mensaje a la cola de RabbitMQ para visitantes
+                    rabbitTemplate.convertAndSend("visitantesQueue", "Actualizar");
 
                     // Evento cada 10 tics (excluyendo 0)
                     if (ticsTotales != 0 && ticsTotales % 10 == 0) {
