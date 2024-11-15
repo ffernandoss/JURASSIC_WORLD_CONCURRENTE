@@ -8,12 +8,12 @@ public class DinosaurioEstado {
     public DinosaurioEstado(Dinosaurio dinosaurio) {
         this.dinosaurio = dinosaurio;
         this.temperatura = (int) (Math.random() * 41);
-        this.estaEnfermo = this.temperatura >= 30; // Set to true if temperature is 30 or more
+        this.estaEnfermo = this.temperatura >= 38; // Set to true if temperature is 37 or more
     }
 
     public void actualizarEstado() {
         this.temperatura = (int) (Math.random() * 41);
-        this.estaEnfermo = this.temperatura >= 30; // Set to true if temperature is 30 or more
+        this.estaEnfermo = this.temperatura >= 38; // Set to true if temperature is 30 or more
     }
 
     @Override

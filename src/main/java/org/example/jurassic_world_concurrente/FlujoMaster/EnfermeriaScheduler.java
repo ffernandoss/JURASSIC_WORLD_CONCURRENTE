@@ -8,9 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Schedulers;
 
 import java.time.Duration;
 import java.util.List;
@@ -30,8 +31,10 @@ public class EnfermeriaScheduler {
     @Autowired
     private DinosaurioEstadoService dinosaurioEstadoService;
 
+    private Disposable disposable;
+
     public void iniciarEnfermeria() {
-        Flux.interval(Duration.ofSeconds(2))
+        disposable = Flux.interval(Duration.ofSeconds(2))
                 .doOnNext(tic -> {
 
                     // Enviar dinosaurios enfermos a la cola de enfermería
@@ -52,12 +55,28 @@ public class EnfermeriaScheduler {
 
                     // Mostrar array de dinosaurios enfermos
                     logger.info("Mostrando lista de dinosaurios enfermos:");
-                    dinosaurioEstadoService.imprimirDinosauriosEnfermos();
+                    dinosauriosEnfermos.stream()
+                            .filter(Dinosaurio::isEstaEnfermo)
+                            .forEach(dinosaurio -> logger.info(dinosaurio.toString()));
 
                     // Log the updated states of the sick dinosaurs
                     logger.info("Actualización dinosaurios enfermos:");
                     logger.info("Estados de dinosaurios enfermos actualizados: {}", dinosaurioEstadoService.getEstados());
                 })
+                .filter(tic -> dinosaurioService.getDinosaurios().stream().noneMatch(Dinosaurio::isEstaEnfermo)) // Filtrar dinosaurios curados
+                .doOnNext(tic -> {
+                    List<Dinosaurio> dinosaurios = dinosaurioService.getDinosaurios();
+                    dinosaurios.stream()
+                            .filter(Dinosaurio::isEstaEnfermo)
+                            .forEach(dinosaurio -> logger.info("Dinosaurio en el flujo: {}", dinosaurio));
+                })
+                .subscribeOn(Schedulers.parallel())
                 .subscribe();
+    }
+
+    public void detenerEnfermeria() {
+        if (disposable != null && !disposable.isDisposed()) {
+            disposable.dispose();
+        }
     }
 }

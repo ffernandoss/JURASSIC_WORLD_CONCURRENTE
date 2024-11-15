@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.Disposable;
+import reactor.core.publisher.Flux;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,7 @@ public class DinosaurioService {
 
     private List<Dinosaurio> dinosaurios = new ArrayList<>();
     private List<Dinosaurio> dinosauriosEnfermos = new ArrayList<>();
+    private List<Disposable> disposables = new ArrayList<>();
 
     public void envejecerDinosaurios() {
         List<Dinosaurio> dinosauriosParaEliminar = new ArrayList<>();
@@ -55,13 +58,18 @@ public class DinosaurioService {
     public void suscribirDinosaurio(Dinosaurio dinosaurio) {
         if (!dinosaurios.contains(dinosaurio)) {
             dinosaurios.add(dinosaurio);
-            logger.info("!!!!!Dinosaurio suscrito a dinosaurios: " + dinosaurio.getNombre());
+            Disposable disposable = Flux.just(dinosaurio)
+                    .doOnSubscribe(subscription -> logger.info("!!!!!Dinosaurio suscrito a dinosaurios: " + dinosaurio.getNombre()))
+                    .subscribe();
+            disposables.add(disposable);
         }
     }
 
     public void desuscribirDinosaurio(Dinosaurio dinosaurio) {
         if (dinosaurios.contains(dinosaurio)) {
             dinosaurios.remove(dinosaurio);
+            disposables.forEach(Disposable::dispose);
+            disposables.clear();
             logger.info("!!!!Dinosaurio desuscrito de dinosaurios: " + dinosaurio.getNombre());
         }
     }
@@ -77,14 +85,19 @@ public class DinosaurioService {
     public void suscribirDinosaurioEnfermo(Dinosaurio dinosaurio) {
         if (!dinosauriosEnfermos.contains(dinosaurio)) {
             dinosauriosEnfermos.add(dinosaurio);
-            logger.info("!!!!!Dinosaurio suscrito a enfermería: " + dinosaurio.getNombre());
+            Disposable disposable = Flux.just(dinosaurio)
+                    .doOnSubscribe(subscription -> logger.info("HAN PEGADO UN TIRO A " + dinosaurio.getNombre()))
+                    .subscribe();
+            disposables.add(disposable);
         }
     }
 
     public void desuscribirDinosaurioEnfermo(Dinosaurio dinosaurio) {
         if (dinosauriosEnfermos.contains(dinosaurio)) {
             dinosauriosEnfermos.remove(dinosaurio);
-            logger.info("!!!!!!Dinosaurio desuscrito de enfermería: " + dinosaurio.getNombre());
+            disposables.forEach(Disposable::dispose);
+            disposables.clear();
+            logger.info("UNA DOCTORA CULONA HA CURADO A " + dinosaurio.getNombre());
             suscribirDinosaurio(dinosaurio); // Añadir el dinosaurio a la lista de dinosaurios
         }
     }

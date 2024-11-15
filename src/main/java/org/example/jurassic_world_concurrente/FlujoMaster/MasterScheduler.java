@@ -9,8 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 
 import java.time.Duration;
@@ -34,10 +34,10 @@ public class MasterScheduler {
     private RabbitTemplate rabbitTemplate;
 
     private int ticsTotales = 0;
-
+    private Disposable disposable;
 
     public void iniciarSimulacion() {
-        Flux.interval(Duration.ofSeconds(2))
+        disposable = Flux.interval(Duration.ofSeconds(2))
                 .doOnNext(tic -> {
                     ticsTotales++;
                     logger.info("---------------------------Año de la simulación: {}---------------------------", ticsTotales);
@@ -53,8 +53,6 @@ public class MasterScheduler {
 
                     // Actualizar estados de dinosaurios
                     rabbitTemplate.convertAndSend("actualizarDinosaurioEstadoQueue", "Actualizar");
-
-
 
                     // Evento cada 10 tics (excluyendo 0)
                     if (ticsTotales != 0 && ticsTotales % 10 == 0) {
@@ -76,6 +74,16 @@ public class MasterScheduler {
                     // Imprimir dinosaurios enfermos
                     dinosaurioEstadoService.imprimirDinosauriosEnfermos();
                 })
+                .doOnNext(tic -> {
+                    List<Dinosaurio> dinosaurios = dinosaurioService.getDinosaurios();
+                    dinosaurios.forEach(dinosaurio -> logger.info("Dinosaurio en el flujo: {}", dinosaurio));
+                })
                 .subscribe();
+    }
+
+    public void detenerSimulacion() {
+        if (disposable != null && !disposable.isDisposed()) {
+            disposable.dispose();
+        }
     }
 }
