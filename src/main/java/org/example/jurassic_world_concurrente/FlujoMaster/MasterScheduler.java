@@ -1,7 +1,10 @@
+// src/main/java/org/example/jurassic_world_concurrente/FlujoMaster/MasterScheduler.java
 package org.example.jurassic_world_concurrente.FlujoMaster;
 
 import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioService;
 import org.example.jurassic_world_concurrente.Huevos.HuevoService;
+import org.example.jurassic_world_concurrente.Visitantes.Visitante;
+import org.example.jurassic_world_concurrente.Visitantes.VisitanteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -21,6 +24,9 @@ public class MasterScheduler {
 
     @Autowired
     private HuevoService huevoService;
+
+    @Autowired
+    private VisitanteService visitanteService;
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
@@ -58,6 +64,12 @@ public class MasterScheduler {
                         huevoService.crearHuevoAleatorio();
                         logger.info("Evento de reproducción: se ha creado un nuevo huevo.");
                     }
+
+                    // Agregar un nuevo visitante cada tic
+                    visitanteService.agregarVisitante(new Visitante("Visitante_" + ticsTotales));
+
+                    // Mostrar total de visitantes
+                    logger.info("Total de visitantes: {}", visitanteService.getTotalVisitantes());
                 })
                 .subscribe();
     }
