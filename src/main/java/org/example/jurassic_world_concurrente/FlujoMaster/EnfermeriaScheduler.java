@@ -38,29 +38,40 @@ public class EnfermeriaScheduler {
                     ticActual++;
                     logger.info("Tic actual: {}", ticActual);
 
-                    // Verificar salida de dinosaurios enfermos de la enfermería
-                    dinosaurioService.verificarSalidaEnfermeria(ticActual);
-
-                    // Obtener dinosaurios enfermos y enviarlos a la cola de enfermería
+                    // Obtener dinosaurios enfermos
                     List<Dinosaurio> dinosauriosEnfermos = dinosaurioService.getDinosauriosEnfermos();
-                    dinosauriosEnfermos.forEach(dinosaurio -> {
-                        if (dinosaurio.isEstaEnfermo()) {
-                            logger.info("Dinosaurio enfermo detectado: {}", dinosaurio.getNombre());
-                            rabbitTemplate.convertAndSend("enfermeriaQueue", dinosaurio);
+
+                    synchronized (dinosauriosEnfermos) {
+                        // Incrementar tics y verificar salida de la enfermería
+                        for (Dinosaurio dinosaurio : dinosauriosEnfermos) {
+                            dinosaurio.incrementarTicsEnEnfermeria();
+                            logger.info("Dinosaurio {} ha estado {} tics en la enfermería.", dinosaurio.getNombre(), dinosaurio.getTicsEnEnfermeria());
                         }
-                    });
 
-                    // Actualizar estados de dinosaurios
+                        // Verificar si algún dinosaurio debe salir
+                        dinosaurioService.verificarSalidaEnfermeria(ticActual);
+                    }
+
+                    // Enviar actualización a la cola de estados
                     rabbitTemplate.convertAndSend("actualizarDinosaurioEstadoQueue", "Actualizar");
+                    logger.info("Se envió una actualización de estado a la cola.");
 
-                    // Mostrar estado actual de dinosaurios enfermos
-                    logger.info("Dinosaurios enfermos actualmente en la enfermería:");
-                    dinosauriosEnfermos.forEach(dinosaurio -> logger.info(dinosaurio.toString()));
+                    // Mostrar estado actual de los dinosaurios enfermos
+                    synchronized (dinosauriosEnfermos) {
+                        if (dinosauriosEnfermos.isEmpty()) {
+                            logger.info("No hay dinosaurios enfermos en la enfermería.");
+                        } else {
+                            logger.info("Dinosaurios enfermos actualmente en la enfermería:");
+                            dinosauriosEnfermos.forEach(dinosaurio -> {
+                                logger.info("{} ({} tics)", dinosaurio.getNombre(), dinosaurio.getTicsEnEnfermeria());
+                            });
+                        }
+                    }
 
                     // Log de estados actualizados
-                    logger.info("Actualización de estados:");
-                    logger.info("Estados de dinosaurios enfermos: {}", dinosaurioEstadoService.getEstados());
+                    logger.info("Estados de dinosaurios enfermos actualizados: {}", dinosaurioEstadoService.getEstados());
                 })
+                .onErrorContinue((error, obj) -> logger.error("Error en el flujo de enfermería: ", error))
                 .subscribeOn(Schedulers.parallel())
                 .subscribe();
     }

@@ -17,22 +17,23 @@ public class DinosaurioService {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    private final List<Dinosaurio> dinosaurios = new ArrayList<>();
-    private final List<Dinosaurio> dinosauriosEnfermos = new ArrayList<>();
+    private final List<Dinosaurio> dinosaurios = Collections.synchronizedList(new ArrayList<>());
+    private final List<Dinosaurio> dinosauriosEnfermos = Collections.synchronizedList(new ArrayList<>());
     private final List<Disposable> disposables = new ArrayList<>();
-    private final Map<Dinosaurio, Integer> dinosaurioEnfermoTics = new HashMap<>();
     private static final int DURACION_ENFERMERIA = 3; // Tiempo en tics que el dinosaurio permanece enfermo
 
     public synchronized void envejecerDinosaurios() {
         List<Dinosaurio> dinosauriosParaEliminar = new ArrayList<>();
-        dinosaurios.forEach(dinosaurio -> {
-            if (dinosaurio.getEdad() < dinosaurio.getMaxEdad()) {
-                dinosaurio.envejecer();
-                logger.info("Dinosaurio {} tiene ahora {} años.", dinosaurio.getNombre(), dinosaurio.getEdad());
-            } else {
-                dinosauriosParaEliminar.add(dinosaurio);
-            }
-        });
+        synchronized (dinosaurios) {
+            dinosaurios.forEach(dinosaurio -> {
+                if (dinosaurio.getEdad() < dinosaurio.getMaxEdad()) {
+                    dinosaurio.envejecer();
+                    logger.info("Dinosaurio {} tiene ahora {} años.", dinosaurio.getNombre(), dinosaurio.getEdad());
+                } else {
+                    dinosauriosParaEliminar.add(dinosaurio);
+                }
+            });
+        }
         dinosauriosParaEliminar.forEach(this::matarDinosaurio);
     }
 
@@ -57,19 +58,14 @@ public class DinosaurioService {
     public synchronized void suscribirDinosaurio(Dinosaurio dinosaurio) {
         if (!dinosaurios.contains(dinosaurio)) {
             dinosaurios.add(dinosaurio);
-            Disposable disposable = Flux.just(dinosaurio)
-                    .doOnSubscribe(subscription -> logger.info("!!!!! Dinosaurio suscrito a dinosaurios: " + dinosaurio.getNombre()))
-                    .subscribe();
-            disposables.add(disposable);
+            logger.info("Dinosaurio {} agregado a la lista principal.", dinosaurio.getNombre());
         }
     }
 
     public synchronized void desuscribirDinosaurio(Dinosaurio dinosaurio) {
         if (dinosaurios.contains(dinosaurio)) {
             dinosaurios.remove(dinosaurio);
-            disposables.forEach(Disposable::dispose);
-            disposables.clear();
-            logger.info("!!!! Dinosaurio desuscrito de dinosaurios: " + dinosaurio.getNombre());
+            logger.info("Dinosaurio {} eliminado de la lista principal.", dinosaurio.getNombre());
         }
     }
 
@@ -84,29 +80,34 @@ public class DinosaurioService {
     public synchronized void suscribirDinosaurioEnfermo(Dinosaurio dinosaurio, int ticActual) {
         if (!dinosauriosEnfermos.contains(dinosaurio)) {
             dinosauriosEnfermos.add(dinosaurio);
-            dinosaurioEnfermoTics.put(dinosaurio, ticActual);
-            logger.info("HAN PEGADO UN TIRO A " + dinosaurio.getNombre() + " en el tic " + ticActual);
+            dinosaurio.setTicsEnEnfermeria(0); // Reiniciar contador de tics
+            logger.info("Dinosaurio {} ingresó a la enfermería en el tic {}.", dinosaurio.getNombre(), ticActual);
         }
     }
 
     public synchronized void desuscribirDinosaurioEnfermo(Dinosaurio dinosaurio) {
         if (dinosauriosEnfermos.contains(dinosaurio)) {
             dinosauriosEnfermos.remove(dinosaurio);
-            dinosaurioEnfermoTics.remove(dinosaurio);
-            logger.info("UNA DOCTORA CULONA HA CURADO A " + dinosaurio.getNombre());
-            suscribirDinosaurio(dinosaurio); // Añadir el dinosaurio a la lista de dinosaurios
+            dinosaurio.resetTicsEnEnfermeria();
+            logger.info("Dinosaurio {} ha sido curado y salió de la enfermería.", dinosaurio.getNombre());
+            suscribirDinosaurio(dinosaurio); // Regresar a la lista principal
         }
     }
 
-    public synchronized void verificarSalidaEnfermeria(int ticActual) {
-        List<Dinosaurio> dinosauriosCurados = new ArrayList<>();
-        dinosaurioEnfermoTics.forEach((dinosaurio, ticEntrada) -> {
-            if (ticActual >= ticEntrada + DURACION_ENFERMERIA) {
-                dinosauriosCurados.add(dinosaurio);
+    public void verificarSalidaEnfermeria(int ticsTotales) {
+        logger.info("Verificando dinosaurios que cumplen el tiempo de permanencia en enfermería...");
+        List<Dinosaurio> dinosauriosParaSalir = new ArrayList<>();
+        synchronized (dinosauriosEnfermos) {
+            for (Dinosaurio dinosaurio : dinosauriosEnfermos) {
+                if (dinosaurio.getTicsEnEnfermeria() >= DURACION_ENFERMERIA) {
+                    dinosaurio.setEstaEnfermo(false);
+                    dinosaurio.resetTicsEnEnfermeria();
+                    dinosauriosParaSalir.add(dinosaurio);
+                    logger.info("Dinosaurio {} cumplió el tiempo en enfermería y será dado de alta.", dinosaurio.getNombre());
+                }
             }
-        });
-
-        dinosauriosCurados.forEach(this::desuscribirDinosaurioEnfermo);
+        }
+        dinosauriosParaSalir.forEach(this::desuscribirDinosaurioEnfermo);
     }
 
     public synchronized List<Dinosaurio> getDinosauriosEnfermos() {

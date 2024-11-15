@@ -7,6 +7,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
 import java.time.Duration;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Component
 public class ControladorDeFlujos {
@@ -14,6 +15,8 @@ public class ControladorDeFlujos {
     private static final int TICS_POR_FLUJO = 1; // 1 tic por flujo
     private Disposable masterFlowDisposable;
     private Disposable otherFlowDisposable;
+    private final AtomicBoolean masterFlowRunning = new AtomicBoolean(false);
+    private final AtomicBoolean otherFlowRunning = new AtomicBoolean(false);
 
     @Autowired
     private MasterScheduler masterScheduler;
@@ -21,23 +24,31 @@ public class ControladorDeFlujos {
     @Autowired
     private EnfermeriaScheduler otroScheduler; // Tu otro flujo
 
-    // Inicia el flujo master
+    // Inicia el flujo master y luego el flujo alterno (de enfermería)
     public void iniciarFlujos() {
         masterFlowDisposable = Flux.interval(Duration.ofSeconds(1)) // Intervalo de un segundo por tic
                 .doOnNext(tic -> {
-                    // Ejecutar un tic del flujo master
-                    masterScheduler.iniciarSimulacion();
-                    pausarFlujo(masterFlowDisposable);
+                    if (!otherFlowRunning.get() && !masterFlowRunning.get()) {
+                        masterFlowRunning.set(true);
+                        // Ejecutar un tic del flujo master
+                        masterScheduler.iniciarSimulacion();
+                        pausarFlujo(masterFlowDisposable); // Pausar flujo master
+                        masterFlowRunning.set(false);
 
-                    // Iniciar el flujo alterno
-                    otherFlowDisposable = Flux.interval(Duration.ofSeconds(1))
-                            .doOnNext(t -> {
-                                // Ejecutar un tic del flujo alterno
-                                otroScheduler.iniciarEnfermeria();
-                                pausarFlujo(otherFlowDisposable); // Pausar después del tic
-                            })
-                            .subscribeOn(Schedulers.parallel())
-                            .subscribe();
+                        // Ahora iniciar el flujo alterno (de enfermería) con el mismo tic
+                        otherFlowDisposable = Flux.interval(Duration.ofSeconds(1))
+                                .doOnNext(t -> {
+                                    if (!masterFlowRunning.get() && !otherFlowRunning.get()) {
+                                        otherFlowRunning.set(true);
+                                        // Ejecutar un tic del flujo alterno
+                                        otroScheduler.iniciarEnfermeria();
+                                        pausarFlujo(otherFlowDisposable); // Pausar después del tic
+                                        otherFlowRunning.set(false);
+                                    }
+                                })
+                                .subscribeOn(Schedulers.parallel())
+                                .subscribe();
+                    }
                 })
                 .subscribeOn(Schedulers.parallel())
                 .subscribe();
