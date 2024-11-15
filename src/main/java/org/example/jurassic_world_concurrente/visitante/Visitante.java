@@ -33,6 +33,6 @@ public class Visitante {
 
     @Override
     public String toString() {
-        return String.format("Visitante{id=%d, nombre='%s'}", id, nombre);
+        return String.format("Visitante {id=%d}", id);
     }
 }

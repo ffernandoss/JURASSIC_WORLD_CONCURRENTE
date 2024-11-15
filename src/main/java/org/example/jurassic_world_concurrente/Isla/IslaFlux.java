@@ -32,7 +32,7 @@ public class IslaFlux {
                     synchronized (this) {
                         visitantes.add(v);
                         int total = totalVisitantes.incrementAndGet();
-                        logger.info("Visitante {} ha entrado a {}. Total visitantes: {}", v.getNombre(), nombreIsla, total);
+                        logger.info("Visitante {} ha entrado a {}. Total visitantes: {}", v.getId(), nombreIsla, total);
                         if (total == MAX_VISITANTES) {
                             rabbitTemplate.convertAndSend("visitorNotificationQueue", nombreIsla);
                         }
@@ -47,7 +47,7 @@ public class IslaFlux {
                             totalVisitantes.set(0);
                             total = 0;
                         }
-                        logger.info("Visitante {} ha salido de {}. Total visitantes: {}", v.getNombre(), nombreIsla, total);
+                        logger.info("Visitante {} ha salido de {}. Total visitantes: {}", v.getId(), nombreIsla, total);
                     }
                 })
                 .then();

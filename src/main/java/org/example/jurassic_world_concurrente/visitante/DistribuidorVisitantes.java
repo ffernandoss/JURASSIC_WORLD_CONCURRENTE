@@ -1,4 +1,4 @@
-// src/main/java/org/example/jurassic_world_concurrente/DistribuidorVisitantes.java
+// src/main/java/org/example/jurassic_world_concurrente/visitante/DistribuidorVisitantes.java
 package org.example.jurassic_world_concurrente.visitante;
 
 import org.example.jurassic_world_concurrente.Isla.IslaFlux;
@@ -29,7 +29,7 @@ public class DistribuidorVisitantes {
 
     public Mono<Void> moverAIsla(Visitante visitante) {
         String islaAsignada = islas.get(random.nextInt(islas.size()));
-        logger.info("Visitante {} asignado a {}", visitante.getNombre(), islaAsignada);
+        logger.info("Visitante {} asignado a {}", visitante.getId(), islaAsignada);
         return islaFluxMap.get(islaAsignada).agregarVisitante(visitante);
     }
 
