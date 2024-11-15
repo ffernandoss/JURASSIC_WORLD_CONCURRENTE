@@ -1,4 +1,4 @@
-package org.example.jurassic_world_concurrente;
+package org.example.jurassic_world_concurrente.visitante;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

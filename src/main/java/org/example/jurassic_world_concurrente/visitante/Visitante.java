@@ -1,5 +1,5 @@
 // src/main/java/org/example/jurassic_world_concurrente/Visitante.java
-package org.example.jurassic_world_concurrente;
+package org.example.jurassic_world_concurrente.visitante;
 
 public class Visitante {
     private static long idCounter = 0;

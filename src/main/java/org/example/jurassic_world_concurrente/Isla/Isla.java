@@ -1,4 +1,6 @@
-package org.example.jurassic_world_concurrente;
+package org.example.jurassic_world_concurrente.Isla;
+
+import org.example.jurassic_world_concurrente.visitante.Visitante;
 
 import java.util.ArrayList;
 import java.util.List;

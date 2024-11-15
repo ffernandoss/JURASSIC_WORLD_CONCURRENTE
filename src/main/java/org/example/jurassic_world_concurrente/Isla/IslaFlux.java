@@ -1,6 +1,7 @@
 // src/main/java/org/example/jurassic_world_concurrente/IslaFlux.java
-package org.example.jurassic_world_concurrente;
+package org.example.jurassic_world_concurrente.Isla;
 
+import org.example.jurassic_world_concurrente.visitante.Visitante;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;

@@ -1,8 +1,8 @@
 // src/main/java/org/example/jurassic_world_concurrente/rabbit/VisitorNotificationListener.java
 package org.example.jurassic_world_concurrente.rabbit;
 
-import org.example.jurassic_world_concurrente.DistribuidorVisitantes;
-import org.example.jurassic_world_concurrente.Visitante;
+import org.example.jurassic_world_concurrente.visitante.DistribuidorVisitantes;
+import org.example.jurassic_world_concurrente.visitante.Visitante;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
