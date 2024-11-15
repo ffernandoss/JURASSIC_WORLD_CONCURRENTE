@@ -1,3 +1,4 @@
+// src/main/java/org/example/jurassic_world_concurrente/JurassicWorldConcurrenteApplication.java
 package org.example.jurassic_world_concurrente;
 
 import org.example.jurassic_world_concurrente.Dinosaurios.Dinosaurio;
@@ -36,6 +37,9 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
     @Autowired
     private MasterScheduler masterScheduler;
 
+    @Autowired
+    private DistribuidorVisitantes distribuidorVisitantes;
+
     public static void main(String[] args) {
         SpringApplication.run(JurassicWorldConcurrenteApplication.class, args);
     }
@@ -60,8 +64,14 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
         VisitanteGenerator visitanteGenerator = new VisitanteGenerator();
         Flux<Visitante> visitantesFlux = visitanteGenerator.generarVisitantesContinuos();
 
-        visitantesFlux
-                .flatMap(DistribuidorVisitantes::moverAIsla) // Distribuye visitantes
+        // Combinar flujos de visitantes y flujos de islas
+        Flux<Visitante> flujoCombinado = Flux.merge(
+                visitantesFlux,
+                distribuidorVisitantes.obtenerFlujosIslas()
+        );
+
+        flujoCombinado
+                .flatMap(distribuidorVisitantes::moverAIsla) // Distribuye visitantes
                 .subscribe();
 
         // Keep the application running to observe the visitor generation

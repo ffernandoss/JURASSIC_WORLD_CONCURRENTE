@@ -17,4 +17,9 @@ public class RabbitMQConfig {
     public Queue verificarDinosauriosQueue() {
         return new Queue("verificarDinosauriosQueue", false);
     }
+
+    @Bean
+    public Queue visitorNotificationQueue() {
+        return new Queue("visitorNotificationQueue", false);
+    }
 }
