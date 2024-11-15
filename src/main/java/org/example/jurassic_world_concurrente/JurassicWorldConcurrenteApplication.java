@@ -1,3 +1,4 @@
+// src/main/java/org/example/jurassic_world_concurrente/JurassicWorldConcurrenteApplication.java
 package org.example.jurassic_world_concurrente;
 
 import org.example.jurassic_world_concurrente.Dinosaurios.Dinosaurio;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import reactor.core.publisher.Flux;
 
 import java.util.Arrays;
 
@@ -43,10 +45,6 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         // Crear dinosaurios de cada tipo usando la fábrica y agregar al DinosaurioService
-        /*Dinosaurio carnivoro1 = fabricaDinosaurios.crearDinosaurio("Carnivoro");
-        Dinosaurio carnivoro2 = fabricaDinosaurios.crearDinosaurio("Carnivoro");
-        Dinosaurio herbivoro1 = fabricaDinosaurios.crearDinosaurio("Herbivoro");
-        Dinosaurio herbivoro2 = fabricaDinosaurios.crearDinosaurio("Herbivoro");*/
         Dinosaurio volador1 = fabricaDinosaurios.crearDinosaurio("Volador");
         Dinosaurio volador2 = fabricaDinosaurios.crearDinosaurio("Volador");
 
@@ -58,5 +56,20 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
 
         // Iniciar el flujo maestro que controla el tiempo de simulación
         masterScheduler.iniciarSimulacion();
+
+        // Iniciar la generación de visitantes
+        VisitanteGenerator visitanteGenerator = new VisitanteGenerator();
+        Flux<Visitante> visitantesFlux = visitanteGenerator.generarVisitantesContinuos();
+
+        visitantesFlux.subscribe(visitante -> {
+            // No log the visitor creation here
+        });
+
+        // Keep the application running to observe the visitor generation
+        try {
+            Thread.sleep(10000); // Run for 10 seconds
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
