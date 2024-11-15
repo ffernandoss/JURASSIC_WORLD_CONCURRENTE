@@ -1,4 +1,3 @@
-// src/main/java/org/example/jurassic_world_concurrente/Visitante.java
 package org.example.jurassic_world_concurrente.visitante;
 
 public class Visitante {
@@ -34,9 +33,6 @@ public class Visitante {
 
     @Override
     public String toString() {
-        return "Visitante{" +
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
-                '}';
+        return String.format("Visitante{id=%d, nombre='%s'}", id, nombre);
     }
 }

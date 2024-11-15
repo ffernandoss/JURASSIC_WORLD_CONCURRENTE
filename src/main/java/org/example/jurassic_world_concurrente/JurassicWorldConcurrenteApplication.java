@@ -1,4 +1,3 @@
-// src/main/java/org/example/jurassic_world_concurrente/JurassicWorldConcurrenteApplication.java
 package org.example.jurassic_world_concurrente;
 
 import org.example.jurassic_world_concurrente.Dinosaurios.Dinosaurio;
@@ -64,7 +63,7 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
         masterScheduler.iniciarSimulacion();
 
         // Iniciar la generación de visitantes
-        VisitanteGenerator visitanteGenerator = new VisitanteGenerator();
+        VisitanteGenerator visitanteGenerator = new VisitanteGenerator(distribuidorVisitantes);
         Flux<Visitante> visitantesFlux = visitanteGenerator.generarVisitantesContinuos();
 
         // Combinar flujos de visitantes y flujos de islas

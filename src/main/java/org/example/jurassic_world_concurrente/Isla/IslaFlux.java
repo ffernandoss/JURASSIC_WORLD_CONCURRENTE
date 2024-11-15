@@ -1,4 +1,3 @@
-// src/main/java/org/example/jurassic_world_concurrente/IslaFlux.java
 package org.example.jurassic_world_concurrente.Isla;
 
 import org.example.jurassic_world_concurrente.visitante.Visitante;
@@ -30,30 +29,41 @@ public class IslaFlux {
         return Mono.just(visitante)
                 .filter(v -> totalVisitantes.get() < MAX_VISITANTES)
                 .doOnNext(v -> {
-                    visitantes.add(v);
-                    int total = totalVisitantes.incrementAndGet();
-                    logger.info("Visitante {} ha entrado a {}. Total visitantes: {}", v.getNombre(), nombreIsla, total);
-                    if (total == MAX_VISITANTES) {
-                        rabbitTemplate.convertAndSend("visitorNotificationQueue", nombreIsla);
+                    synchronized (this) {
+                        visitantes.add(v);
+                        int total = totalVisitantes.incrementAndGet();
+                        logger.info("Visitante {} ha entrado a {}. Total visitantes: {}", v.getNombre(), nombreIsla, total);
+                        if (total == MAX_VISITANTES) {
+                            rabbitTemplate.convertAndSend("visitorNotificationQueue", nombreIsla);
+                        }
                     }
                 })
                 .delayElement(Duration.ofSeconds(5))
                 .doOnNext(v -> {
-                    visitantes.remove(v);
-                    int total = totalVisitantes.decrementAndGet();
-                    logger.info("Visitante {} ha salido de {}. Total visitantes: {}", v.getNombre(), nombreIsla, total);
+                    synchronized (this) {
+                        visitantes.remove(v);
+                        int total = totalVisitantes.decrementAndGet();
+                        if (total < 0) {
+                            totalVisitantes.set(0);
+                            total = 0;
+                        }
+                        logger.info("Visitante {} ha salido de {}. Total visitantes: {}", v.getNombre(), nombreIsla, total);
+                    }
                 })
                 .then();
     }
 
-    public int getTotalVisitantes() {
+    public synchronized int getTotalVisitantes() {
         return totalVisitantes.get();
     }
 
-    public Visitante removeVisitante() {
+    public synchronized Visitante removeVisitante() {
         if (!visitantes.isEmpty()) {
             Visitante visitante = visitantes.remove(0);
-            totalVisitantes.decrementAndGet();
+            int total = totalVisitantes.decrementAndGet();
+            if (total < 0) {
+                totalVisitantes.set(0);
+            }
             return visitante;
         }
         return null;
