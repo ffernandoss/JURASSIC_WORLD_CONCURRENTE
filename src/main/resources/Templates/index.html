@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jurassic World Concurrente</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap');
+
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: 'Rock Salt', cursive;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .video-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      color: #fff;
+    }
+
+    h1 {
+      font-size: 3em;
+      text-shadow: 2px 2px 4px #000; /* Contorno negro */
+    }
+
+    p {
+      font-size: 1.2em;
+      text-shadow: 2px 2px 4px #000; /* Contorno negro */
+    }
+
+    .logo {
+      width: 600px; /* Ajusta el tamaño aquí */
+      margin-bottom: 20px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .island-button {
+      font-family: 'Rock Salt', cursive;
+      font-size: 1.2em;
+      padding: 10px 20px;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .island-button:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+<video autoplay muted loop class="video-background">
+  <source src="/static/mediaNode-1731522870754.mp4" type="video/mp4">
+  Tu navegador no soporta la etiqueta de video.
+</video>
+<div class="content">
+  <img src="/static/jurassic-park-seeklogo.png" alt="Jurassic Park Logo" class="logo">
+  <h1>Bienvenido a Jurassic World </h1>
+  <p>A que Isla deseas ir</p>
+  <div class="buttons">
+    <button class="island-button" onclick="location.href='isla_voladores.html'">ISLA VOLADORES</button>
+    <button class="island-button" onclick="location.href='isla_carnivoros.html'">ISLA CARNÍVOROS</button>
+    <button class="island-button" onclick="location.href='isla_herbivoros.html'">ISLA HERBÍVOROS</button>
+    <button class="island-button" onclick="location.href='enfermeria.html'">ENFERMERÍA</button>
+  </div>
+</div>
+</body>
+</html>
