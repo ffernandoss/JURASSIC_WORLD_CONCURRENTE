@@ -20,52 +20,53 @@ public class DinosaurioService {
     private RabbitTemplate rabbitTemplate;
 
     private List<Dinosaurio> dinosaurios = new ArrayList<>();
+    private List<Dinosaurio> dinosauriosEnfermos = new ArrayList<>();
 
     public void envejecerDinosaurios() {
-        List<Dinosaurio> dinosauriosParaEliminar = new ArrayList<>();
-        dinosaurios.forEach(dinosaurio -> {
-            if (dinosaurio.getEdad() < dinosaurio.getMaxEdad()) {
-                dinosaurio.envejecer();
-                logger.info("Dinosaurio {} tiene ahora {} años.", dinosaurio.getNombre(), dinosaurio.getEdad());
-                if (dinosaurio.isEstaEnfermo()) {
-                    rabbitTemplate.convertAndSend("enfermeriaQueue", dinosaurio);
-                }
-            } else {
-                dinosauriosParaEliminar.add(dinosaurio);
-            }
-        });
-        dinosauriosParaEliminar.forEach(this::matarDinosaurio);
+        // Lógica para envejecer dinosaurios
     }
 
     public void matarDinosaurio(Dinosaurio dinosaurio) {
-        logger.info("Dinosaurio {} ha muerto de viejo.", dinosaurio.getNombre());
-        dinosaurios.remove(dinosaurio);
-        rabbitTemplate.convertAndSend("dinosaurDeathQueue", dinosaurio.getTipo());
+        // Lógica para matar dinosaurio
     }
 
     public void generarEventoMuerteAleatoria() {
-        if (!dinosaurios.isEmpty()) {
-            Dinosaurio randomDino = dinosaurios.get(new Random().nextInt(dinosaurios.size()));
-            logger.info("Evento de muerte aleatoria: Dinosaurio {} fue asesinado.", randomDino.getNombre());
-            dinosaurios.remove(randomDino);
-        }
+        // Lógica para generar evento de muerte aleatoria
     }
 
     public void agregarDinosaurio(Dinosaurio dinosaurio) {
         dinosaurios.add(dinosaurio);
     }
 
+    public void suscribirDinosaurioEnfermo(Dinosaurio dinosaurio) {
+        if (!dinosauriosEnfermos.contains(dinosaurio)) {
+            dinosauriosEnfermos.add(dinosaurio);
+        }
+    }
+
+    public void desuscribirDinosaurioEnfermo(Dinosaurio dinosaurio) {
+        dinosauriosEnfermos.remove(dinosaurio);
+    }
+
+    public void suscribirDinosaurio(Dinosaurio dinosaurio) {
+        if (!dinosaurios.contains(dinosaurio)) {
+            dinosaurios.add(dinosaurio);
+        }
+    }
+
+    public void desuscribirDinosaurio(Dinosaurio dinosaurio) {
+        dinosaurios.remove(dinosaurio);
+    }
+
     public List<Dinosaurio> getDinosaurios() {
         return dinosaurios;
     }
 
-    public boolean existeDinosaurioDeTipo(String tipo) {
-        return dinosaurios.stream().anyMatch(dino -> dino.getTipo().equalsIgnoreCase(tipo));
+    public List<Dinosaurio> getDinosauriosEnfermos() {
+        return dinosauriosEnfermos;
     }
 
-    public List<Dinosaurio> getDinosauriosEnfermos() {
-        return dinosaurios.stream()
-                .filter(Dinosaurio::isEstaEnfermo)
-                .collect(Collectors.toList());
+    public boolean existeDinosaurioDeTipo(String tipo) {
+        return dinosaurios.stream().anyMatch(dino -> dino.getTipo().equalsIgnoreCase(tipo));
     }
 }

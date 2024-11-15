@@ -1,5 +1,7 @@
+// src/main/java/org/example/jurassic_world_concurrente/Dinosaurios/DinosaurioEstadoService.java
 package org.example.jurassic_world_concurrente.Dinosaurios;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -10,12 +12,23 @@ import java.util.stream.Collectors;
 public class DinosaurioEstadoService {
     private List<DinosaurioEstado> estados = new ArrayList<>();
 
+    @Autowired
+    private DinosaurioService dinosaurioService;
+
     public void actualizarEstados(List<Dinosaurio> dinosaurios) {
         estados.clear();
-        for (Dinosaurio dinosaurio : dinosaurios) {
+        List<Dinosaurio> dinosauriosCopy = new ArrayList<>(dinosaurios); // Crear una copia de la lista
+        for (Dinosaurio dinosaurio : dinosauriosCopy) {
             DinosaurioEstado estado = new DinosaurioEstado(dinosaurio);
             estado.actualizarEstado();
             estados.add(estado);
+            if (estado.isEstaEnfermo()) {
+                dinosaurioService.suscribirDinosaurioEnfermo(dinosaurio);
+                dinosaurioService.desuscribirDinosaurio(dinosaurio);
+            } else {
+                dinosaurioService.desuscribirDinosaurioEnfermo(dinosaurio);
+                dinosaurioService.suscribirDinosaurio(dinosaurio);
+            }
         }
     }
 

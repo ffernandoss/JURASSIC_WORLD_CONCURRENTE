@@ -1,3 +1,4 @@
+// src/main/java/org/example/jurassic_world_concurrente/FlujoMaster/EnfermeriaScheduler.java
 package org.example.jurassic_world_concurrente.FlujoMaster;
 
 import org.example.jurassic_world_concurrente.Dinosaurios.Dinosaurio;
@@ -37,6 +38,7 @@ public class EnfermeriaScheduler {
                         if (dinosaurio.isEstaEnfermo()) {
                             logger.info("Dinosaurio enfermo: " + dinosaurio.getNombre());
                             rabbitTemplate.convertAndSend("enfermeriaQueue", dinosaurio);
+                            dinosaurioService.suscribirDinosaurioEnfermo(dinosaurio);
                         }
                     });
 
