@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -25,8 +26,9 @@ public class HuevoService {
     private Random random = new Random();
 
     public void incubarHuevos() {
-        List<Huevo> huevosEclosionados = new LinkedList<>();
-        colaHuevos.forEach(huevo -> {
+        Iterator<Huevo> iterator = colaHuevos.iterator();
+        while (iterator.hasNext()) {
+            Huevo huevo = iterator.next();
             if (!"Eclosionado".equals(huevo.getEstado())) {
                 huevo.incubar();
                 logger.info("Huevo de tipo {} está incubando. Tiempo de incubación: {} días", huevo.getTipo(), huevo.getTiempoIncubacion());
@@ -34,10 +36,9 @@ public class HuevoService {
                 Dinosaurio dinosaurio = huevo.transformarADinosaurio();
                 dinosaurioService.agregarDinosaurio(dinosaurio);
                 logger.info("Huevo de tipo {} ha eclosionado, creando dinosaurio {}", huevo.getTipo(), dinosaurio.getNombre());
-                huevosEclosionados.add(huevo);
+                iterator.remove();
             }
-        });
-        colaHuevos.removeAll(huevosEclosionados);
+        }
     }
 
     public Huevo crearHuevo(String tipo) {

@@ -3,6 +3,10 @@ package org.example.jurassic_world_concurrente.FlujoMaster;
 
 import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioService;
 import org.example.jurassic_world_concurrente.Huevos.HuevoService;
+import org.example.jurassic_world_concurrente.Islas.IslaCarnivoro;
+import org.example.jurassic_world_concurrente.Islas.IslaHerbivoro;
+import org.example.jurassic_world_concurrente.Islas.IslaVolador;
+import org.example.jurassic_world_concurrente.Islas.IslaHuevo;
 import org.example.jurassic_world_concurrente.Visitantes.Visitante;
 import org.example.jurassic_world_concurrente.Visitantes.VisitanteService;
 import org.slf4j.Logger;
@@ -32,10 +36,23 @@ public class MasterScheduler {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
+    @Autowired
+    private IslaCarnivoro islaCarnivoro;
+
+    @Autowired
+    private IslaHerbivoro islaHerbivoro;
+
+    @Autowired
+    private IslaVolador islaVolador;
+
+    @Autowired
+    private IslaHuevo islaHuevo;
+
     private int ticsTotales = 0;
     private Random random = new Random();
 
     public void iniciarSimulacion() {
+        // Flujo principal para generar eventos
         Flux.interval(Duration.ofSeconds(2))
                 .doOnNext(tic -> {
                     ticsTotales++;
@@ -44,17 +61,8 @@ public class MasterScheduler {
                     // Envejecer dinosaurios y verificar muertes
                     dinosaurioService.envejecerDinosaurios();
 
-                    // Incubar huevos y verificar eclosión
-                    huevoService.incubarHuevos();
-
                     // Enviar mensaje a la cola para verificar dinosaurios
                     rabbitTemplate.convertAndSend("verificarDinosauriosQueue", "Verificar");
-
-                    // Mostrar lista de dinosaurios
-                    logger.info("Lista de dinosaurios: {}", dinosaurioService.getDinosaurios());
-
-                    // Mostrar lista de huevos
-                    logger.info("Lista de huevos: {}", huevoService.getHuevos());
 
                     // Evento cada 10 tics (excluyendo 0)
                     if (ticsTotales != 0 && ticsTotales % 10 == 0) {
@@ -67,6 +75,19 @@ public class MasterScheduler {
                         logger.info("Evento de reproducción: se ha creado un nuevo huevo.");
                     }
 
+                    // Mostrar información de Isla Huevo
+                    huevoService.incubarHuevos();
+                    islaHuevo.mostrarInformacion();
+
+                    // Mostrar información de Isla Carnívoro
+                    islaCarnivoro.mostrarInformacion();
+
+                    // Mostrar información de Isla Herbívoro
+                    islaHerbivoro.mostrarInformacion();
+
+                    // Mostrar información de Isla Volador
+                    islaVolador.mostrarInformacion();
+
                     // Incrementar tiempo de visitantes en el parque y eliminar los que han estado más de 2 años
                     visitanteService.incrementarTiempoVisitantes();
 
@@ -78,6 +99,7 @@ public class MasterScheduler {
 
                     // Mostrar total de visitantes
                     logger.info("Total de visitantes: {}", visitanteService.getTotalVisitantes());
+
                 })
                 .subscribe();
     }

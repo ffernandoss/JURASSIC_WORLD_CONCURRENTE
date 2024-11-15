@@ -7,9 +7,9 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
 public class DinosaurioService {
@@ -18,10 +18,10 @@ public class DinosaurioService {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    private List<Dinosaurio> dinosaurios = new ArrayList<>();
+    private List<Dinosaurio> dinosaurios = new CopyOnWriteArrayList<>();
 
     public void envejecerDinosaurios() {
-        List<Dinosaurio> dinosauriosParaEliminar = new ArrayList<>();
+        List<Dinosaurio> dinosauriosParaEliminar = new CopyOnWriteArrayList<>();
         dinosaurios.forEach(dinosaurio -> {
             if (dinosaurio.getEdad() < dinosaurio.getMaxEdad()) {
                 dinosaurio.envejecer();
