@@ -5,10 +5,12 @@ public class Visitante {
     private static long idCounter = 0;
     private Long id;
     private String nombre;
+    private int tiempoEnParque;
 
     public Visitante(String nombre) {
         this.id = generateId();
         this.nombre = nombre;
+        this.tiempoEnParque = 0;
     }
 
     private synchronized long generateId() {
@@ -23,11 +25,20 @@ public class Visitante {
         return nombre;
     }
 
+    public int getTiempoEnParque() {
+        return tiempoEnParque;
+    }
+
+    public void incrementarTiempoEnParque() {
+        this.tiempoEnParque++;
+    }
+
     @Override
     public String toString() {
         return "Visitante{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
+                ", tiempoEnParque=" + tiempoEnParque +
                 '}';
     }
 }

@@ -15,7 +15,19 @@ public class VisitanteService {
 
     public void agregarVisitante(Visitante visitante) {
         visitantes.add(visitante);
-        logger.info("Nuevo visitante agregado: {}", visitante);
+        logger.info("Nuevo visitante agregado: Visitante_{}", visitante.getId());
+    }
+
+    public void incrementarTiempoVisitantes() {
+        List<Visitante> visitantesParaEliminar = new ArrayList<>();
+        for (Visitante visitante : visitantes) {
+            visitante.incrementarTiempoEnParque();
+            if (visitante.getTiempoEnParque() >= 2) {
+                visitantesParaEliminar.add(visitante);
+                logger.info("Visitante {} ha abandonado el parque.", visitante.getId());
+            }
+        }
+        visitantes.removeAll(visitantesParaEliminar);
     }
 
     public List<Visitante> getVisitantes() {

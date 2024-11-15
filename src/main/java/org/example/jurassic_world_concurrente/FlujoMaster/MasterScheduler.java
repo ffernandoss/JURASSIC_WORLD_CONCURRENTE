@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
 import java.time.Duration;
+import java.util.Random;
 
 @Component
 public class MasterScheduler {
@@ -32,6 +33,7 @@ public class MasterScheduler {
     private RabbitTemplate rabbitTemplate;
 
     private int ticsTotales = 0;
+    private Random random = new Random();
 
     public void iniciarSimulacion() {
         Flux.interval(Duration.ofSeconds(2))
@@ -65,8 +67,14 @@ public class MasterScheduler {
                         logger.info("Evento de reproducción: se ha creado un nuevo huevo.");
                     }
 
-                    // Agregar un nuevo visitante cada tic
-                    visitanteService.agregarVisitante(new Visitante("Visitante_" + ticsTotales));
+                    // Incrementar tiempo de visitantes en el parque y eliminar los que han estado más de 2 años
+                    visitanteService.incrementarTiempoVisitantes();
+
+                    // Agregar un número aleatorio de visitantes cada año
+                    int nuevosVisitantes = random.nextInt(10) + 1;
+                    for (int i = 0; i < nuevosVisitantes; i++) {
+                        visitanteService.agregarVisitante(new Visitante("Visitante_" + ticsTotales + "_" + i));
+                    }
 
                     // Mostrar total de visitantes
                     logger.info("Total de visitantes: {}", visitanteService.getTotalVisitantes());
