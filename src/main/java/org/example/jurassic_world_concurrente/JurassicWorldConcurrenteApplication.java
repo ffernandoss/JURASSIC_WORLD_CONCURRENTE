@@ -4,7 +4,6 @@ package org.example.jurassic_world_concurrente;
 import org.example.jurassic_world_concurrente.Dinosaurios.Dinosaurio;
 import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioService;
 import org.example.jurassic_world_concurrente.FlujoMaster.MasterScheduler;
-import org.example.jurassic_world_concurrente.FlujoMaster.VisitantesScheduler;
 import org.example.jurassic_world_concurrente.Huevos.FabricaHuevos;
 import org.example.jurassic_world_concurrente.Huevos.HuevoService;
 import org.example.jurassic_world_concurrente.Dinosaurios.FabricaDinosaurios;
@@ -37,8 +36,6 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
     @Autowired
     private MasterScheduler masterScheduler;
 
-    @Autowired
-    private VisitantesScheduler visitantesScheduler;
 
     public static void main(String[] args) {
         SpringApplication.run(JurassicWorldConcurrenteApplication.class, args);
@@ -59,7 +56,5 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
         // Iniciar el flujo maestro que controla el tiempo de simulación
         masterScheduler.iniciarSimulacion();
 
-        // Iniciar el flujo de visitantes que controla el tiempo de simulación
-        visitantesScheduler.iniciarSimulacion();
     }
 }
