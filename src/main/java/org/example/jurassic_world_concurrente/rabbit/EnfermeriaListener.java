@@ -27,6 +27,7 @@ public class EnfermeriaListener {
         try {
             if (dinosaurio.isEstaEnfermo()) {
                 dinosaurioService.suscribirDinosaurioEnfermo(dinosaurio);
+                dinosaurioService.desuscribirDinosaurio(dinosaurio);
                 logger.info("Dinosaurio enfermo añadido: " + dinosaurio.getNombre());
             } else {
                 dinosaurioService.desuscribirDinosaurioEnfermo(dinosaurio);

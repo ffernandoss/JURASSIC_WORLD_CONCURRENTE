@@ -14,6 +14,7 @@ import reactor.core.publisher.Flux;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.ArrayList;
 
 @Component
 public class EnfermeriaScheduler {
@@ -34,12 +35,15 @@ public class EnfermeriaScheduler {
                 .doOnNext(tic -> {
 
                     // Enviar dinosaurios enfermos a la cola de enfermería
-                    List<Dinosaurio> dinosauriosEnfermos = dinosaurioService.getDinosauriosEnfermos();
+                    List<Dinosaurio> dinosauriosEnfermos = new ArrayList<>(dinosaurioService.getDinosauriosEnfermos());
                     dinosauriosEnfermos.forEach(dinosaurio -> {
                         if (dinosaurio.isEstaEnfermo()) {
                             logger.info("Dinosaurio enfermo: " + dinosaurio.getNombre());
                             rabbitTemplate.convertAndSend("enfermeriaQueue", dinosaurio);
                             dinosaurioService.suscribirDinosaurioEnfermo(dinosaurio);
+                        } else {
+                            dinosaurioService.desuscribirDinosaurioEnfermo(dinosaurio);
+                            dinosaurioService.suscribirDinosaurio(dinosaurio);
                         }
                     });
 

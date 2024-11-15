@@ -55,14 +55,14 @@ public class DinosaurioService {
     public void suscribirDinosaurio(Dinosaurio dinosaurio) {
         if (!dinosaurios.contains(dinosaurio)) {
             dinosaurios.add(dinosaurio);
-            logger.info("Dinosaurio suscrito: " + dinosaurio.getNombre());
+            logger.info("!!!!!Dinosaurio suscrito a dinosaurios: " + dinosaurio.getNombre());
         }
     }
 
     public void desuscribirDinosaurio(Dinosaurio dinosaurio) {
         if (dinosaurios.contains(dinosaurio)) {
             dinosaurios.remove(dinosaurio);
-            logger.info("Dinosaurio desuscrito: " + dinosaurio.getNombre());
+            logger.info("!!!!Dinosaurio desuscrito de dinosaurios: " + dinosaurio.getNombre());
         }
     }
 
@@ -77,14 +77,15 @@ public class DinosaurioService {
     public void suscribirDinosaurioEnfermo(Dinosaurio dinosaurio) {
         if (!dinosauriosEnfermos.contains(dinosaurio)) {
             dinosauriosEnfermos.add(dinosaurio);
-            logger.info("Dinosaurio suscrito a enfermería: " + dinosaurio.getNombre());
+            logger.info("!!!!!Dinosaurio suscrito a enfermería: " + dinosaurio.getNombre());
         }
     }
 
     public void desuscribirDinosaurioEnfermo(Dinosaurio dinosaurio) {
         if (dinosauriosEnfermos.contains(dinosaurio)) {
             dinosauriosEnfermos.remove(dinosaurio);
-            logger.info("Dinosaurio desuscrito de enfermería: " + dinosaurio.getNombre());
+            logger.info("!!!!!!Dinosaurio desuscrito de enfermería: " + dinosaurio.getNombre());
+            suscribirDinosaurio(dinosaurio); // Añadir el dinosaurio a la lista de dinosaurios
         }
     }
 
