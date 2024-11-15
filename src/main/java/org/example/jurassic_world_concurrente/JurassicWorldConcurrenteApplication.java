@@ -1,4 +1,3 @@
-// src/main/java/org/example/jurassic_world_concurrente/JurassicWorldConcurrenteApplication.java
 package org.example.jurassic_world_concurrente;
 
 import org.example.jurassic_world_concurrente.Dinosaurios.Dinosaurio;
@@ -61,9 +60,9 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
         VisitanteGenerator visitanteGenerator = new VisitanteGenerator();
         Flux<Visitante> visitantesFlux = visitanteGenerator.generarVisitantesContinuos();
 
-        visitantesFlux.subscribe(visitante -> {
-            // No log the visitor creation here
-        });
+        visitantesFlux
+                .flatMap(DistribuidorVisitantes::moverAIsla) // Distribuye visitantes
+                .subscribe();
 
         // Keep the application running to observe the visitor generation
         try {
