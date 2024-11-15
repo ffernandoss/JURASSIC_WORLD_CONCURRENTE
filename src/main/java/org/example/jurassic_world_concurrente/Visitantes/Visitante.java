@@ -6,11 +6,13 @@ public class Visitante {
     private Long id;
     private String nombre;
     private int tiempoEnParque;
+    private String islaAsignada;
 
-    public Visitante(String nombre) {
+    public Visitante(String nombre, String islaAsignada) {
         this.id = generateId();
         this.nombre = nombre;
         this.tiempoEnParque = 0;
+        this.islaAsignada = islaAsignada;
     }
 
     private synchronized long generateId() {
@@ -33,12 +35,12 @@ public class Visitante {
         this.tiempoEnParque++;
     }
 
+    public String getIslaAsignada() {
+        return islaAsignada;
+    }
+
     @Override
     public String toString() {
-        return "Visitante{" +
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
-                ", tiempoEnParque=" + tiempoEnParque +
-                '}';
+        return "Visitante_" + id;
     }
 }

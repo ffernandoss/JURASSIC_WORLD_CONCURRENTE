@@ -20,6 +20,6 @@ public class IslaHuevo {
         String info = huevoService.getHuevos().stream()
                 .map(Object::toString)
                 .collect(Collectors.joining(", "));
-        logger.info("Información de la Isla Huevo: [{}]", info);
+        logger.info("Información de la Isla Huevo:\nHuevos [{}]", info);
     }
 }

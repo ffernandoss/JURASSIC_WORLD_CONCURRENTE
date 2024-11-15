@@ -29,7 +29,8 @@ public class VisitantesListener {
         // Agregar un número aleatorio de visitantes cada año
         int nuevosVisitantes = random.nextInt(10) + 1;
         for (int i = 0; i < nuevosVisitantes; i++) {
-            visitanteService.agregarVisitante(new Visitante("Visitante_" + System.currentTimeMillis() + "_" + i));
+            String islaAsignada = visitanteService.asignarIslaAleatoria();
+            visitanteService.agregarVisitante(new Visitante("Visitante_" + System.currentTimeMillis() + "_" + i, islaAsignada));
         }
 
         // Mostrar total de visitantes

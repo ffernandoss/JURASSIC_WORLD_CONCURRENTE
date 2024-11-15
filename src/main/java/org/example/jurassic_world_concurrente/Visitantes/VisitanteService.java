@@ -7,15 +7,18 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class VisitanteService {
     private static final Logger logger = LoggerFactory.getLogger(VisitanteService.class);
     private List<Visitante> visitantes = new ArrayList<>();
+    private static final String[] ISLAS = {"Carnivoro", "Herbivoro", "Volador"};
+    private Random random = new Random();
 
     public void agregarVisitante(Visitante visitante) {
         visitantes.add(visitante);
-        logger.info("Nuevo visitante agregado: Visitante_{}", visitante.getId());
+        logger.info("Nuevo visitante agregado: Visitante_{} a la isla {}", visitante.getId(), visitante.getIslaAsignada());
     }
 
     public void incrementarTiempoVisitantes() {
@@ -24,7 +27,7 @@ public class VisitanteService {
             visitante.incrementarTiempoEnParque();
             if (visitante.getTiempoEnParque() >= 2) {
                 visitantesParaEliminar.add(visitante);
-                logger.info("Visitante {} ha abandonado el parque.", visitante.getId());
+                logger.info("Visitante {} ha abandonado la isla {} y el parque.", visitante.getId(), visitante.getIslaAsignada());
             }
         }
         visitantes.removeAll(visitantesParaEliminar);
@@ -36,5 +39,9 @@ public class VisitanteService {
 
     public int getTotalVisitantes() {
         return visitantes.size();
+    }
+
+    public String asignarIslaAleatoria() {
+        return ISLAS[random.nextInt(ISLAS.length)];
     }
 }
