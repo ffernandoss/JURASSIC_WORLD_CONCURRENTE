@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.stream.Collectors;
+
 @Component
 public class IslaHuevo {
     private static final Logger logger = LoggerFactory.getLogger(IslaHuevo.class);
@@ -15,7 +17,9 @@ public class IslaHuevo {
     private HuevoService huevoService;
 
     public void mostrarInformacion() {
-        logger.info("Información de la Isla Huevo:");
-        huevoService.getHuevos().forEach(huevo -> logger.info(huevo.toString()));
+        String info = huevoService.getHuevos().stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(", "));
+        logger.info("Información de la Isla Huevo: [{}]", info);
     }
 }

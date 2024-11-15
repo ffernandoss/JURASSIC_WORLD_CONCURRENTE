@@ -3,11 +3,6 @@ package org.example.jurassic_world_concurrente.FlujoMaster;
 
 import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioService;
 import org.example.jurassic_world_concurrente.Huevos.HuevoService;
-import org.example.jurassic_world_concurrente.Islas.IslaCarnivoro;
-import org.example.jurassic_world_concurrente.Islas.IslaHerbivoro;
-import org.example.jurassic_world_concurrente.Islas.IslaVolador;
-import org.example.jurassic_world_concurrente.Islas.IslaHuevo;
-import org.example.jurassic_world_concurrente.Visitantes.Visitante;
 import org.example.jurassic_world_concurrente.Visitantes.VisitanteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,18 +31,6 @@ public class MasterScheduler {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    @Autowired
-    private IslaCarnivoro islaCarnivoro;
-
-    @Autowired
-    private IslaHerbivoro islaHerbivoro;
-
-    @Autowired
-    private IslaVolador islaVolador;
-
-    @Autowired
-    private IslaHuevo islaHuevo;
-
     private int ticsTotales = 0;
     private Random random = new Random();
 
@@ -64,6 +47,13 @@ public class MasterScheduler {
                     // Enviar mensaje a la cola para verificar dinosaurios
                     rabbitTemplate.convertAndSend("verificarDinosauriosQueue", "Verificar");
 
+                    // Enviar mensajes a las colas de RabbitMQ para visitantes y islas
+                    rabbitTemplate.convertAndSend("visitantesQueue", "Actualizar");
+                    rabbitTemplate.convertAndSend("islaHuevoQueue", "Actualizar");
+                    rabbitTemplate.convertAndSend("islaCarnivoroQueue", "Actualizar");
+                    rabbitTemplate.convertAndSend("islaHerbivoroQueue", "Actualizar");
+                    rabbitTemplate.convertAndSend("islaVoladorQueue", "Actualizar");
+
                     // Evento cada 10 tics (excluyendo 0)
                     if (ticsTotales != 0 && ticsTotales % 10 == 0) {
                         dinosaurioService.generarEventoMuerteAleatoria();
@@ -74,31 +64,6 @@ public class MasterScheduler {
                         huevoService.crearHuevoAleatorio();
                         logger.info("Evento de reproducción: se ha creado un nuevo huevo.");
                     }
-
-                    // Mostrar información de Isla Huevo
-                    huevoService.incubarHuevos();
-                    islaHuevo.mostrarInformacion();
-
-                    // Mostrar información de Isla Carnívoro
-                    islaCarnivoro.mostrarInformacion();
-
-                    // Mostrar información de Isla Herbívoro
-                    islaHerbivoro.mostrarInformacion();
-
-                    // Mostrar información de Isla Volador
-                    islaVolador.mostrarInformacion();
-
-                    // Incrementar tiempo de visitantes en el parque y eliminar los que han estado más de 2 años
-                    visitanteService.incrementarTiempoVisitantes();
-
-                    // Agregar un número aleatorio de visitantes cada año
-                    int nuevosVisitantes = random.nextInt(10) + 1;
-                    for (int i = 0; i < nuevosVisitantes; i++) {
-                        visitanteService.agregarVisitante(new Visitante("Visitante_" + ticsTotales + "_" + i));
-                    }
-
-                    // Mostrar total de visitantes
-                    logger.info("Total de visitantes: {}", visitanteService.getTotalVisitantes());
 
                 })
                 .subscribe();

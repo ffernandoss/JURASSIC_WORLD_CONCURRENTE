@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.stream.Collectors;
+
 @Component
 public class IslaVolador {
     private static final Logger logger = LoggerFactory.getLogger(IslaVolador.class);
@@ -15,9 +17,10 @@ public class IslaVolador {
     private DinosaurioService dinosaurioService;
 
     public void mostrarInformacion() {
-        logger.info("Información de la Isla Volador:");
-        dinosaurioService.getDinosaurios().stream()
+        String info = dinosaurioService.getDinosaurios().stream()
                 .filter(dino -> "Volador".equalsIgnoreCase(dino.getTipo()))
-                .forEach(dino -> logger.info(dino.toString()));
+                .map(Object::toString)
+                .collect(Collectors.joining(", "));
+        logger.info("Información de la Isla Volador: [{}]", info);
     }
 }

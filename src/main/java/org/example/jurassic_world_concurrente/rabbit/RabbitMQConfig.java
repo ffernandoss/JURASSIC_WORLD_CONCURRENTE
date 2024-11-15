@@ -17,4 +17,29 @@ public class RabbitMQConfig {
     public Queue verificarDinosauriosQueue() {
         return new Queue("verificarDinosauriosQueue", false);
     }
+
+    @Bean
+    public Queue visitantesQueue() {
+        return new Queue("visitantesQueue", false);
+    }
+
+    @Bean
+    public Queue islaHuevoQueue() {
+        return new Queue("islaHuevoQueue", false);
+    }
+
+    @Bean
+    public Queue islaCarnivoroQueue() {
+        return new Queue("islaCarnivoroQueue", false);
+    }
+
+    @Bean
+    public Queue islaHerbivoroQueue() {
+        return new Queue("islaHerbivoroQueue", false);
+    }
+
+    @Bean
+    public Queue islaVoladorQueue() {
+        return new Queue("islaVoladorQueue", false);
+    }
 }
