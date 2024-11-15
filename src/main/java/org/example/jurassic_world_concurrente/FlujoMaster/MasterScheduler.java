@@ -1,4 +1,3 @@
-// src/main/java/org/example/jurassic_world_concurrente/FlujoMaster/MasterScheduler.java
 package org.example.jurassic_world_concurrente.FlujoMaster;
 
 import org.example.jurassic_world_concurrente.Dinosaurios.Dinosaurio;
@@ -12,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Schedulers;
 
 import java.time.Duration;
 import java.util.List;
@@ -42,48 +42,57 @@ public class MasterScheduler {
                     ticsTotales++;
                     logger.info("---------------------------Año de la simulación: {}---------------------------", ticsTotales);
 
-                    // Envejecer dinosaurios y verificar muertes
+                    // Envejecer dinosaurios y verificar muertes por edad
                     dinosaurioService.envejecerDinosaurios();
+
+                    // Verificar salida de dinosaurios enfermos de la enfermería
+                    dinosaurioService.verificarSalidaEnfermeria(ticsTotales);
 
                     // Incubar huevos y verificar eclosión
                     huevoService.incubarHuevos();
 
-                    // Enviar mensaje a la cola para verificar dinosaurios
-                    rabbitTemplate.convertAndSend("verificarDinosauriosQueue", "Verificar");
-
-                    // Actualizar estados de dinosaurios
-                    rabbitTemplate.convertAndSend("actualizarDinosaurioEstadoQueue", "Actualizar");
-
-                    // Evento cada 10 tics (excluyendo 0)
-                    if (ticsTotales != 0 && ticsTotales % 10 == 0) {
-                        dinosaurioService.generarEventoMuerteAleatoria();
-                    }
-
-                    // Evento de reproducción cada 5 tics (excluyendo 0)
-                    if (ticsTotales != 0 && ticsTotales % 5 == 0) {
+                    // Evento de reproducción cada 5 tics
+                    if (ticsTotales % 5 == 0) {
                         huevoService.crearHuevoAleatorio();
                         logger.info("Evento de reproducción: se ha creado un nuevo huevo.");
                     }
 
-                    // Mostrar lista de dinosaurios
-                    logger.info("Lista de dinosaurios: {}", dinosaurioService.getDinosaurios());
+                    // Evento de muerte aleatoria cada 10 tics
+                    if (ticsTotales % 10 == 0) {
+                        dinosaurioService.generarEventoMuerteAleatoria();
+                    }
 
-                    // Mostrar lista de huevos
-                    logger.info("Lista de huevos: {}", huevoService.getHuevos());
+                    // Publicar estados actualizados
+                    rabbitTemplate.convertAndSend("actualizarDinosaurioEstadoQueue", "Actualizar");
+                    rabbitTemplate.convertAndSend("verificarDinosauriosQueue", "Verificar");
 
-                    // Imprimir dinosaurios enfermos
-                    dinosaurioEstadoService.imprimirDinosauriosEnfermos();
+                    // Imprimir estado actual de dinosaurios
+                    imprimirEstadoActual();
+
                 })
-                .doOnNext(tic -> {
-                    List<Dinosaurio> dinosaurios = dinosaurioService.getDinosaurios();
-                    dinosaurios.forEach(dinosaurio -> logger.info("Dinosaurio en el flujo: {}", dinosaurio));
-                })
+                .subscribeOn(Schedulers.parallel())
                 .subscribe();
     }
 
     public void detenerSimulacion() {
         if (disposable != null && !disposable.isDisposed()) {
             disposable.dispose();
+            logger.info("Simulación detenida.");
         }
+    }
+
+    private void imprimirEstadoActual() {
+        // Lista de dinosaurios
+        List<Dinosaurio> dinosaurios = dinosaurioService.getDinosaurios();
+        logger.info("Dinosaurios en el parque: ");
+        dinosaurios.forEach(dinosaurio -> logger.info("- {}", dinosaurio));
+
+        // Lista de huevos
+        logger.info("Huevos en incubación: ");
+        huevoService.getHuevos().forEach(huevo -> logger.info("- {}", huevo));
+
+        // Lista de dinosaurios enfermos
+        logger.info("Dinosaurios enfermos:");
+        dinosaurioEstadoService.imprimirDinosauriosEnfermos();
     }
 }

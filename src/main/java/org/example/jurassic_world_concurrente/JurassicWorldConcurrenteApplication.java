@@ -1,10 +1,10 @@
-// src/main/java/org/example/jurassic_world_concurrente/JurassicWorldConcurrenteApplication.java
 package org.example.jurassic_world_concurrente;
 
 import org.example.jurassic_world_concurrente.Dinosaurios.Dinosaurio;
 import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioService;
-import org.example.jurassic_world_concurrente.FlujoMaster.EnfermeriaScheduler;
+import org.example.jurassic_world_concurrente.FlujoMaster.ControladorDeFlujos; // Importar el controlador de flujos
 import org.example.jurassic_world_concurrente.FlujoMaster.MasterScheduler;
+import org.example.jurassic_world_concurrente.FlujoMaster.EnfermeriaScheduler;
 import org.example.jurassic_world_concurrente.Huevos.FabricaHuevos;
 import org.example.jurassic_world_concurrente.Huevos.HuevoService;
 import org.example.jurassic_world_concurrente.Dinosaurios.FabricaDinosaurios;
@@ -17,7 +17,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.util.Arrays;
-
 
 @SpringBootApplication
 public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
@@ -42,6 +41,9 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
     @Autowired
     private EnfermeriaScheduler enfermeriaScheduler;
 
+    @Autowired
+    private ControladorDeFlujos controladorDeFlujos; // Inyectar ControladorDeFlujos
+
     public static void main(String[] args) {
         SpringApplication.run(JurassicWorldConcurrenteApplication.class, args);
     }
@@ -62,11 +64,11 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
 
         logger.info("Dinosaurios iniciales creados y agregados al servicio de gestión.");
 
-        // Iniciar el flujo maestro que controla el tiempo de simulación
-        masterScheduler.iniciarSimulacion();
+        // Iniciar el controlador de flujos (alternando entre master y otro flujo)
+        controladorDeFlujos.iniciarFlujos();
 
+        // El flujo de enfermería puede ser manejado adicionalmente
         Thread.sleep(100);
-        // Iniciar el flujo de enfermería
         enfermeriaScheduler.iniciarEnfermeria();
     }
 }

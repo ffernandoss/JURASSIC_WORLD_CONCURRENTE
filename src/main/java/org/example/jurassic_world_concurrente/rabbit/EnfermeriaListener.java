@@ -1,4 +1,3 @@
-// src/main/java/org/example/jurassic_world_concurrente/rabbit/EnfermeriaListener.java
 package org.example.jurassic_world_concurrente.rabbit;
 
 import org.example.jurassic_world_concurrente.Dinosaurios.Dinosaurio;
@@ -25,8 +24,11 @@ public class EnfermeriaListener {
             return;
         }
         try {
+            // Calcular o asignar el tiempo de recuperación
+            int tiempoRecuperacion = calcularTiempoRecuperacion(dinosaurio);
+
             if (dinosaurio.isEstaEnfermo()) {
-                dinosaurioService.suscribirDinosaurioEnfermo(dinosaurio);
+                dinosaurioService.suscribirDinosaurioEnfermo(dinosaurio, tiempoRecuperacion);
                 dinosaurioService.desuscribirDinosaurio(dinosaurio);
                 logger.info("Dinosaurio enfermo añadido: " + dinosaurio.getNombre());
             } else {
@@ -38,5 +40,10 @@ public class EnfermeriaListener {
         } catch (Exception e) {
             logger.error("Error al procesar el mensaje de la cola de enfermería", e);
         }
+    }
+
+    private int calcularTiempoRecuperacion(Dinosaurio dinosaurio) {
+        // Ejemplo de cálculo del tiempo de recuperación, aquí se puede incluir la lógica que necesites
+        return 5; // Este valor es solo un ejemplo, puedes ajustarlo según la lógica que necesites
     }
 }

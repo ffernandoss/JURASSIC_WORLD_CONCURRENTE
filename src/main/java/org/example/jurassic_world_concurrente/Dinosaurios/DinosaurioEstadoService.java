@@ -26,7 +26,9 @@ public class DinosaurioEstadoService {
             estado.actualizarEstado();
             estados.add(estado);
             if (estado.isEstaEnfermo()) {
-                dinosaurioService.suscribirDinosaurioEnfermo(dinosaurio);
+                // Supongamos que el segundo parámetro es el tiempo estimado de recuperación
+                int tiempoRecuperacion = calcularTiempoRecuperacion(dinosaurio);
+                dinosaurioService.suscribirDinosaurioEnfermo(dinosaurio, tiempoRecuperacion);
                 dinosaurioService.desuscribirDinosaurio(dinosaurio);
             } else {
                 dinosaurioService.desuscribirDinosaurioEnfermo(dinosaurio);
@@ -50,8 +52,13 @@ public class DinosaurioEstadoService {
         if (enfermos.isEmpty()) {
             logger.info("No hay dinosaurios enfermos.");
         } else {
-            logger.info("LOS FOKIN DINOSAURIOS:");
+            logger.info("Lista de dinosaurios enfermos:");
             enfermos.forEach(dinosaurioEstado -> logger.info(dinosaurioEstado.toString()));
         }
+    }
+
+    private int calcularTiempoRecuperacion(Dinosaurio dinosaurio) {
+        // Ejemplo de cálculo basado en las características del dinosaurio
+        return 5; // Se puede reemplazar con lógica real, como edad o tipo de enfermedad
     }
 }

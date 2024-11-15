@@ -1,4 +1,3 @@
-// src/main/java/org/example/jurassic_world_concurrente/Dinosaurios/DinosaurioService.java
 package org.example.jurassic_world_concurrente.Dinosaurios;
 
 import org.slf4j.Logger;
@@ -9,9 +8,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class DinosaurioService {
@@ -20,11 +17,13 @@ public class DinosaurioService {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    private List<Dinosaurio> dinosaurios = new ArrayList<>();
-    private List<Dinosaurio> dinosauriosEnfermos = new ArrayList<>();
-    private List<Disposable> disposables = new ArrayList<>();
+    private final List<Dinosaurio> dinosaurios = new ArrayList<>();
+    private final List<Dinosaurio> dinosauriosEnfermos = new ArrayList<>();
+    private final List<Disposable> disposables = new ArrayList<>();
+    private final Map<Dinosaurio, Integer> dinosaurioEnfermoTics = new HashMap<>();
+    private static final int DURACION_ENFERMERIA = 3; // Tiempo en tics que el dinosaurio permanece enfermo
 
-    public void envejecerDinosaurios() {
+    public synchronized void envejecerDinosaurios() {
         List<Dinosaurio> dinosauriosParaEliminar = new ArrayList<>();
         dinosaurios.forEach(dinosaurio -> {
             if (dinosaurio.getEdad() < dinosaurio.getMaxEdad()) {
@@ -37,13 +36,13 @@ public class DinosaurioService {
         dinosauriosParaEliminar.forEach(this::matarDinosaurio);
     }
 
-    public void matarDinosaurio(Dinosaurio dinosaurio) {
+    public synchronized void matarDinosaurio(Dinosaurio dinosaurio) {
         logger.info("Dinosaurio {} ha muerto de viejo.", dinosaurio.getNombre());
         dinosaurios.remove(dinosaurio);
         rabbitTemplate.convertAndSend("dinosaurDeathQueue", dinosaurio.getTipo());
     }
 
-    public void generarEventoMuerteAleatoria() {
+    public synchronized void generarEventoMuerteAleatoria() {
         if (!dinosaurios.isEmpty()) {
             Dinosaurio randomDino = dinosaurios.get(new Random().nextInt(dinosaurios.size()));
             logger.info("Evento de muerte aleatoria: Dinosaurio {} fue asesinado.", randomDino.getNombre());
@@ -51,58 +50,66 @@ public class DinosaurioService {
         }
     }
 
-    public void agregarDinosaurio(Dinosaurio dinosaurio) {
+    public synchronized void agregarDinosaurio(Dinosaurio dinosaurio) {
         dinosaurios.add(dinosaurio);
     }
 
-    public void suscribirDinosaurio(Dinosaurio dinosaurio) {
+    public synchronized void suscribirDinosaurio(Dinosaurio dinosaurio) {
         if (!dinosaurios.contains(dinosaurio)) {
             dinosaurios.add(dinosaurio);
             Disposable disposable = Flux.just(dinosaurio)
-                    .doOnSubscribe(subscription -> logger.info("!!!!!Dinosaurio suscrito a dinosaurios: " + dinosaurio.getNombre()))
+                    .doOnSubscribe(subscription -> logger.info("!!!!! Dinosaurio suscrito a dinosaurios: " + dinosaurio.getNombre()))
                     .subscribe();
             disposables.add(disposable);
         }
     }
 
-    public void desuscribirDinosaurio(Dinosaurio dinosaurio) {
+    public synchronized void desuscribirDinosaurio(Dinosaurio dinosaurio) {
         if (dinosaurios.contains(dinosaurio)) {
             dinosaurios.remove(dinosaurio);
             disposables.forEach(Disposable::dispose);
             disposables.clear();
-            logger.info("!!!!Dinosaurio desuscrito de dinosaurios: " + dinosaurio.getNombre());
+            logger.info("!!!! Dinosaurio desuscrito de dinosaurios: " + dinosaurio.getNombre());
         }
     }
 
-    public List<Dinosaurio> getDinosaurios() {
-        return dinosaurios;
+    public synchronized List<Dinosaurio> getDinosaurios() {
+        return new ArrayList<>(dinosaurios);
     }
 
-    public boolean existeDinosaurioDeTipo(String tipo) {
+    public synchronized boolean existeDinosaurioDeTipo(String tipo) {
         return dinosaurios.stream().anyMatch(dino -> dino.getTipo().equalsIgnoreCase(tipo));
     }
 
-    public void suscribirDinosaurioEnfermo(Dinosaurio dinosaurio) {
+    public synchronized void suscribirDinosaurioEnfermo(Dinosaurio dinosaurio, int ticActual) {
         if (!dinosauriosEnfermos.contains(dinosaurio)) {
             dinosauriosEnfermos.add(dinosaurio);
-            Disposable disposable = Flux.just(dinosaurio)
-                    .doOnSubscribe(subscription -> logger.info("HAN PEGADO UN TIRO A " + dinosaurio.getNombre()))
-                    .subscribe();
-            disposables.add(disposable);
+            dinosaurioEnfermoTics.put(dinosaurio, ticActual);
+            logger.info("HAN PEGADO UN TIRO A " + dinosaurio.getNombre() + " en el tic " + ticActual);
         }
     }
 
-    public void desuscribirDinosaurioEnfermo(Dinosaurio dinosaurio) {
+    public synchronized void desuscribirDinosaurioEnfermo(Dinosaurio dinosaurio) {
         if (dinosauriosEnfermos.contains(dinosaurio)) {
             dinosauriosEnfermos.remove(dinosaurio);
-            disposables.forEach(Disposable::dispose);
-            disposables.clear();
+            dinosaurioEnfermoTics.remove(dinosaurio);
             logger.info("UNA DOCTORA CULONA HA CURADO A " + dinosaurio.getNombre());
             suscribirDinosaurio(dinosaurio); // Añadir el dinosaurio a la lista de dinosaurios
         }
     }
 
-    public List<Dinosaurio> getDinosauriosEnfermos() {
-        return dinosauriosEnfermos;
+    public synchronized void verificarSalidaEnfermeria(int ticActual) {
+        List<Dinosaurio> dinosauriosCurados = new ArrayList<>();
+        dinosaurioEnfermoTics.forEach((dinosaurio, ticEntrada) -> {
+            if (ticActual >= ticEntrada + DURACION_ENFERMERIA) {
+                dinosauriosCurados.add(dinosaurio);
+            }
+        });
+
+        dinosauriosCurados.forEach(this::desuscribirDinosaurioEnfermo);
+    }
+
+    public synchronized List<Dinosaurio> getDinosauriosEnfermos() {
+        return new ArrayList<>(dinosauriosEnfermos);
     }
 }
