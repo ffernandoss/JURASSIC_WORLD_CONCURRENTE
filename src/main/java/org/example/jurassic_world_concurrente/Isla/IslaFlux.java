@@ -18,7 +18,7 @@ public class IslaFlux {
     private final String nombreIsla;
     private final AtomicInteger totalVisitantes = new AtomicInteger(0);
     private final List<Visitante> visitantes = new ArrayList<>();
-    private static final int MAX_VISITANTES = 2;
+    private static final int MAX_VISITANTES = 4;
     private final RabbitTemplate rabbitTemplate;
 
     public IslaFlux(String nombreIsla, RabbitTemplate rabbitTemplate) {
