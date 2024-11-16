@@ -19,12 +19,12 @@ public class VisitanteGenerator {
     }
 
     public Flux<Visitante> generarVisitantesContinuos() {
-        return Flux.interval(Duration.ofSeconds(1))
+        return Flux.interval(Duration.ofSeconds(2))
                 .flatMap(tic -> {
-                    logger.info("Generación {} ---------------------------", tic);
+                    logger.info("--------------------------- Generación {} ---------------------------", tic);
                     if (islasLlenas()) {
                         logger.info("Todas las islas están llenas. Pausando generación de visitantes por 2 segundos.");
-                        return Mono.delay(Duration.ofSeconds(3)).thenMany(Flux.empty());
+                        return Mono.delay(Duration.ofSeconds(4)).thenMany(Flux.empty());
                     } else {
                         int numVisitantes = random.nextInt(5) + 1;
                         logger.info("Generando {} visitantes en el tick {}", numVisitantes, tic);
