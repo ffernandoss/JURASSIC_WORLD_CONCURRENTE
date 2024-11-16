@@ -78,4 +78,5 @@ public class EnfermeriaScheduler {
             logger.info("Enfermería detenida.");
         }
     }
+    //sadad
 }
