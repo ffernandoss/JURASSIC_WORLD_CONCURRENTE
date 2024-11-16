@@ -59,14 +59,14 @@ public class DinosaurioService {
     public synchronized void suscribirDinosaurio(Dinosaurio dinosaurio) {
         if (!dinosaurios.contains(dinosaurio)) {
             dinosaurios.add(dinosaurio);
-            logger.info("Dinosaurio {} agregado a la lista principal.", dinosaurio.getNombre());
+
         }
     }
 
     public synchronized void desuscribirDinosaurio(Dinosaurio dinosaurio) {
         if (dinosaurios.contains(dinosaurio)) {
             dinosaurios.remove(dinosaurio);
-            logger.info("Dinosaurio {} eliminado de la lista principal.", dinosaurio.getNombre());
+
         }
     }
 
@@ -79,10 +79,12 @@ public class DinosaurioService {
     }
 
     public synchronized void suscribirDinosaurioEnfermo(Dinosaurio dinosaurio, int ticActual) {
-        if (!dinosauriosEnfermos.contains(dinosaurio)) {
-            dinosauriosEnfermos.add(dinosaurio);
-            dinosaurio.setTicsEnEnfermeria(0); // Reiniciar contador de tics
-            logger.info("Dinosaurio {} ingresó a la enfermería en el tic {}.", dinosaurio.getNombre(), ticActual);
+        if (dinosaurio.getMaxEdad() - dinosaurio.getEdad() > 3) { // Verificar si tiene más de 3 días de vida restantes
+            if (!dinosauriosEnfermos.contains(dinosaurio)) {
+                dinosauriosEnfermos.add(dinosaurio);
+                dinosaurio.setTicsEnEnfermeria(0); // Reiniciar contador de tics
+
+            }
         }
     }
 
@@ -97,7 +99,6 @@ public class DinosaurioService {
     }
 
     public void verificarSalidaEnfermeria(int ticsTotales) {
-        logger.info("Verificando dinosaurios que cumplen el tiempo de permanencia en enfermería...");
         List<Dinosaurio> dinosauriosParaSalir = new ArrayList<>();
         synchronized (dinosauriosEnfermos) {
             for (Dinosaurio dinosaurio : dinosauriosEnfermos) {
@@ -105,7 +106,7 @@ public class DinosaurioService {
                     dinosaurio.setEstaEnfermo(false);
                     dinosaurio.resetTicsEnEnfermeria();
                     dinosauriosParaSalir.add(dinosaurio);
-                    logger.info("Dinosaurio {} cumplió el tiempo en enfermería y será dado de alta.", dinosaurio.getNombre());
+
                 }
             }
         }

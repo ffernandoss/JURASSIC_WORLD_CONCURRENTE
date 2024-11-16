@@ -11,7 +11,7 @@ public class Herbivoro implements Dinosaurio {
     private int edad;
     private String nombre;
     private boolean estaEnfermo;
-    private final int maxEdad = 40;
+    private final int maxEdad = 20;
     private int ticsEnEnfermeria;
 
     public Herbivoro() {

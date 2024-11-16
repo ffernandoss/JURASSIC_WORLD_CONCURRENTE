@@ -52,13 +52,13 @@ public class MasterScheduler {
                     huevoService.incubarHuevos();
 
                     // Evento de reproducción cada 5 tics
-                    if (ticsTotales % 5 == 0) {
+                    if (ticsTotales % 10 == 0) {
                         huevoService.crearHuevoAleatorio();
                         logger.info("Evento de reproducción: se ha creado un nuevo huevo.");
                     }
 
                     // Evento de muerte aleatoria cada 10 tics
-                    if (ticsTotales % 10 == 0) {
+                    if (ticsTotales % 7 == 0) {
                         dinosaurioService.generarEventoMuerteAleatoria();
                     }
 
@@ -82,17 +82,11 @@ public class MasterScheduler {
     }
 
     private void imprimirEstadoActual() {
-        // Lista de dinosaurios
-        List<Dinosaurio> dinosaurios = dinosaurioService.getDinosaurios();
-        logger.info("Dinosaurios en el parque: ");
-        dinosaurios.forEach(dinosaurio -> logger.info("- {}", dinosaurio));
 
         // Lista de huevos
         logger.info("Huevos en incubación: ");
         huevoService.getHuevos().forEach(huevo -> logger.info("- {}", huevo));
 
-        // Lista de dinosaurios enfermos
-        logger.info("Dinosaurios enfermos:");
         dinosaurioEstadoService.imprimirDinosauriosEnfermos();
     }
 }

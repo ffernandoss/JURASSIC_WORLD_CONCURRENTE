@@ -8,12 +8,20 @@ public class DinosaurioEstado {
     public DinosaurioEstado(Dinosaurio dinosaurio) {
         this.dinosaurio = dinosaurio;
         this.temperatura = (int) (Math.random() * 41);
-        this.estaEnfermo = this.temperatura >= 38; // Set to true if temperature is 37 or more
+        if (dinosaurio.getMaxEdad() - dinosaurio.getEdad() > 3) {
+            this.estaEnfermo = this.temperatura >= 38; // Set to true if temperature is 38 or more
+        } else {
+            this.estaEnfermo = false; // Cannot be sick if 3 or less days to max age
+        }
     }
 
     public void actualizarEstado() {
         this.temperatura = (int) (Math.random() * 41);
-        this.estaEnfermo = this.temperatura >= 38; // Set to true if temperature is 30 or more
+        if (dinosaurio.getMaxEdad() - dinosaurio.getEdad() > 3) {
+            this.estaEnfermo = this.temperatura >= 38; // Set to true if temperature is 38 or more
+        } else {
+            this.estaEnfermo = false; // Cannot be sick if 3 or less days to max age
+        }
     }
 
     @Override
@@ -35,7 +43,11 @@ public class DinosaurioEstado {
     }
 
     public void setEstaEnfermo(boolean estaEnfermo) {
-        this.estaEnfermo = estaEnfermo;
+        if (dinosaurio.getMaxEdad() - dinosaurio.getEdad() > 3) {
+            this.estaEnfermo = estaEnfermo;
+        } else {
+            this.estaEnfermo = false; // Cannot be sick if 3 or less days to max age
+        }
     }
 
     public int getTemperatura() {

@@ -54,7 +54,7 @@ public class EnfermeriaScheduler {
 
                     // Enviar actualización a la cola de estados
                     rabbitTemplate.convertAndSend("actualizarDinosaurioEstadoQueue", "Actualizar");
-                    logger.info("Se envió una actualización de estado a la cola.");
+
 
                     // Mostrar estado actual de los dinosaurios enfermos
                     synchronized (dinosauriosEnfermos) {
@@ -63,13 +63,9 @@ public class EnfermeriaScheduler {
                         } else {
                             logger.info("Dinosaurios enfermos actualmente en la enfermería:");
                             dinosauriosEnfermos.forEach(dinosaurio -> {
-                                logger.info("{} ({} tics)", dinosaurio.getNombre(), dinosaurio.getTicsEnEnfermeria());
                             });
                         }
                     }
-
-                    // Log de estados actualizados
-                    logger.info("Estados de dinosaurios enfermos actualizados: {}", dinosaurioEstadoService.getEstados());
                 })
                 .onErrorContinue((error, obj) -> logger.error("Error en el flujo de enfermería: ", error))
                 .subscribeOn(Schedulers.parallel())

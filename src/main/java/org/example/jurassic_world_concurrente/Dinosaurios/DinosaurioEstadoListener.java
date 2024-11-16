@@ -1,5 +1,5 @@
 // src/main/java/org/example/jurassic_world_concurrente/rabbit/DinosaurioEstadoListener.java
-package org.example.jurassic_world_concurrente.rabbit;
+package org.example.jurassic_world_concurrente.Dinosaurios;
 
 import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioEstadoService;
 import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioService;
