@@ -75,10 +75,8 @@ public class Huevo {
     public void incubar() {
         if (tiempoIncubacion < periodoIncubacion) {
             tiempoIncubacion++;
-            logger.info("Huevo de tipo {} está incubando. Tiempo de incubación: {} días", tipo, tiempoIncubacion);
         } else {
             estado = "Eclosionado";
-            logger.info("Huevo de tipo {} ha eclosionado.", tipo);
         }
     }
 

@@ -21,7 +21,7 @@ public class VisitanteGenerator {
     public Flux<Visitante> generarVisitantesContinuos() {
         return Flux.interval(Duration.ofSeconds(2))
                 .flatMap(tic -> {
-                    logger.info("--------------------------- Generación {} ---------------------------", tic);
+                    logger.info("--------------------------- Generación de visitantes {} ---------------------------", tic);
                     if (islasLlenas()) {
                         logger.info("Todas las islas están llenas. Pausando generación de visitantes por 2 segundos.");
                         return Mono.delay(Duration.ofSeconds(4)).thenMany(Flux.empty());
