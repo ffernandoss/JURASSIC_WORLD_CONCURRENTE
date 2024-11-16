@@ -33,7 +33,7 @@ public class fluxController {
 
     public void sendEventToIsla(String isla, String data) {
         islaSinks.computeIfAbsent(isla, k -> Sinks.many().multicast().onBackpressureBuffer()).tryEmitNext(data);
-    }
+    }//
 
     public void sendEventToEnfermeria(String data) {
         sendEventToIsla("Enfermeria", data);
