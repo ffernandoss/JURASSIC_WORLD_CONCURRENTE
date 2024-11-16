@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Página de Prueba</title>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: 'Rock Salt', cursive;
+      background: url('prueba.webp') no-repeat center center fixed;
+      background-size: cover;
+      background-attachment: fixed;
+      overflow: auto; /* Enable scrolling */
+    }
+
+    #square {
+      width: 50px;
+      height: 50px;
+      background-color: red;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .rectangle {
+      width: 100px;
+      height: 100px;
+      background-color: blue;
+      position: absolute;
+      pointer-events: none; /* Make rectangles unclickable */
+    }
+
+    #popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+<div id="square"></div>
+<div class="rectangle" style="top: 10%; left: 10%;"></div>
+<div class="rectangle" style="top: 10%; left: 40%;"></div>
+<div class="rectangle" style="top: 10%; left: 70%;"></div>
+<div class="rectangle" style="top: 40%; left: 10%;"></div>
+<div class="rectangle" style="top: 40%; left: 40%;"></div>
+<div class="rectangle" style="top: 40%; left: 70%;"></div>
+<div class="rectangle" style="top: 70%; left: 10%;"></div>
+<div class="rectangle" style="top: 70%; left: 40%;"></div>
+<div class="rectangle" style="top: 70%; left: 70%;"></div>
+<div id="popup">
+  <p>¡El cuadrado está dentro del rectángulo!</p>
+</div>
+<script>
+  document.addEventListener('keydown', function(event) {
+    const square = document.getElementById('square');
+    const popup = document.getElementById('popup');
+    const rectangles = document.querySelectorAll('.rectangle');
+    const step = 10;
+    let top = parseInt(window.getComputedStyle(square).top);
+    let left = parseInt(window.getComputedStyle(square).left);
+
+    switch(event.key) {
+      case 'w':
+        square.style.top = (top - step) + 'px';
+        break;
+      case 'a':
+        square.style.left = (left - step) + 'px';
+        break;
+      case 's':
+        square.style.top = (top + step) + 'px';
+        break;
+      case 'd':
+        square.style.left = (left + step) + 'px';
+        break;
+      case 'Enter':
+        rectangles.forEach(rect => {
+          const rectBounds = rect.getBoundingClientRect();
+          const squareBounds = square.getBoundingClientRect();
+          if (squareBounds.left >= rectBounds.left && squareBounds.right <= rectBounds.right &&
+                  squareBounds.top >= rectBounds.top && squareBounds.bottom <= rectBounds.bottom) {
+            popup.style.display = 'block';
+          }
+        });
+        break;
+      case 'Escape':
+        popup.style.display = 'none';
+        break;
+    }
+  });
+</script>
+</body>
+</html>
