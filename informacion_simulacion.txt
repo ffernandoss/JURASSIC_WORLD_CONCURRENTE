@@ -1,8 +1,0 @@
-Tic: 1
-Lista de dinosaurios: [Volador_0, Volador_1]
-Lista de dinosaurios enfermos: []
-Lista de huevos: [Huevo_1 (Herbivoro), Huevo_3 (Volador), Huevo_4 (Carnivoro)]
-Visitantes en IslaCarnivoros: []
-Visitantes en IslaHerbivoros: [Visitante {id=0}, Visitante {id=3}, Visitante {id=4}]
-Visitantes en IslaVoladores: [Visitante {id=1}, Visitante {id=2}]
---------------------------------------------------
