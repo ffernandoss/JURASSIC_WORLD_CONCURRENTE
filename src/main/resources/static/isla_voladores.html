@@ -5,52 +5,116 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Isla Voladores</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap');
     body, html {
       height: 100%;
+      width: 100%;
       margin: 0;
       font-family: 'Rock Salt', cursive;
-      background: url('/voladores.jpeg') no-repeat center center fixed;
-      background-size: cover;
-    }
-
-    .header-container {
-      position: absolute;
-      top: 20px;
-      width: 100%;
-      text-align: center;
-      color: #fff;
-      font-size: 3em;
-      z-index: 1;
-      text-shadow: 2px 2px 4px #000;
-    }
-
-    .main-container {
       display: flex;
-      width: 100%;
-      height: 100vh;
+      overflow: hidden;
     }
 
     .aside-container {
-      position: fixed;
-      left: 0;
-      top: 0;
-      width: 20%;
+      width: 45%;
+      height: 100%;
       background-color: rgba(0, 0, 0, 0.5);
       color: #fff;
       padding: 20px;
       box-sizing: border-box;
-      height: 100vh;
       overflow-y: auto;
+      font-family: 'Roboto', sans-serif;
+      font-size: 1.2em;
+      display: flex;
+      flex-direction: row; /* Cambiado a row para disposición vertical */
     }
 
-    .content {
-      flex-grow: 1;
+    .general-info, .island-info {
+      flex: 1;
+      overflow-y: auto;
+      width: 50%; /* Cada sección ocupa el 50% del ancho */
+    }
+
+    .image-container {
+      width: 55%;
+      height: 100%;
+      position: relative;
       display: flex;
-      align-items: center;
       justify-content: center;
-      color: #fff;
-      margin-left: 20%;
+      align-items: center;
+    }
+
+    #background-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      z-index: 0;
+    }
+
+    #square {
+      width: 30px;
+      height: 30px;
+      background-color: red;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+    }
+
+    .rectangle {
+      width: 10%;
+      height: 10%;
+      background-color: rgba(128, 128, 128, 0.5);
+      position: absolute;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .rectangle[data-url="isla_herbivoros.html"] {
+      top: 15%;
+      left: 14%;
+    }
+
+    .rectangle[data-url="isla_carnivoros.html"] {
+      top: 8%;
+      left: 45%;
+    }
+
+    .rectangle[data-url="isla_voladores_3.html"] {
+      top: 85%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .rectangle[data-url="isla_voladores.html"] {
+      top: 15%;
+      left: 77%;
+    }
+
+    .rectangle[data-url="huevos.html"] {
+      top: 45%;
+      left: 7%;
+    }
+
+    .rectangle[data-url="enfermeria.html"] {
+      top: 47%;
+      left: 84%;
+    }
+
+    .rectangle[data-url="isla_herbivoros_2.html"] {
+      top: 78%;
+      left: 14%;
+    }
+
+    .rectangle[data-url="isla_carnivoros_2.html"] {
+      top: 82%;
+      left: 78%;
+    }
+
+    .rectangle[data-url="isla_voladores_2.html"] {
+      top: 15%;
+      left: 77%;
     }
 
     table {
@@ -72,12 +136,9 @@
   </style>
 </head>
 <body>
-<div class="header-container">
-  <h1>Bienvenido a Isla Voladores</h1>
-</div>
-
-<div class="main-container">
-  <div class="aside-container">
+<div class="aside-container">
+  <div class="general-info">
+    <h2>Información General</h2>
     <table>
       <thead>
       <!-- Encabezados eliminados para que la tabla esté vacía -->
@@ -87,17 +148,83 @@
       </tbody>
     </table>
   </div>
-  <div class="content">
-    <!-- Contenido adicional -->
+  <div class="island-info">
+    <h2>Información de Isla Voladores</h2>
+    <table>
+      <thead>
+      <!-- Encabezados eliminados para que la tabla esté vacía -->
+      </thead>
+      <tbody id="informacion-isla">
+      <!-- Contenido dinámico que será llenado desde el backend -->
+      </tbody>
+    </table>
   </div>
+</div>
+<div class="image-container">
+  <img id="background-image" src="prueba.webp" alt="Background Image">
+  <div id="square"></div>
+  <div class="rectangle" data-url="isla_herbivoros.html">Herbivoros</div>
+  <div class="rectangle" data-url="isla_carnivoros.html">Carnivoros</div>
+  <div class="rectangle" data-url="isla_voladores.html">Voladores</div>
+  <div class="rectangle" data-url="huevos.html">Huevos</div>
+  <div class="rectangle" data-url="enfermeria.html">Enfermeria</div>
+  <div class="rectangle" data-url="isla_herbivoros_2.html">Herbivoros</div>
+  <div class="rectangle" data-url="isla_carnivoros_2.html">Carnivoros</div>
+  <div class="rectangle" data-url="isla_voladores_2.html">Voladores</div>
+  <div class="rectangle" data-url="isla_voladores_3.html">Voladores</div>
 </div>
 
 <script>
-  const eventSource = new EventSource('/sse/IslaVoladores');
+  document.addEventListener('keydown', function(event) {
+    const square = document.getElementById('square');
+    const rectangles = document.querySelectorAll('.rectangle');
+    const step = 10;
+    let top = parseInt(window.getComputedStyle(square).top);
+    let left = parseInt(window.getComputedStyle(square).left);
+
+    switch(event.key) {
+      case 'w':
+        square.style.top = (top - step) + 'px';
+        break;
+      case 'a':
+        square.style.left = (left - step) + 'px';
+        break;
+      case 's':
+        square.style.top = (top + step) + 'px';
+        break;
+      case 'd':
+        square.style.left = (left + step) + 'px';
+        break;
+      case 'Enter':
+        rectangles.forEach(rect => {
+          const rectBounds = rect.getBoundingClientRect();
+          const squareBounds = square.getBoundingClientRect();
+          if (squareBounds.left >= rectBounds.left && squareBounds.right <= rectBounds.right &&
+                  squareBounds.top >= rectBounds.top && squareBounds.bottom <= rectBounds.bottom) {
+            window.open(rect.getAttribute('data-url'), '_blank', 'width=800,height=600');
+          }
+        });
+        break;
+    }
+  });
+
+  const eventSource = new EventSource('/sse');
 
   eventSource.onmessage = function(event) {
     const info = event.data;
     const infoElement = document.getElementById('informacion');
+    const newRow = document.createElement('tr');
+    const newCell = document.createElement('td');
+    newCell.textContent = info;
+    newRow.appendChild(newCell);
+    infoElement.appendChild(newRow);
+  };
+
+  const eventSourceIsla = new EventSource('/sse/IslaVoladores');
+
+  eventSourceIsla.onmessage = function(event) {
+    const info = event.data;
+    const infoElement = document.getElementById('informacion-isla');
     const newRow = document.createElement('tr');
     const newCell = document.createElement('td');
     newCell.textContent = info;
