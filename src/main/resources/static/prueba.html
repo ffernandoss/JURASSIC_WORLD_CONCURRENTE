@@ -42,38 +42,23 @@
       pointer-events: none; /* Make rectangles unclickable */
       z-index: 1;
     }
-
-    #popup {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: white;
-      padding: 20px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-      z-index: 1000;
-    }
   </style>
 </head>
 <body>
 <img id="background-image" src="prueba.webp" alt="Background Image">
 <div id="square"></div>
-<div class="rectangle" style="top: 90px; left: 170px;">Herbivoros</div>
-<div class="rectangle" style="top: 50px; left: 360px;">Carnivoros</div>
-<div class="rectangle" style="top: 90px; left: 550px;">Voladores</div>
-<div class="rectangle" style="top: 280px; left: 130px;">Anterior dia</div>
-<div class="rectangle" style="top: 280px; left: 590px;">Siguiente dia</div>
-<div class="rectangle" style="top: 470px; left: 170px;">Enfermeria</div>
-<div class="rectangle" style="top: 495px; left: 360px;">Salir</div>
-<div class="rectangle" style="top: 470px; left: 550px;">Huevos</div>
-<div id="popup">
-  <p>¡El cuadrado está dentro del rectángulo!</p>
-</div>
+<div class="rectangle" style="top: 90px; left: 170px;" data-url="isla_herbivoros.html">Herbivoros</div>
+<div class="rectangle" style="top: 50px; left: 360px;" data-url="isla_carnivoros.html">Carnivoros</div>
+<div class="rectangle" style="top: 90px; left: 550px;" data-url="isla_voladores.html">Voladores</div>
+<div class="rectangle" style="top: 280px; left: 130px;" data-url="huevos.html">Huevos</div>
+<div class="rectangle" style="top: 280px; left: 590px;" data-url="enfermeria.html">Enfermeria</div>
+<div class="rectangle" style="top: 470px; left: 170px;" data-url="isla_herbivoros.html">Herbivoros</div>
+<div class="rectangle" style="top: 495px; left: 360px;" data-url="isla_carnivoros.html">Carnivoros</div>
+<div class="rectangle" style="top: 470px; left: 550px;" data-url="isla_voladores.html">Voladores</div>
+
 <script>
   document.addEventListener('keydown', function(event) {
     const square = document.getElementById('square');
-    const popup = document.getElementById('popup');
     const rectangles = document.querySelectorAll('.rectangle');
     const step = 10;
     let top = parseInt(window.getComputedStyle(square).top);
@@ -98,12 +83,9 @@
           const squareBounds = square.getBoundingClientRect();
           if (squareBounds.left >= rectBounds.left && squareBounds.right <= rectBounds.right &&
                   squareBounds.top >= rectBounds.top && squareBounds.bottom <= rectBounds.bottom) {
-            popup.style.display = 'block';
+            window.open(rect.getAttribute('data-url'), '_blank', 'width=800,height=600');
           }
         });
-        break;
-      case 'Escape':
-        popup.style.display = 'none';
         break;
     }
   });
