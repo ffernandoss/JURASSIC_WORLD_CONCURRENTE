@@ -25,6 +25,10 @@ public class IslaFlux {
         this.rabbitTemplate = rabbitTemplate;
     }
 
+    public synchronized int getTotalDinosaurios() {
+        return visitantes.size(); // Asumiendo que cada visitante es un dinosaurio
+    }
+
     public Mono<Void> agregarVisitante(Visitante visitante) {
         return Mono.just(visitante)
                 .filter(v -> totalVisitantes.get() < MAX_VISITANTES)

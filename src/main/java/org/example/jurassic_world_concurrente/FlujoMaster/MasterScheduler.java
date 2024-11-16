@@ -98,31 +98,31 @@ public class MasterScheduler {
     }
 
     private void guardarInformacionEnNotas() {
-    Flux.zip(
-            distribuidorVisitantes.getIslaFlux("IslaCarnivoros").obtenerFlujoVisitantes().collectList(),
-            distribuidorVisitantes.getIslaFlux("IslaHerbivoros").obtenerFlujoVisitantes().collectList(),
-            distribuidorVisitantes.getIslaFlux("IslaVoladores").obtenerFlujoVisitantes().collectList()
-    ).doOnNext(tuple -> {
-        StringBuilder info = new StringBuilder();
-        info.append("Tic: ").append(ticsTotales).append("\n");
-        info.append("Lista de dinosaurios: ").append(dinosaurioService.getDinosaurios()).append("\n");
-        info.append("Lista de dinosaurios enfermos: ").append(dinosaurioService.getDinosauriosEnfermos()).append("\n");
-        info.append("Lista de huevos: ").append(huevoService.getHuevos()).append("\n");
-        info.append("Visitantes en IslaCarnivoros: ").append(tuple.getT1()).append("\n");
-        info.append("Visitantes en IslaHerbivoros: ").append(tuple.getT2()).append("\n");
-        info.append("Visitantes en IslaVoladores: ").append(tuple.getT3()).append("\n");
-        info.append("--------------------------------------------------\n");
+        Flux.zip(
+                distribuidorVisitantes.getIslaFlux("IslaCarnivoros").obtenerFlujoVisitantes().collectList(),
+                distribuidorVisitantes.getIslaFlux("IslaHerbivoros").obtenerFlujoVisitantes().collectList(),
+                distribuidorVisitantes.getIslaFlux("IslaVoladores").obtenerFlujoVisitantes().collectList()
+        ).doOnNext(tuple -> {
+            StringBuilder info = new StringBuilder();
+            info.append("Tic: ").append(ticsTotales).append("\n");
+            info.append("Lista de dinosaurios: ").append(dinosaurioService.getDinosaurios()).append("\n");
+            info.append("Lista de dinosaurios enfermos: ").append(dinosaurioService.getDinosauriosEnfermos()).append("\n");
+            info.append("Lista de huevos: ").append(huevoService.getHuevos()).append("\n");
+            info.append("Visitantes en IslaCarnivoros: ").append(tuple.getT1()).append("\n");
+            info.append("Visitantes en IslaHerbivoros: ").append(tuple.getT2()).append("\n");
+            info.append("Visitantes en IslaVoladores: ").append(tuple.getT3()).append("\n");
+            info.append("--------------------------------------------------\n");
 
-        String infoCarnivoros = "Visitantes en IslaCarnivoros: " + tuple.getT1();
-        String infoHerbivoros = "Visitantes en IslaHerbivoros: " + tuple.getT2();
-        String infoVoladores = "Visitantes en IslaVoladores: " + tuple.getT3();
+            String infoCarnivoros = "Visitantes en IslaCarnivoros: " + tuple.getT1() + "\nDinosaurios en IslaCarnivoros: " + distribuidorVisitantes.getIslaFlux("IslaCarnivoros").getTotalDinosaurios();
+            String infoHerbivoros = "Visitantes en IslaHerbivoros: " + tuple.getT2() + "\nDinosaurios en IslaHerbivoros: " + distribuidorVisitantes.getIslaFlux("IslaHerbivoros").getTotalDinosaurios();
+            String infoVoladores = "Visitantes en IslaVoladores: " + tuple.getT3() + "\nDinosaurios en IslaVoladores: " + distribuidorVisitantes.getIslaFlux("IslaVoladores").getTotalDinosaurios();
 
-        sseController.sendEvent(info.toString());
-        sseController.sendEventToIsla("IslaCarnivoros", infoCarnivoros);
-        sseController.sendEventToIsla("IslaHerbivoros", infoHerbivoros);
-        sseController.sendEventToIsla("IslaVoladores", infoVoladores);
-    }).subscribe();
-}
+            sseController.sendEvent(info.toString());
+            sseController.sendEventToIsla("IslaCarnivoros", infoCarnivoros);
+            sseController.sendEventToIsla("IslaHerbivoros", infoHerbivoros);
+            sseController.sendEventToIsla("IslaVoladores", infoVoladores);
+        }).subscribe();
+    }
 
     private void imprimirEstadoActual() {
         // Lista de huevos
