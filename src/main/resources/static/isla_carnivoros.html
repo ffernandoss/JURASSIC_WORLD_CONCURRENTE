@@ -95,7 +95,7 @@
 <script>
   const eventSource = new EventSource('/sse/IslaCarnivoros');
 
-  eventSource.addEventListener('IslaCarnivoros', function(event) {
+  eventSource.onmessage = function(event) {
     const info = event.data;
     const infoElement = document.getElementById('informacion');
     const newRow = document.createElement('tr');
@@ -103,7 +103,7 @@
     newCell.textContent = info;
     newRow.appendChild(newCell);
     infoElement.appendChild(newRow);
-  });
+  };
 </script>
 </body>
 </html>
