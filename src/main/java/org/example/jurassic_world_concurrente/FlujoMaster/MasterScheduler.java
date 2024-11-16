@@ -1,5 +1,6 @@
 package org.example.jurassic_world_concurrente.FlujoMaster;
 
+import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioEstadoService;
 import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioService;
 import org.example.jurassic_world_concurrente.Huevos.HuevoService;
 import org.slf4j.Logger;
@@ -7,7 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Schedulers;
 
 import java.time.Duration;
 
@@ -49,12 +52,12 @@ public class MasterScheduler {
                     logger.info("Lista de huevos: {}", huevoService.getHuevos());
 
                     // Evento cada 10 tics (excluyendo 0)
-                    if (ticsTotales != 0 && ticsTotales % 10 == 0) {
+                    if (ticsTotales != 0 && ticsTotales % 7 == 0) {
                         dinosaurioService.generarEventoMuerteAleatoria();
                     }
 
                     // Evento de reproducción cada 5 tics (excluyendo 0)
-                    if (ticsTotales != 0 && ticsTotales % 5 == 0) {
+                    if (ticsTotales != 0 && ticsTotales % 10 == 0) {
                         huevoService.crearHuevoAleatorio();
                         logger.info("Evento de reproducción: se ha creado un nuevo huevo.");
                     }
