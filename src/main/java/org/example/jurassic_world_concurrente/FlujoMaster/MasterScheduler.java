@@ -16,6 +16,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.Duration;
 
 @Component
@@ -118,11 +120,20 @@ public class MasterScheduler {
         String infoVoladores = "Visitantes en IslaVoladores: " + tuple.getT3() + "\nDinosaurios en IslaVoladores: " + distribuidorVisitantes.getIslaFlux("IslaVoladores").getTotalDinosaurios();
         String infoEnfermeria = "Dinosaurios enfermos: " + dinosaurioService.getDinosauriosEnfermos();
 
+        // Enviar datos al frontend
         sseController.sendEvent(info.toString());
         sseController.sendEventToIsla("IslaCarnivoros", infoCarnivoros);
         sseController.sendEventToIsla("IslaHerbivoros", infoHerbivoros);
         sseController.sendEventToIsla("IslaVoladores", infoVoladores);
         sseController.sendEventToEnfermeria(infoEnfermeria);
+
+        // Guardar datos en el archivo de notas
+        try (FileWriter writer = new FileWriter("informacion_simulacion.txt", true)) {
+            writer.write(info.toString());
+        } catch (IOException e) {
+            logger.error("Error al guardar la información en notas: ", e);
+        }
+
     }).subscribe();
 }
 
