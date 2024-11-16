@@ -37,7 +37,7 @@
     .rectangle {
       width: 80px; /* Fixed width */
       height: 60px; /* Fixed height */
-      background-color: blue;
+      background-color: rgba(128, 128, 128, 0.5); /* Gray with transparency */
       position: absolute;
       pointer-events: none; /* Make rectangles unclickable */
       z-index: 1;
@@ -59,14 +59,14 @@
 <body>
 <img id="background-image" src="prueba.webp" alt="Background Image">
 <div id="square"></div>
-<div class="rectangle" style="top: 90px; left: 170px;"></div>
-<div class="rectangle" style="top: 50px; left: 360px;"></div>
-<div class="rectangle" style="top: 90px; left: 550px;"></div>
-<div class="rectangle" style="top: 280px; left: 130px;"></div>
-<div class="rectangle" style="top: 280px; left: 590px;"></div>
-<div class="rectangle" style="top: 470px; left: 170px;"></div>
-<div class="rectangle" style="top: 495px; left: 360px;"></div>
-<div class="rectangle" style="top: 470px; left: 55s0px;"></div>
+<div class="rectangle" style="top: 90px; left: 170px;">Herbivoros</div>
+<div class="rectangle" style="top: 50px; left: 360px;">Carnivoros</div>
+<div class="rectangle" style="top: 90px; left: 550px;">Voladores</div>
+<div class="rectangle" style="top: 280px; left: 130px;">Anterior dia</div>
+<div class="rectangle" style="top: 280px; left: 590px;">Siguiente dia</div>
+<div class="rectangle" style="top: 470px; left: 170px;">Enfermeria</div>
+<div class="rectangle" style="top: 495px; left: 360px;">Salir</div>
+<div class="rectangle" style="top: 470px; left: 550px;">Huevos</div>
 <div id="popup">
   <p>¡El cuadrado está dentro del rectángulo!</p>
 </div>
