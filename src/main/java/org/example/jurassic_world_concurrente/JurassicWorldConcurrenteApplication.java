@@ -2,6 +2,8 @@ package org.example.jurassic_world_concurrente;
 
 import org.example.jurassic_world_concurrente.Dinosaurios.Dinosaurio;
 import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioService;
+import org.example.jurassic_world_concurrente.FlujoMaster.ControladorDeFlujos;
+import org.example.jurassic_world_concurrente.FlujoMaster.EnfermeriaScheduler;
 import org.example.jurassic_world_concurrente.FlujoMaster.MasterScheduler;
 import org.example.jurassic_world_concurrente.Huevos.FabricaHuevos;
 import org.example.jurassic_world_concurrente.Huevos.HuevoService;
@@ -42,6 +44,13 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
     @Autowired
     private DistribuidorVisitantes distribuidorVisitantes;
 
+    @Autowired
+    private EnfermeriaScheduler enfermeriaScheduler;
+
+    @Autowired
+    private ControladorDeFlujos controladorDeFlujos; // Inyectar ControladorDeFlujos
+
+
     public static void main(String[] args) {
         SpringApplication.run(JurassicWorldConcurrenteApplication.class, args);
     }
@@ -75,6 +84,11 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
         flujoCombinado
                 .flatMap(distribuidorVisitantes::moverAIsla) // Distribuye visitantes
                 .subscribe();
+
+        controladorDeFlujos.iniciarFlujos();
+
+        // El flujo de enfermería puede ser manejado adicionalmente
+        enfermeriaScheduler.iniciarEnfermeria();
 
         // Keep the application running to observe the visitor generation
         try {
