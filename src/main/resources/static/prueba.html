@@ -9,28 +9,38 @@
       height: 100%;
       margin: 0;
       font-family: 'Rock Salt', cursive;
-      background: url('prueba.webp') no-repeat center center fixed;
-      background-size: cover;
-      background-attachment: fixed;
       overflow: auto; /* Enable scrolling */
+      position: relative;
+    }
+
+    #background-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 800px; /* Fixed width */
+      height: 600px; /* Fixed height */
+      object-fit: contain;
+      z-index: 0;
     }
 
     #square {
-      width: 50px;
-      height: 50px;
+      width: 30px;
+      height: 30px;
       background-color: red;
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+      z-index: 2;
     }
 
     .rectangle {
-      width: 100px;
-      height: 100px;
+      width: 80px; /* Fixed width */
+      height: 60px; /* Fixed height */
       background-color: blue;
       position: absolute;
       pointer-events: none; /* Make rectangles unclickable */
+      z-index: 1;
     }
 
     #popup {
@@ -47,16 +57,16 @@
   </style>
 </head>
 <body>
+<img id="background-image" src="prueba.webp" alt="Background Image">
 <div id="square"></div>
-<div class="rectangle" style="top: 10%; left: 10%;"></div>
-<div class="rectangle" style="top: 10%; left: 40%;"></div>
-<div class="rectangle" style="top: 10%; left: 70%;"></div>
-<div class="rectangle" style="top: 40%; left: 10%;"></div>
-<div class="rectangle" style="top: 40%; left: 40%;"></div>
-<div class="rectangle" style="top: 40%; left: 70%;"></div>
-<div class="rectangle" style="top: 70%; left: 10%;"></div>
-<div class="rectangle" style="top: 70%; left: 40%;"></div>
-<div class="rectangle" style="top: 70%; left: 70%;"></div>
+<div class="rectangle" style="top: 90px; left: 170px;"></div>
+<div class="rectangle" style="top: 50px; left: 360px;"></div>
+<div class="rectangle" style="top: 90px; left: 550px;"></div>
+<div class="rectangle" style="top: 280px; left: 130px;"></div>
+<div class="rectangle" style="top: 280px; left: 590px;"></div>
+<div class="rectangle" style="top: 470px; left: 170px;"></div>
+<div class="rectangle" style="top: 495px; left: 360px;"></div>
+<div class="rectangle" style="top: 470px; left: 55s0px;"></div>
 <div id="popup">
   <p>¡El cuadrado está dentro del rectángulo!</p>
 </div>
