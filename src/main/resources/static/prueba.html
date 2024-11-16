@@ -7,19 +7,39 @@
   <style>
     body, html {
       height: 100%;
+      width: 100%;
       margin: 0;
       font-family: 'Rock Salt', cursive;
-      overflow: auto; /* Enable scrolling */
+      display: flex;
+      overflow: hidden;
+    }
+
+    .aside-container {
+      width: 45%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      padding: 20px;
+      box-sizing: border-box;
+      overflow-y: auto;
+      font-family: 'Roboto', sans-serif;
+      font-size: 1.2em;
+    }
+
+    .image-container {
+      width: 55%;
+      height: 100%;
       position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     #background-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 800px; /* Fixed width */
-      height: 600px; /* Fixed height */
-      object-fit: contain;
       z-index: 0;
     }
 
@@ -35,26 +55,95 @@
     }
 
     .rectangle {
-      width: 80px; /* Fixed width */
-      height: 60px; /* Fixed height */
-      background-color: rgba(128, 128, 128, 0.5); /* Gray with transparency */
+      width: 10%;
+      height: 10%;
+      background-color: rgba(128, 128, 128, 0.5);
       position: absolute;
-      pointer-events: none; /* Make rectangles unclickable */
+      pointer-events: none;
       z-index: 1;
+    }
+
+    .rectangle[data-url="isla_herbivoros.html"] {
+      top: 15%;
+      left: 14%;
+    }
+
+    .rectangle[data-url="isla_carnivoros.html"] {
+      top: 8%;
+      left: 45%;
+    }
+
+    .rectangle[data-url="isla_voladores.html"] {
+      top: 15%;
+      left: 77%;
+    }
+
+    .rectangle[data-url="huevos.html"] {
+      top: 45%;
+      left: 7%;
+    }
+
+    .rectangle[data-url="enfermeria.html"] {
+      top: 47%;
+      left: 84%;
+    }
+
+    .rectangle[data-url="isla_herbivoros.html"]:nth-of-type(2) {
+      top: 78%;
+      left: 14%;
+    }
+
+    .rectangle[data-url="isla_carnivoros.html"]:nth-of-type(2) {
+      top: 28%;
+      left: 45%;
+    }
+
+    .rectangle[data-url="isla_voladores.html"]:nth-of-type(2) {
+      top: 15%;
+      left: 77%;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: #fff;
+    }
+
+    th, td {
+      border: 1px solid #fff;
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background-color: rgba(255, 255, 255, 0.3);
     }
   </style>
 </head>
 <body>
-<img id="background-image" src="prueba.webp" alt="Background Image">
-<div id="square"></div>
-<div class="rectangle" style="top: 90px; left: 170px;" data-url="isla_herbivoros.html">Herbivoros</div>
-<div class="rectangle" style="top: 50px; left: 360px;" data-url="isla_carnivoros.html">Carnivoros</div>
-<div class="rectangle" style="top: 90px; left: 550px;" data-url="isla_voladores.html">Voladores</div>
-<div class="rectangle" style="top: 280px; left: 130px;" data-url="huevos.html">Huevos</div>
-<div class="rectangle" style="top: 280px; left: 590px;" data-url="enfermeria.html">Enfermeria</div>
-<div class="rectangle" style="top: 470px; left: 170px;" data-url="isla_herbivoros.html">Herbivoros</div>
-<div class="rectangle" style="top: 495px; left: 360px;" data-url="isla_carnivoros.html">Carnivoros</div>
-<div class="rectangle" style="top: 470px; left: 550px;" data-url="isla_voladores.html">Voladores</div>
+<div class="aside-container">
+  <table>
+    <thead>
+    <!-- Encabezados eliminados para que la tabla esté vacía -->
+    </thead>
+    <tbody id="informacion">
+    <!-- Contenido dinámico que será llenado desde el backend -->
+    </tbody>
+  </table>
+</div>
+<div class="image-container">
+  <img id="background-image" src="prueba.webp" alt="Background Image">
+  <div id="square"></div>
+  <div class="rectangle" data-url="isla_herbivoros.html">Herbivoros</div>
+  <div class="rectangle" data-url="isla_carnivoros.html">Carnivoros</div>
+  <div class="rectangle" data-url="isla_voladores.html">Voladores</div>
+  <div class="rectangle" data-url="huevos.html">Huevos</div>
+  <div class="rectangle" data-url="enfermeria.html">Enfermeria</div>
+  <div class="rectangle" data-url="isla_herbivoros.html">Herbivoros</div>
+  <div class="rectangle" data-url="isla_carnivoros.html">Carnivoros</div>
+  <div class="rectangle" data-url="isla_voladores.html">Voladores</div>
+</div>
 
 <script>
   document.addEventListener('keydown', function(event) {
@@ -89,6 +178,18 @@
         break;
     }
   });
+
+  const eventSource = new EventSource('/sse');
+
+  eventSource.onmessage = function(event) {
+    const info = event.data;
+    const infoElement = document.getElementById('informacion');
+    const newRow = document.createElement('tr');
+    const newCell = document.createElement('td');
+    newCell.textContent = info;
+    newRow.appendChild(newCell);
+    infoElement.appendChild(newRow);
+  };
 </script>
 </body>
 </html>

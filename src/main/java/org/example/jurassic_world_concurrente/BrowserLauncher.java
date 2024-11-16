@@ -15,7 +15,7 @@ public class BrowserLauncher implements ApplicationListener<ContextRefreshedEven
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        String url = "http://localhost:8080/index.html"; // URL de la página index
+        String url = "http://localhost:8080/prueba.html"; // URL de la página index
 
         try {
             ProcessBuilder processBuilder = new ProcessBuilder("open", url);
