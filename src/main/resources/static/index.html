@@ -11,9 +11,6 @@
       height: 100%;
       margin: 0;
       font-family: 'Rock Salt', cursive;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       overflow: hidden;
     }
 
@@ -27,25 +24,50 @@
       z-index: -1;
     }
 
+    .main-container {
+      display: flex;
+      width: 100%;
+      height: 100vh;
+    }
+
+    .aside-container {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 20%;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      padding: 20px;
+      box-sizing: border-box;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 1;
+    }
+
     .content {
-      position: relative;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      margin-left: 20%;
       z-index: 1;
       text-align: center;
-      color: #fff;
     }
 
     h1 {
-      font-size: 3em;
+      font-size: 4em; /* Aumentar tamaño del texto */
       text-shadow: 2px 2px 4px #000;
     }
 
     p {
-      font-size: 1.2em;
+      font-size: 1.5em; /* Aumentar tamaño del texto */
       text-shadow: 2px 2px 4px #000;
     }
 
     .logo {
-      width: 600px;
+      width: 800px; /* Aumentar tamaño del logo */
       margin-bottom: 20px;
     }
 
@@ -58,8 +80,8 @@
 
     .island-button {
       font-family: 'Rock Salt', cursive;
-      font-size: 1.2em;
-      padding: 10px 20px;
+      font-size: 1.5em; /* Aumentar tamaño del texto */
+      padding: 15px 30px; /* Aumentar tamaño del botón */
       background-color: #333;
       color: #fff;
       border: none;
@@ -70,6 +92,23 @@
     .island-button:hover {
       background-color: #555;
     }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: #fff;
+    }
+
+    th, td {
+      border: 1px solid #fff;
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
   </style>
 </head>
 <body>
@@ -77,15 +116,27 @@
   <source src="/mediaNode-1731522870754.mp4" type="video/mp4">
   Tu navegador no soporta la etiqueta de video.
 </video>
-<div class="content">
-  <img src="/jurassic-park-seeklogo.png" alt="Jurassic Park Logo" class="logo">
-  <h1>Bienvenido a Jurassic World</h1>
-  <p>A que Isla deseas ir</p>
-  <div class="buttons">
-    <button class="island-button" onclick="location.href='/isla_voladores.html'">ISLA VOLADORES</button>
-    <button class="island-button" onclick="location.href='/isla_carnivoros.html'">ISLA CARNÍVOROS</button>
-    <button class="island-button" onclick="location.href='/isla_herbivoros.html'">ISLA HERBÍVOROS</button>
-    <button class="island-button" onclick="location.href='/enfermeria.html'">ENFERMERÍA</button>
+<div class="main-container">
+  <div class="aside-container">
+    <table>
+      <thead>
+      <!-- Encabezados eliminados para que la tabla esté vacía -->
+      </thead>
+      <tbody>
+      <!-- Contenido dinámico que será llenado desde el backend -->
+      </tbody>
+    </table>
+  </div>
+  <div class="content">
+    <img src="/jurassic-park-seeklogo.png" alt="Jurassic Park Logo" class="logo">
+    <h1>Bienvenido a Jurassic Park</h1>
+    <p>A que Isla deseas ir</p>
+    <div class="buttons">
+      <button class="island-button" onclick="location.href='/isla_voladores.html'">ISLA VOLADORES</button>
+      <button class="island-button" onclick="location.href='/isla_carnivoros.html'">ISLA CARNÍVOROS</button>
+      <button class="island-button" onclick="location.href='/isla_herbivoros.html'">ISLA HERBÍVOROS</button>
+      <button class="island-button" onclick="location.href='/enfermeria.html'">ENFERMERÍA</button>
+    </div>
   </div>
 </div>
 </body>
