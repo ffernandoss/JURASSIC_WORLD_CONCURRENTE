@@ -33,7 +33,7 @@ public class EnfermeriaScheduler {
     private int ticActual = 0;
 
     public void iniciarEnfermeria() {
-        disposable = Flux.interval(Duration.ofSeconds(2))
+        disposable = Flux.interval(Duration.ofSeconds(4))
                 .doOnNext(tic -> {
                     ticActual++;
                     logger.info("Tic actual: {}", ticActual);

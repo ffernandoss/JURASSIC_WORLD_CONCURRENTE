@@ -1,3 +1,4 @@
+// src/main/java/org/example/jurassic_world_concurrente/Dinosaurios/DinosaurioService.java
 package org.example.jurassic_world_concurrente.Dinosaurios;
 
 import org.slf4j.Logger;
@@ -89,7 +90,8 @@ public class DinosaurioService {
         if (dinosauriosEnfermos.contains(dinosaurio)) {
             dinosauriosEnfermos.remove(dinosaurio);
             dinosaurio.resetTicsEnEnfermeria();
-            logger.info("Dinosaurio {} ha sido curado y salió de la enfermería.", dinosaurio.getNombre());
+            dinosaurio.setEdad(dinosaurio.getEdad() + 3); // Incrementar la edad en 3 años
+            logger.info("Dinosaurio {} ha sido curado, tiene ahora {} años y salió de la enfermería.", dinosaurio.getNombre(), dinosaurio.getEdad());
             suscribirDinosaurio(dinosaurio); // Regresar a la lista principal
         }
     }
