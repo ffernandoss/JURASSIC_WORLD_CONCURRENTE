@@ -83,7 +83,7 @@
           const squareBounds = square.getBoundingClientRect();
           if (squareBounds.left >= rectBounds.left && squareBounds.right <= rectBounds.right &&
                   squareBounds.top >= rectBounds.top && squareBounds.bottom <= rectBounds.bottom) {
-            window.open(rect.getAttribute('data-url'), '_blank', 'width=800,height=600');
+            window.location.href = rect.getAttribute('data-url');
           }
         });
         break;
