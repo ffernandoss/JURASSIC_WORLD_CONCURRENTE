@@ -102,4 +102,24 @@ public class Carnivoro implements Dinosaurio {
     public String toString() {
         return nombre;
     }
+
+    @Override
+    public int getTicsEnEnfermeria() {
+        return ticsEnEnfermeria;
+    }
+
+    @Override
+    public void incrementarTicsEnEnfermeria() {
+        this.ticsEnEnfermeria++;
+    }
+
+    @Override
+    public void resetTicsEnEnfermeria() {
+        this.ticsEnEnfermeria = 0;
+    }
+
+    @Override
+    public void setTicsEnEnfermeria(int ticsEnEnfermeria) {
+        this.ticsEnEnfermeria = ticsEnEnfermeria;
+    }
 }

@@ -23,6 +23,30 @@ public class RabbitMQConfig {
         return new Queue("verificarDinosauriosQueue", false);
     }
 
+    //
+    @Bean
+    public Queue actualizarDinosaurioEstadoQueue() {
+        return new Queue("actualizarDinosaurioEstadoQueue", false);
+    }
+
+    @Bean
+    public Queue enfermeriaQueue() {
+        return new Queue("enfermeriaQueue", false);
+    }
+
+    @Bean
+    public MessageConverter jsonMessageConverter() {
+        return new Jackson2JsonMessageConverter();
+    }
+
+    @Bean
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+        rabbitTemplate.setMessageConverter(jsonMessageConverter());
+        return rabbitTemplate;
+    }
+
+
     @Bean
     public Queue visitorNotificationQueue() {
         return new Queue("visitorNotificationQueue", false);

@@ -15,4 +15,11 @@ public interface Dinosaurio {
     void setTipo(String tipo);
     int getMaxEdad();
     Long getId(); // Add this method
+
+    /// //
+    int getTicsEnEnfermeria();
+    void incrementarTicsEnEnfermeria();
+    void resetTicsEnEnfermeria();
+    void setTicsEnEnfermeria(int ticsEnEnfermeria);
+
 }
