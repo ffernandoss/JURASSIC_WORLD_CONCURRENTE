@@ -4,6 +4,7 @@ package org.example.jurassic_world_concurrente.FlujoMaster;
 import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioEstadoService;
 import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioService;
 import org.example.jurassic_world_concurrente.Huevos.HuevoService;
+import org.example.jurassic_world_concurrente.SseController;
 import org.example.jurassic_world_concurrente.visitante.DistribuidorVisitantes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +16,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.Duration;
 
 @Component
@@ -38,8 +37,11 @@ public class MasterScheduler {
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
-    private Disposable disposable;
 
+    @Autowired
+    private SseController sseController; // Inyectar SseController
+
+    private Disposable disposable;
     private int ticsTotales = 0;
 
     public void iniciarSimulacion() {
@@ -101,18 +103,17 @@ public class MasterScheduler {
                 distribuidorVisitantes.getIslaFlux("IslaHerbivoros").obtenerFlujoVisitantes().collectList(),
                 distribuidorVisitantes.getIslaFlux("IslaVoladores").obtenerFlujoVisitantes().collectList()
         ).doOnNext(tuple -> {
-            try (FileWriter writer = new FileWriter("informacion_simulacion.txt", true)) {
-                writer.write("Tic: " + ticsTotales + "\n");
-                writer.write("Lista de dinosaurios: " + dinosaurioService.getDinosaurios() + "\n");
-                writer.write("Lista de dinosaurios enfermos: " + dinosaurioService.getDinosauriosEnfermos() + "\n");
-                writer.write("Lista de huevos: " + huevoService.getHuevos() + "\n");
-                writer.write("Visitantes en IslaCarnivoros: " + tuple.getT1() + "\n");
-                writer.write("Visitantes en IslaHerbivoros: " + tuple.getT2() + "\n");
-                writer.write("Visitantes en IslaVoladores: " + tuple.getT3() + "\n");
-                writer.write("--------------------------------------------------\n");
-            } catch (IOException e) {
-                logger.error("Error al guardar la información en notas: ", e);
-            }
+            StringBuilder info = new StringBuilder();
+            info.append("Tic: ").append(ticsTotales).append("\n");
+            info.append("Lista de dinosaurios: ").append(dinosaurioService.getDinosaurios()).append("\n");
+            info.append("Lista de dinosaurios enfermos: ").append(dinosaurioService.getDinosauriosEnfermos()).append("\n");
+            info.append("Lista de huevos: ").append(huevoService.getHuevos()).append("\n");
+            info.append("Visitantes en IslaCarnivoros: ").append(tuple.getT1()).append("\n");
+            info.append("Visitantes en IslaHerbivoros: ").append(tuple.getT2()).append("\n");
+            info.append("Visitantes en IslaVoladores: ").append(tuple.getT3()).append("\n");
+            info.append("--------------------------------------------------\n");
+
+            sseController.sendEvent(info.toString());
         }).subscribe();
     }
 

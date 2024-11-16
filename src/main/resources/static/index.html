@@ -6,6 +6,7 @@
   <title>Jurassic World Concurrente</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
     body, html {
       height: 100%;
@@ -42,6 +43,8 @@
       height: 100vh;
       overflow-y: auto;
       z-index: 1;
+      font-family: 'Roboto', sans-serif; /* Aplicar la fuente Roboto al aside */
+      font-size: 1.2em; /* Aumentar el tamaño de la fuente */
     }
 
     .content {
@@ -57,17 +60,17 @@
     }
 
     h1 {
-      font-size: 4em; /* Aumentar tamaño del texto */
+      font-size: 4em;
       text-shadow: 2px 2px 4px #000;
     }
 
     p {
-      font-size: 1.5em; /* Aumentar tamaño del texto */
+      font-size: 1.5em;
       text-shadow: 2px 2px 4px #000;
     }
 
     .logo {
-      width: 800px; /* Aumentar tamaño del logo */
+      width: 800px;
       margin-bottom: 20px;
     }
 
@@ -80,8 +83,8 @@
 
     .island-button {
       font-family: 'Rock Salt', cursive;
-      font-size: 1.5em; /* Aumentar tamaño del texto */
-      padding: 15px 30px; /* Aumentar tamaño del botón */
+      font-size: 1.5em;
+      padding: 15px 30px;
       background-color: #333;
       color: #fff;
       border: none;
@@ -122,7 +125,7 @@
       <thead>
       <!-- Encabezados eliminados para que la tabla esté vacía -->
       </thead>
-      <tbody>
+      <tbody id="informacion">
       <!-- Contenido dinámico que será llenado desde el backend -->
       </tbody>
     </table>
@@ -139,5 +142,19 @@
     </div>
   </div>
 </div>
+
+<script>
+  const eventSource = new EventSource('/sse');
+
+  eventSource.onmessage = function(event) {
+    const info = event.data;
+    const infoElement = document.getElementById('informacion');
+    const newRow = document.createElement('tr');
+    const newCell = document.createElement('td');
+    newCell.textContent = info;
+    newRow.appendChild(newCell);
+    infoElement.appendChild(newRow);
+  };
+</script>
 </body>
 </html>
