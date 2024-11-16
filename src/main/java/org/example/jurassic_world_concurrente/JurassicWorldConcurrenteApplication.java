@@ -3,8 +3,6 @@ package org.example.jurassic_world_concurrente;
 import org.example.jurassic_world_concurrente.Dinosaurios.Dinosaurio;
 import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioService;
 import org.example.jurassic_world_concurrente.FlujoMaster.ControladorDeFlujos;
-import org.example.jurassic_world_concurrente.FlujoMaster.EnfermeriaScheduler;
-import org.example.jurassic_world_concurrente.FlujoMaster.MasterScheduler;
 import org.example.jurassic_world_concurrente.Huevos.FabricaHuevos;
 import org.example.jurassic_world_concurrente.Huevos.HuevoService;
 import org.example.jurassic_world_concurrente.Dinosaurios.FabricaDinosaurios;
@@ -39,17 +37,10 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
     private FabricaHuevos fabricaHuevos;
 
     @Autowired
-    private MasterScheduler masterScheduler;
-
-    @Autowired
     private DistribuidorVisitantes distribuidorVisitantes;
 
     @Autowired
-    private EnfermeriaScheduler enfermeriaScheduler;
-
-    @Autowired
     private ControladorDeFlujos controladorDeFlujos; // Inyectar ControladorDeFlujos
-
 
     public static void main(String[] args) {
         SpringApplication.run(JurassicWorldConcurrenteApplication.class, args);
@@ -68,9 +59,6 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
 
         logger.info("Dinosaurios iniciales creados y agregados al servicio de gestión.");
 
-        // Iniciar el flujo maestro que controla el tiempo de simulación
-        masterScheduler.iniciarSimulacion();
-
         // Iniciar la generación de visitantes
         VisitanteGenerator visitanteGenerator = new VisitanteGenerator(distribuidorVisitantes);
         Flux<Visitante> visitantesFlux = visitanteGenerator.generarVisitantesContinuos();
@@ -85,16 +73,12 @@ public class JurassicWorldConcurrenteApplication implements CommandLineRunner {
                 .flatMap(distribuidorVisitantes::moverAIsla) // Distribuye visitantes
                 .subscribe();
 
+        // Iniciar los flujos controlados por ControladorDeFlujos
         controladorDeFlujos.iniciarFlujos();
 
-        // El flujo de enfermería puede ser manejado adicionalmente
-        enfermeriaScheduler.iniciarEnfermeria();
-
         // Keep the application running to observe the visitor generation
-        try {
-            Thread.sleep(10000); // Run for 10 seconds
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        synchronized (this) {
+            this.wait(); // Keep the application running indefinitely
         }
     }
 }

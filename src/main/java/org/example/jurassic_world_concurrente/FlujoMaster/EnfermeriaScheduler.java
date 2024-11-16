@@ -36,7 +36,7 @@ public class EnfermeriaScheduler {
         disposable = Flux.interval(Duration.ofSeconds(2))
                 .doOnNext(tic -> {
                     ticActual++;
-                    logger.info("Tic actual: {}", ticActual);
+                    logger.info("--------------------------- Tic de la enfermeria actual: {} ---------------------------", ticActual);
 
                     // Obtener dinosaurios enfermos
                     List<Dinosaurio> dinosauriosEnfermos = dinosaurioService.getDinosauriosEnfermos();

@@ -36,18 +36,22 @@ public class ControladorDeFlujos {
                         masterFlowRunning.set(false);
 
                         // Ahora iniciar el flujo alterno (de enfermería) con el mismo tic
-                        otherFlowDisposable = Flux.interval(Duration.ofSeconds(1))
-                                .doOnNext(t -> {
-                                    if (!masterFlowRunning.get() && !otherFlowRunning.get()) {
-                                        otherFlowRunning.set(true);
-                                        // Ejecutar un tic del flujo alterno
-                                        otroScheduler.iniciarEnfermeria();
-                                        pausarFlujo(otherFlowDisposable); // Pausar después del tic
-                                        otherFlowRunning.set(false);
-                                    }
-                                })
-                                .subscribeOn(Schedulers.parallel())
-                                .subscribe();
+                        iniciarFlujoAlterno();
+                    }
+                })
+                .subscribeOn(Schedulers.parallel())
+                .subscribe();
+    }
+
+    private void iniciarFlujoAlterno() {
+        otherFlowDisposable = Flux.interval(Duration.ofSeconds(1))
+                .doOnNext(t -> {
+                    if (!masterFlowRunning.get() && !otherFlowRunning.get()) {
+                        otherFlowRunning.set(true);
+                        // Ejecutar un tic del flujo alterno
+                        otroScheduler.iniciarEnfermeria();
+                        pausarFlujo(otherFlowDisposable); // Pausar después del tic
+                        otherFlowRunning.set(false);
                     }
                 })
                 .subscribeOn(Schedulers.parallel())
