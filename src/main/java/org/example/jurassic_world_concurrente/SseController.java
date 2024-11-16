@@ -56,4 +56,16 @@ public class SseController {
         });
         emitters.removeAll(deadEmitters);
     }
+
+    public void sendEventToEnfermeria(String data) {
+        List<SseEmitter> deadEmitters = new ArrayList<>();
+        emitters.forEach(emitter -> {
+            try {
+                emitter.send(SseEmitter.event().name("Enfermeria").data(data));
+            } catch (IOException e) {
+                deadEmitters.add(emitter);
+            }
+        });
+        emitters.removeAll(deadEmitters);
+    }
 }

@@ -82,7 +82,7 @@
             <thead>
             <!-- Encabezados eliminados para que la tabla esté vacía -->
             </thead>
-            <tbody>
+            <tbody id="informacion">
             <!-- Contenido dinámico que será llenado desde el backend -->
             </tbody>
         </table>
@@ -91,5 +91,19 @@
         <!-- Contenido adicional -->
     </div>
 </div>
+
+<script>
+  const eventSource = new EventSource('/sse/Enfermeria');
+
+  eventSource.addEventListener('Enfermeria', function(event) {
+    const info = event.data;
+    const infoElement = document.getElementById('informacion');
+    const newRow = document.createElement('tr');
+    const newCell = document.createElement('td');
+    newCell.textContent = info;
+    newRow.appendChild(newCell);
+    infoElement.appendChild(newRow);
+  });
+</script>
 </body>
 </html>
