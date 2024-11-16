@@ -4,7 +4,7 @@ package org.example.jurassic_world_concurrente.FlujoMaster;
 import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioEstadoService;
 import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioService;
 import org.example.jurassic_world_concurrente.Huevos.HuevoService;
-import org.example.jurassic_world_concurrente.SseController;
+import org.example.jurassic_world_concurrente.fluxController;
 import org.example.jurassic_world_concurrente.visitante.DistribuidorVisitantes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +41,7 @@ public class MasterScheduler {
     private RabbitTemplate rabbitTemplate;
 
     @Autowired
-    private SseController sseController; // Inyectar SseController
+    private fluxController sseController; // Inyectar SseController
 
     private Disposable disposable;
     private int ticsTotales = 0;
