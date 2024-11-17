@@ -19,7 +19,7 @@ public class fluxController {
 
     @GetMapping(value = "/sse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<String> handleSse() {
-        return sink.asFlux().delayElements(Duration.ofSeconds(1));
+        return sink.asFlux().delayElements(Duration.ofSeconds(0));
     }
 
     @GetMapping(value = "/sse/{isla}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
