@@ -1,184 +1,136 @@
 Tic: 1
 Lista de dinosaurios: [Volador_0, Volador_1]
 Lista de dinosaurios enfermos: []
-Lista de huevos: [Huevo_0 (Carnivoro), Huevo_1 (Herbivoro)]
-Visitantes en IslaCarnivoros: []
-Visitantes en IslaHerbivoros: [Visitante {id=0}]
-Visitantes en IslaVoladores: []
+Lista de huevos: []
+Visitantes en IslaCarnivoros: [Visitante {id=0}, Visitante {id=2}]
+Visitantes en IslaHerbivoros: []
+Visitantes en IslaVoladores: [Visitante {id=1}]
 --------------------------------------------------
 Tic: 2
 Lista de dinosaurios: [Volador_0, Volador_1]
 Lista de dinosaurios enfermos: []
 Lista de huevos: [Huevo_0 (Carnivoro), Huevo_1 (Herbivoro)]
-Visitantes en IslaCarnivoros: [Visitante {id=1}]
-Visitantes en IslaHerbivoros: [Visitante {id=0}]
-Visitantes en IslaVoladores: [Visitante {id=2}]
+Visitantes en IslaCarnivoros: [Visitante {id=0}, Visitante {id=2}]
+Visitantes en IslaHerbivoros: [Visitante {id=4}, Visitante {id=5}]
+Visitantes en IslaVoladores: [Visitante {id=1}, Visitante {id=3}]
 --------------------------------------------------
 Tic: 3
 Lista de dinosaurios: [Volador_0, Volador_1]
 Lista de dinosaurios enfermos: []
 Lista de huevos: [Huevo_0 (Carnivoro), Huevo_1 (Herbivoro)]
-Visitantes en IslaCarnivoros: [Visitante {id=1}, Visitante {id=7}, Visitante {id=2}]
-Visitantes en IslaHerbivoros: [Visitante {id=0}, Visitante {id=3}]
-Visitantes en IslaVoladores: [Visitante {id=4}, Visitante {id=5}, Visitante {id=6}]
+Visitantes en IslaCarnivoros: [Visitante {id=0}, Visitante {id=2}, Visitante {id=6}]
+Visitantes en IslaHerbivoros: [Visitante {id=4}, Visitante {id=5}, Visitante {id=7}]
+Visitantes en IslaVoladores: [Visitante {id=1}, Visitante {id=3}]
 --------------------------------------------------
 Tic: 4
 Lista de dinosaurios: [Volador_0, Volador_1]
 Lista de dinosaurios enfermos: []
 Lista de huevos: [Huevo_0 (Carnivoro), Huevo_1 (Herbivoro)]
-Visitantes en IslaCarnivoros: [Visitante {id=7}, Visitante {id=2}, Visitante {id=8}]
-Visitantes en IslaHerbivoros: [Visitante {id=3}, Visitante {id=9}, Visitante {id=1}]
-Visitantes en IslaVoladores: [Visitante {id=4}, Visitante {id=5}, Visitante {id=6}, Visitante {id=10}]
+Visitantes en IslaCarnivoros: [Visitante {id=6}]
+Visitantes en IslaHerbivoros: [Visitante {id=7}]
+Visitantes en IslaVoladores: [Visitante {id=8}]
 --------------------------------------------------
 Tic: 5
-Lista de dinosaurios: [Volador_0, Volador_1, Herbivoro_0]
-Lista de dinosaurios enfermos: []
+Lista de dinosaurios: [Volador_1, Herbivoro_0]
+Lista de dinosaurios enfermos: [Volador_0]
 Lista de huevos: [Huevo_0 (Carnivoro)]
-Visitantes en IslaCarnivoros: [Visitante {id=8}, Visitante {id=12}]
-Visitantes en IslaHerbivoros: [Visitante {id=9}, Visitante {id=1}, Visitante {id=11}]
-Visitantes en IslaVoladores: [Visitante {id=10}, Visitante {id=15}]
+Visitantes en IslaCarnivoros: [Visitante {id=7}]
+Visitantes en IslaHerbivoros: [Visitante {id=9}, Visitante {id=11}, Visitante {id=12}]
+Visitantes en IslaVoladores: [Visitante {id=8}, Visitante {id=10}]
 --------------------------------------------------
 Tic: 6
-Lista de dinosaurios: [Volador_0, Volador_1, Herbivoro_0, Carnivoro_0]
-Lista de dinosaurios enfermos: []
+Lista de dinosaurios: [Volador_1, Herbivoro_0, Carnivoro_0]
+Lista de dinosaurios enfermos: [Volador_0]
 Lista de huevos: []
-Visitantes en IslaCarnivoros: [Visitante {id=12}, Visitante {id=10}]
-Visitantes en IslaHerbivoros: [Visitante {id=11}]
-Visitantes en IslaVoladores: [Visitante {id=15}, Visitante {id=16}, Visitante {id=17}, Visitante {id=18}]
+Visitantes en IslaCarnivoros: [Visitante {id=7}, Visitante {id=14}]
+Visitantes en IslaHerbivoros: [Visitante {id=9}, Visitante {id=11}, Visitante {id=12}]
+Visitantes en IslaVoladores: [Visitante {id=10}]
 --------------------------------------------------
 Tic: 7
-Lista de dinosaurios: [Volador_1, Carnivoro_0]
-Lista de dinosaurios enfermos: [Herbivoro_0]
+Lista de dinosaurios: [Herbivoro_0, Carnivoro_0]
+Lista de dinosaurios enfermos: [Volador_0]
 Lista de huevos: []
-Visitantes en IslaCarnivoros: [Visitante {id=10}, Visitante {id=19}]
-Visitantes en IslaHerbivoros: []
-Visitantes en IslaVoladores: [Visitante {id=16}, Visitante {id=17}, Visitante {id=18}]
---------------------------------------------------
-Tic: 8
-Lista de dinosaurios: [Volador_1, Carnivoro_0]
-Lista de dinosaurios enfermos: [Herbivoro_0]
-Lista de huevos: [Huevo_2 (Herbivoro)]
-Visitantes en IslaCarnivoros: [Visitante {id=19}, Visitante {id=20}]
-Visitantes en IslaHerbivoros: []
+Visitantes en IslaCarnivoros: [Visitante {id=14}, Visitante {id=15}]
+Visitantes en IslaHerbivoros: [Visitante {id=16}]
 Visitantes en IslaVoladores: []
 --------------------------------------------------
-Tic: 9
-Lista de dinosaurios: [Volador_1, Carnivoro_0, Herbivoro_0]
+Tic: 8
+Lista de dinosaurios: [Herbivoro_0, Carnivoro_0, Volador_0]
 Lista de dinosaurios enfermos: []
-Lista de huevos: [Huevo_2 (Herbivoro)]
-Visitantes en IslaCarnivoros: [Visitante {id=20}, Visitante {id=23}]
-Visitantes en IslaHerbivoros: [Visitante {id=21}, Visitante {id=22}]
-Visitantes en IslaVoladores: [Visitante {id=24}]
+Lista de huevos: [Huevo_2 (Volador)]
+Visitantes en IslaCarnivoros: [Visitante {id=15}, Visitante {id=18}]
+Visitantes en IslaHerbivoros: [Visitante {id=16}]
+Visitantes en IslaVoladores: [Visitante {id=17}]
+--------------------------------------------------
+Tic: 9
+Lista de dinosaurios: [Herbivoro_0, Volador_0]
+Lista de dinosaurios enfermos: [Carnivoro_0]
+Lista de huevos: [Huevo_2 (Volador), Huevo_3 (Carnivoro)]
+Visitantes en IslaCarnivoros: [Visitante {id=18}, Visitante {id=21}, Visitante {id=22}]
+Visitantes en IslaHerbivoros: [Visitante {id=20}, Visitante {id=15}]
+Visitantes en IslaVoladores: [Visitante {id=17}, Visitante {id=19}, Visitante {id=23}]
 --------------------------------------------------
 Tic: 10
-Lista de dinosaurios: [Volador_1, Carnivoro_0, Herbivoro_0]
-Lista de dinosaurios enfermos: []
-Lista de huevos: [Huevo_2 (Herbivoro), Huevo_3 (Herbivoro)]
-Visitantes en IslaCarnivoros: [Visitante {id=23}, Visitante {id=26}]
-Visitantes en IslaHerbivoros: [Visitante {id=21}, Visitante {id=22}]
-Visitantes en IslaVoladores: [Visitante {id=24}, Visitante {id=25}]
+Lista de dinosaurios: [Herbivoro_0, Volador_0, Volador_2]
+Lista de dinosaurios enfermos: [Carnivoro_0]
+Lista de huevos: [Huevo_3 (Carnivoro), Huevo_4 (Herbivoro)]
+Visitantes en IslaCarnivoros: [Visitante {id=21}, Visitante {id=22}, Visitante {id=25}]
+Visitantes en IslaHerbivoros: [Visitante {id=20}, Visitante {id=15}, Visitante {id=26}, Visitante {id=17}]
+Visitantes en IslaVoladores: [Visitante {id=19}, Visitante {id=23}, Visitante {id=24}]
 --------------------------------------------------
 Tic: 11
-Lista de dinosaurios: [Volador_1, Carnivoro_0, Herbivoro_0, Herbivoro_1]
-Lista de dinosaurios enfermos: []
-Lista de huevos: [Huevo_3 (Herbivoro)]
-Visitantes en IslaCarnivoros: [Visitante {id=26}]
-Visitantes en IslaHerbivoros: [Visitante {id=28}]
-Visitantes en IslaVoladores: [Visitante {id=25}, Visitante {id=27}]
+Lista de dinosaurios: [Volador_0, Volador_2]
+Lista de dinosaurios enfermos: [Herbivoro_0, Carnivoro_0]
+Lista de huevos: [Huevo_3 (Carnivoro), Huevo_4 (Herbivoro)]
+Visitantes en IslaCarnivoros: [Visitante {id=25}, Visitante {id=20}]
+Visitantes en IslaHerbivoros: [Visitante {id=26}, Visitante {id=17}, Visitante {id=28}]
+Visitantes en IslaVoladores: [Visitante {id=24}, Visitante {id=29}]
 --------------------------------------------------
 Tic: 12
-Lista de dinosaurios: [Volador_1, Carnivoro_0, Herbivoro_0, Herbivoro_1]
-Lista de dinosaurios enfermos: []
-Lista de huevos: [Huevo_3 (Herbivoro)]
-Visitantes en IslaCarnivoros: [Visitante {id=29}, Visitante {id=30}]
+Lista de dinosaurios: [Volador_0, Volador_2]
+Lista de dinosaurios enfermos: [Herbivoro_0, Carnivoro_0]
+Lista de huevos: [Huevo_3 (Carnivoro), Huevo_4 (Herbivoro)]
+Visitantes en IslaCarnivoros: [Visitante {id=20}, Visitante {id=30}, Visitante {id=31}]
 Visitantes en IslaHerbivoros: [Visitante {id=28}]
-Visitantes en IslaVoladores: [Visitante {id=27}]
+Visitantes en IslaVoladores: [Visitante {id=29}]
 --------------------------------------------------
 Tic: 13
-Lista de dinosaurios: [Volador_1, Herbivoro_1]
-Lista de dinosaurios enfermos: [Herbivoro_0, Carnivoro_0]
-Lista de huevos: [Huevo_3 (Herbivoro)]
-Visitantes en IslaCarnivoros: [Visitante {id=29}, Visitante {id=30}, Visitante {id=32}]
-Visitantes en IslaHerbivoros: [Visitante {id=31}]
+Lista de dinosaurios: [Volador_0, Volador_2, Herbivoro_0, Carnivoro_1]
+Lista de dinosaurios enfermos: [Carnivoro_0]
+Lista de huevos: [Huevo_4 (Herbivoro)]
+Visitantes en IslaCarnivoros: [Visitante {id=30}, Visitante {id=31}, Visitante {id=32}, Visitante {id=34}]
+Visitantes en IslaHerbivoros: [Visitante {id=36}, Visitante {id=20}]
 Visitantes en IslaVoladores: [Visitante {id=33}]
 --------------------------------------------------
 Tic: 14
-Lista de dinosaurios: [Volador_1, Herbivoro_1]
-Lista de dinosaurios enfermos: [Herbivoro_0, Carnivoro_0]
-Lista de huevos: [Huevo_4 (Carnivoro)]
-Visitantes en IslaCarnivoros: [Visitante {id=32}, Visitante {id=34}, Visitante {id=36}]
-Visitantes en IslaHerbivoros: [Visitante {id=31}, Visitante {id=35}, Visitante {id=29}]
-Visitantes en IslaVoladores: [Visitante {id=33}]
---------------------------------------------------
-Tic: 15
-Lista de dinosaurios: [Volador_1, Herbivoro_1, Herbivoro_0]
-Lista de dinosaurios enfermos: [Carnivoro_0]
-Lista de huevos: [Huevo_4 (Carnivoro)]
-Visitantes en IslaCarnivoros: [Visitante {id=34}, Visitante {id=36}, Visitante {id=31}]
-Visitantes en IslaHerbivoros: [Visitante {id=35}, Visitante {id=29}, Visitante {id=38}]
-Visitantes en IslaVoladores: [Visitante {id=40}]
---------------------------------------------------
-Tic: 16
-Lista de dinosaurios: [Herbivoro_1, Herbivoro_0, Carnivoro_0]
-Lista de dinosaurios enfermos: []
-Lista de huevos: [Huevo_4 (Carnivoro)]
-Visitantes en IslaCarnivoros: [Visitante {id=31}, Visitante {id=41}, Visitante {id=42}]
-Visitantes en IslaHerbivoros: [Visitante {id=38}, Visitante {id=43}]
-Visitantes en IslaVoladores: [Visitante {id=40}, Visitante {id=44}]
---------------------------------------------------
-Tic: 17
-Lista de dinosaurios: [Herbivoro_1, Herbivoro_0, Carnivoro_0]
-Lista de dinosaurios enfermos: []
-Lista de huevos: [Huevo_4 (Carnivoro), Huevo_5 (Volador), Huevo_7 (Volador)]
-Visitantes en IslaCarnivoros: [Visitante {id=41}, Visitante {id=42}]
-Visitantes en IslaHerbivoros: [Visitante {id=43}, Visitante {id=45}]
-Visitantes en IslaVoladores: [Visitante {id=44}]
---------------------------------------------------
-Tic: 18
-Lista de dinosaurios: [Herbivoro_1, Herbivoro_0, Carnivoro_0, Carnivoro_1]
-Lista de dinosaurios enfermos: []
-Lista de huevos: [Huevo_5 (Volador), Huevo_7 (Volador)]
-Visitantes en IslaCarnivoros: [Visitante {id=47}, Visitante {id=48}, Visitante {id=49}]
-Visitantes en IslaHerbivoros: [Visitante {id=45}, Visitante {id=46}, Visitante {id=50}]
-Visitantes en IslaVoladores: []
---------------------------------------------------
-Tic: 19
-Lista de dinosaurios: [Herbivoro_1, Herbivoro_0, Carnivoro_0, Carnivoro_1, Volador_2, Volador_3]
+Lista de dinosaurios: [Volador_0, Volador_2, Herbivoro_0, Carnivoro_0, Herbivoro_1]
 Lista de dinosaurios enfermos: []
 Lista de huevos: []
-Visitantes en IslaCarnivoros: [Visitante {id=47}, Visitante {id=48}, Visitante {id=49}, Visitante {id=51}]
-Visitantes en IslaHerbivoros: [Visitante {id=46}, Visitante {id=50}]
+Visitantes en IslaCarnivoros: [Visitante {id=32}, Visitante {id=34}, Visitante {id=41}]
+Visitantes en IslaHerbivoros: [Visitante {id=20}, Visitante {id=37}, Visitante {id=38}, Visitante {id=39}]
+Visitantes en IslaVoladores: [Visitante {id=33}, Visitante {id=40}, Visitante {id=36}]
+--------------------------------------------------
+Tic: 15
+Lista de dinosaurios: [Volador_0, Volador_2, Herbivoro_0, Carnivoro_0, Herbivoro_1]
+Lista de dinosaurios enfermos: []
+Lista de huevos: []
+Visitantes en IslaCarnivoros: [Visitante {id=41}, Visitante {id=43}, Visitante {id=20}]
+Visitantes en IslaHerbivoros: [Visitante {id=37}, Visitante {id=38}, Visitante {id=39}, Visitante {id=42}]
+Visitantes en IslaVoladores: [Visitante {id=40}, Visitante {id=36}]
+--------------------------------------------------
+Tic: 16
+Lista de dinosaurios: [Volador_2, Herbivoro_0, Carnivoro_0, Herbivoro_1]
+Lista de dinosaurios enfermos: []
+Lista de huevos: []
+Visitantes en IslaCarnivoros: [Visitante {id=43}, Visitante {id=20}]
+Visitantes en IslaHerbivoros: [Visitante {id=42}, Visitante {id=44}]
 Visitantes en IslaVoladores: []
 --------------------------------------------------
-Tic: 20
-Lista de dinosaurios: [Herbivoro_0, Carnivoro_0, Carnivoro_1, Volador_2, Volador_3]
-Lista de dinosaurios enfermos: [Herbivoro_1]
-Lista de huevos: [Huevo_8 (Herbivoro)]
-Visitantes en IslaCarnivoros: [Visitante {id=51}, Visitante {id=53}]
-Visitantes en IslaHerbivoros: [Visitante {id=52}, Visitante {id=55}, Visitante {id=56}]
-Visitantes en IslaVoladores: [Visitante {id=54}, Visitante {id=46}]
---------------------------------------------------
-Tic: 21
-Lista de dinosaurios: [Herbivoro_0, Carnivoro_1]
-Lista de dinosaurios enfermos: [Herbivoro_1, Volador_2, Volador_3]
-Lista de huevos: [Huevo_8 (Herbivoro), Huevo_9 (Volador)]
-Visitantes en IslaCarnivoros: [Visitante {id=53}, Visitante {id=59}, Visitante {id=60}, Visitante {id=54}]
-Visitantes en IslaHerbivoros: [Visitante {id=52}, Visitante {id=55}, Visitante {id=56}, Visitante {id=57}]
-Visitantes en IslaVoladores: [Visitante {id=46}, Visitante {id=58}, Visitante {id=61}]
---------------------------------------------------
-Tic: 22
-Lista de dinosaurios: [Herbivoro_0, Carnivoro_1]
-Lista de dinosaurios enfermos: [Herbivoro_1, Volador_2, Volador_3]
-Lista de huevos: [Huevo_8 (Herbivoro), Huevo_9 (Volador)]
-Visitantes en IslaCarnivoros: [Visitante {id=59}, Visitante {id=60}, Visitante {id=54}, Visitante {id=52}]
-Visitantes en IslaHerbivoros: [Visitante {id=57}, Visitante {id=62}, Visitante {id=63}]
-Visitantes en IslaVoladores: [Visitante {id=58}, Visitante {id=61}]
---------------------------------------------------
-Tic: 23
-Lista de dinosaurios: [Herbivoro_0, Carnivoro_1, Herbivoro_1, Volador_2, Volador_4]
-Lista de dinosaurios enfermos: [Volador_3]
-Lista de huevos: [Huevo_8 (Herbivoro)]
-Visitantes en IslaCarnivoros: [Visitante {id=52}]
-Visitantes en IslaHerbivoros: [Visitante {id=62}, Visitante {id=63}]
-Visitantes en IslaVoladores: [Visitante {id=65}]
+Tic: 17
+Lista de dinosaurios: [Volador_2, Herbivoro_0, Carnivoro_0, Herbivoro_1]
+Lista de dinosaurios enfermos: []
+Lista de huevos: [Huevo_6 (Volador)]
+Visitantes en IslaCarnivoros: []
+Visitantes en IslaHerbivoros: [Visitante {id=44}, Visitante {id=46}]
+Visitantes en IslaVoladores: [Visitante {id=45}]
 --------------------------------------------------
