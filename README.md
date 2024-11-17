@@ -502,8 +502,25 @@ Controlador para manejar eventos SSE.
 
 ---
 
-## Interfaz Web: `index.html`
+## Interfaz Web
+
+#### `index.html`
 La interfaz web `index.html` proporciona una visualización de la simulación del parque de dinosaurios. Incluye elementos para mostrar el estado de los dinosaurios, huevos, visitantes y otros eventos en tiempo real.
+
+#### `enfermeria.html`
+La interfaz web `enfermeria.html` muestra información sobre los dinosaurios que están en recuperación en la enfermería. Permite visualizar el estado de salud y el tiempo de recuperación de cada dinosaurio.
+
+#### `isla_carnivoros.html`
+La interfaz web `isla_carnivoros.html` proporciona una visualización de la isla de los dinosaurios carnívoros. Muestra información sobre los visitantes y los dinosaurios presentes en esta isla.
+
+#### `isla_herbivoros.html`
+La interfaz web `isla_herbivoros.html` proporciona una visualización de la isla de los dinosaurios herbívoros. Muestra información sobre los visitantes y los dinosaurios presentes en esta isla.
+
+#### `isla_voladores.html`
+La interfaz web `isla_voladores.html` proporciona una visualización de la isla de los dinosaurios voladores. Muestra información sobre los visitantes y los dinosaurios presentes en esta isla.
+
+#### `prueba.html`
+La interfaz web `prueba.html` es utilizada para pruebas y visualización general del estado del parque. Incluye elementos para interactuar y verificar el funcionamiento de diferentes componentes del sistema.
 
 ---
 
