@@ -18,7 +18,7 @@ public class BrowserLauncher implements ApplicationListener<ContextRefreshedEven
         String url = "http://localhost:8080/prueba.html"; // URL de la página index
 
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder("open", url);
+            ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/c", "start", url);
             processBuilder.start();
             logger.info("Navegador abierto con la URL: {}", url);
         } catch (IOException e) {
