@@ -101,7 +101,7 @@
       left: 77%;
     }
 
-    .rectangle[data-url="huevos.html"] {
+    .rectangle[data-url="prueba.html"] {
       top: 40%;
       left: 1%;
     }
@@ -209,7 +209,7 @@
   <div class="rectangle" data-url="isla_carnivoros.html" data-original-url="isla_carnivoros.html">Carnívoros</div>
   <div class="rectangle" data-url="isla_voladores.html" data-original-url="isla_voladores_2.html">Voladores</div>
   <div class="rectangle" data-url="isla_voladores.html" data-original-url="isla_voladores_3.html">Voladores</div>
-  <div class="rectangle" data-url="huevos.html" data-original-url="huevos.html">Huevos</div>
+  <div class="rectangle" data-url="prueba.html" data-original-url="prueba.html">inicio</div>
   <div class="rectangle" data-url="enfermeria.html" data-original-url="enfermeria.html">Enfermería</div>
 </div>
 
@@ -254,7 +254,7 @@
           const rectBounds = rect.getBoundingClientRect();
           const squareBounds = square.getBoundingClientRect();
           if (squareBounds.left >= rectBounds.left && squareBounds.right <= rectBounds.right &&
-              squareBounds.top >= rectBounds.top && squareBounds.bottom <= rectBounds.bottom) {
+                  squareBounds.top >= rectBounds.top && squareBounds.bottom <= rectBounds.bottom) {
             window.open(rect.getAttribute('data-url'), '_blank', 'width=800,height=600');
             audio.play();
           }

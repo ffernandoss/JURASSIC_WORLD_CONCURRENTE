@@ -127,22 +127,6 @@ public class MasterScheduler {
         sseController.sendEventToIsla("IslaVoladores", infoVoladores);
         sseController.sendEventToEnfermeria(infoEnfermeria);
 
-        // Filtrar y enviar eventos específicos de cada isla
-        tuple.getT1().forEach(visitante -> {
-            String evento = "Visitante " + visitante.getId() + " ha salido de IslaCarnivoros. Total visitantes: " + tuple.getT1().size();
-            sseController.sendEventToIsla("IslaCarnivoros", evento);
-        });
-
-        tuple.getT2().forEach(visitante -> {
-            String evento = "Visitante " + visitante.getId() + " asignado a IslaHerbivoros. Total visitantes: " + tuple.getT2().size();
-            sseController.sendEventToIsla("IslaHerbivoros", evento);
-        });
-
-        tuple.getT3().forEach(visitante -> {
-            String evento = "Visitante " + visitante.getId() + " asignado a IslaVoladores. Total visitantes: " + tuple.getT3().size();
-            sseController.sendEventToIsla("IslaVoladores", evento);
-        });
-
         // Guardar datos en el archivo de notas
         try (FileWriter writer = new FileWriter("informacion_simulacion.txt", true)) {
             writer.write(info.toString());
