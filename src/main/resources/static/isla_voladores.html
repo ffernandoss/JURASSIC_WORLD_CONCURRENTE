@@ -25,13 +25,13 @@
       font-family: 'Roboto', sans-serif;
       font-size: 1.2em;
       display: flex;
-      flex-direction: row; /* Cambiado a row para disposición vertical */
+      flex-direction: row;
     }
 
     .general-info, .island-info {
-      flex: 1;
+      width: 50%;
       overflow-y: auto;
-      width: 50%; /* Cada sección ocupa el 50% del ancho */
+      height: 100%;
     }
 
     .image-container {
@@ -52,39 +52,48 @@
     }
 
     #square {
-      width: 30px;
-      height: 30px;
-      background-color: red;
+      width: 70px;
+      height: 70px;
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20px;
+      background-size: cover;
+      background-image: url("/static/izquierda.png");
+      background-color: red; /* Cambiar a rojo para verificar visibilidad */
+      border: none;
     }
 
     .rectangle {
-      width: 10%;
-      height: 10%;
-      background-color: rgba(128, 128, 128, 0.5);
+      width: 25%;
+      height: 25%;
+      background-color: rgba(128, 128, 128, 0);
       position: absolute;
       pointer-events: none;
       z-index: 1;
+      color: #fff;
+      font-size: 1.5em;
+      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
     }
 
     .rectangle[data-url="isla_herbivoros.html"] {
-      top: 15%;
-      left: 14%;
+      top: 7%;
+      left: 6%;
     }
 
     .rectangle[data-url="isla_carnivoros.html"] {
-      top: 8%;
-      left: 45%;
+      top: 1%;
+      left: 38%;
     }
 
     .rectangle[data-url="isla_voladores_3.html"] {
-      top: 85%;
-      left: 50%;
-      transform: translateX(-50%);
+      top: 95%;
+      left: 5%;
     }
 
     .rectangle[data-url="isla_voladores.html"] {
@@ -93,18 +102,34 @@
     }
 
     .rectangle[data-url="huevos.html"] {
-      top: 45%;
-      left: 7%;
+      top: 40%;
+      left: 1%;
     }
 
     .rectangle[data-url="enfermeria.html"] {
-      top: 47%;
-      left: 84%;
+      top: 39%;
+      left: 77%;
     }
 
-    .rectangle[data-url="isla_herbivoros_2.html"] {
-      top: 78%;
-      left: 14%;
+    .rectangle[data-url="isla_herbivoros.html"][data-original-url="isla_herbivoros_2.html"] {
+      top: 71%;
+      left: 6%;
+    }
+
+    .rectangle[data-url="isla_carnivoros.html"][data-original-url="isla_carnivoros_2.html"] {
+      top: 72%;
+      left: 70%;
+    }
+
+    .rectangle[data-url="isla_voladores.html"][data-original-url="isla_voladores_2.html"] {
+      top: 7%;
+      left: 70%;
+    }
+
+    .rectangle[data-url="isla_voladores.html"][data-original-url="isla_voladores_3.html"] {
+      top: 75%;
+      left: 50%;
+      transform: translateX(-50%);
     }
 
     .rectangle[data-url="isla_carnivoros_2.html"] {
@@ -133,6 +158,21 @@
     th {
       background-color: rgba(255, 255, 255, 0.3);
     }
+
+    .instructions {
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
+      background-color: transparent;
+      color: #000;
+      padding: 5px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 1em;
+      z-index: 3;
+      display: flex;
+      gap: 10px;
+      border: none;
+    }
   </style>
 </head>
 <body>
@@ -144,7 +184,7 @@
       <!-- Encabezados eliminados para que la tabla esté vacía -->
       </thead>
       <tbody id="informacion">
-      <!-- Contenido dinámico que será llenado desde el backend -->
+      <!-- Contenido din��mico que será llenado desde el backend -->
       </tbody>
     </table>
   </div>
@@ -163,16 +203,25 @@
 <div class="image-container">
   <img id="background-image" src="prueba.webp" alt="Background Image">
   <div id="square"></div>
-  <div class="rectangle" data-url="isla_herbivoros.html">Herbivoros</div>
-  <div class="rectangle" data-url="isla_carnivoros.html">Carnivoros</div>
-  <div class="rectangle" data-url="isla_voladores.html">Voladores</div>
-  <div class="rectangle" data-url="huevos.html">Huevos</div>
-  <div class="rectangle" data-url="enfermeria.html">Enfermeria</div>
-  <div class="rectangle" data-url="isla_herbivoros_2.html">Herbivoros</div>
-  <div class="rectangle" data-url="isla_carnivoros_2.html">Carnivoros</div>
-  <div class="rectangle" data-url="isla_voladores_2.html">Voladores</div>
-  <div class="rectangle" data-url="isla_voladores_3.html">Voladores</div>
+  <div class="rectangle" data-url="isla_herbivoros.html" data-original-url="isla_herbivoros_2.html">Herbívoros</div>
+  <div class="rectangle" data-url="isla_herbivoros.html" data-original-url="isla_herbivoros.html">Herbívoros</div>
+  <div class="rectangle" data-url="isla_carnivoros.html" data-original-url="isla_carnivoros_2.html">Carnívoros</div>
+  <div class="rectangle" data-url="isla_carnivoros.html" data-original-url="isla_carnivoros.html">Carnívoros</div>
+  <div class="rectangle" data-url="isla_voladores.html" data-original-url="isla_voladores_2.html">Voladores</div>
+  <div class="rectangle" data-url="isla_voladores.html" data-original-url="isla_voladores_3.html">Voladores</div>
+  <div class="rectangle" data-url="huevos.html" data-original-url="huevos.html">Huevos</div>
+  <div class="rectangle" data-url="enfermeria.html" data-original-url="enfermeria.html">Enfermería</div>
 </div>
+
+<div class="instructions">
+  <p>W: Arriba</p>
+  <p>A: Izquierda</p>
+  <p>S: Abajo</p>
+  <p>D: Derecha</p>
+  <p>Enter: Seleccionar</p>
+</div>
+
+<audio id="audio" src="WhatsApp Audio 2024-11-16 at 23.50.45.mpeg"></audio>
 
 <script>
   document.addEventListener('keydown', function(event) {
@@ -181,27 +230,33 @@
     const step = 10;
     let top = parseInt(window.getComputedStyle(square).top);
     let left = parseInt(window.getComputedStyle(square).left);
+    const audio = document.getElementById('audio');
 
     switch(event.key) {
       case 'w':
         square.style.top = (top - step) + 'px';
+        square.style.backgroundImage = 'url("/static/arriba.png")';
         break;
       case 'a':
         square.style.left = (left - step) + 'px';
+        square.style.backgroundImage = 'url("/static/izquierda.png")';
         break;
       case 's':
         square.style.top = (top + step) + 'px';
+        square.style.backgroundImage = 'url("/static/abajo.png")';
         break;
       case 'd':
         square.style.left = (left + step) + 'px';
+        square.style.backgroundImage = 'url("/static/derecha.png")';
         break;
       case 'Enter':
         rectangles.forEach(rect => {
           const rectBounds = rect.getBoundingClientRect();
           const squareBounds = square.getBoundingClientRect();
           if (squareBounds.left >= rectBounds.left && squareBounds.right <= rectBounds.right &&
-                  squareBounds.top >= rectBounds.top && squareBounds.bottom <= rectBounds.bottom) {
+              squareBounds.top >= rectBounds.top && squareBounds.bottom <= rectBounds.bottom) {
             window.open(rect.getAttribute('data-url'), '_blank', 'width=800,height=600');
+            audio.play();
           }
         });
         break;
