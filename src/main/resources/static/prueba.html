@@ -60,12 +60,15 @@
     }
 
     .rectangle {
-      width: 25%; /* Reducir el tamaño */
-      height: 25%; /* Reducir el tamaño */
-      background-color: rgba(128, 128, 128, 0.5);
+      width: 25%;
+      height: 25%;
+      background-color: rgba(128, 128, 128, 0); /* Hacer el fondo invisible */
       position: absolute;
       pointer-events: none;
       z-index: 1;
+      color: #fff; /* Color del texto */
+      font-size: 1.5em; /* Tamaño del texto */
+      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; /* Contorno negro */
     }
 
     .rectangle[data-url="isla_herbivoros.html"] {
@@ -81,7 +84,6 @@
     .rectangle[data-url="isla_voladores_3.html"] {
       top: 95%;
       left: 5%;
-
     }
 
     .rectangle[data-url="isla_voladores.html"] {
