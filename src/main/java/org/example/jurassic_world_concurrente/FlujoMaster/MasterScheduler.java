@@ -4,6 +4,7 @@ package org.example.jurassic_world_concurrente.FlujoMaster;
 import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioEstadoService;
 import org.example.jurassic_world_concurrente.Dinosaurios.DinosaurioService;
 import org.example.jurassic_world_concurrente.Huevos.HuevoService;
+import org.example.jurassic_world_concurrente.fluxController;
 import org.example.jurassic_world_concurrente.visitante.DistribuidorVisitantes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,8 +39,11 @@ public class MasterScheduler {
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
-    private Disposable disposable;
 
+    @Autowired
+    private fluxController sseController; // Inyectar SseController
+
+    private Disposable disposable;
     private int ticsTotales = 0;
 
     public void iniciarSimulacion() {
@@ -95,26 +99,43 @@ public class MasterScheduler {
                 .subscribe();
     }
 
-    private void guardarInformacionEnNotas() {
-        Flux.zip(
-                distribuidorVisitantes.getIslaFlux("IslaCarnivoros").obtenerFlujoVisitantes().collectList(),
-                distribuidorVisitantes.getIslaFlux("IslaHerbivoros").obtenerFlujoVisitantes().collectList(),
-                distribuidorVisitantes.getIslaFlux("IslaVoladores").obtenerFlujoVisitantes().collectList()
-        ).doOnNext(tuple -> {
-            try (FileWriter writer = new FileWriter("informacion_simulacion.txt", true)) {
-                writer.write("Tic: " + ticsTotales + "\n");
-                writer.write("Lista de dinosaurios: " + dinosaurioService.getDinosaurios() + "\n");
-                writer.write("Lista de dinosaurios enfermos: " + dinosaurioService.getDinosauriosEnfermos() + "\n");
-                writer.write("Lista de huevos: " + huevoService.getHuevos() + "\n");
-                writer.write("Visitantes en IslaCarnivoros: " + tuple.getT1() + "\n");
-                writer.write("Visitantes en IslaHerbivoros: " + tuple.getT2() + "\n");
-                writer.write("Visitantes en IslaVoladores: " + tuple.getT3() + "\n");
-                writer.write("--------------------------------------------------\n");
-            } catch (IOException e) {
-                logger.error("Error al guardar la información en notas: ", e);
-            }
-        }).subscribe();
-    }
+   private void guardarInformacionEnNotas() {
+    Flux.zip(
+            distribuidorVisitantes.getIslaFlux("IslaCarnivoros").obtenerFlujoVisitantes().collectList(),
+            distribuidorVisitantes.getIslaFlux("IslaHerbivoros").obtenerFlujoVisitantes().collectList(),
+            distribuidorVisitantes.getIslaFlux("IslaVoladores").obtenerFlujoVisitantes().collectList()
+    ).doOnNext(tuple -> {
+        StringBuilder info = new StringBuilder();
+        info.append("Tic: ").append(ticsTotales).append("\n");
+        info.append("Lista de dinosaurios: ").append(dinosaurioService.getDinosaurios()).append("\n");
+        info.append("Lista de dinosaurios enfermos: ").append(dinosaurioService.getDinosauriosEnfermos()).append("\n");
+        info.append("Lista de huevos: ").append(huevoService.getHuevos()).append("\n");
+        info.append("Visitantes en IslaCarnivoros: ").append(tuple.getT1()).append("\n");
+        info.append("Visitantes en IslaHerbivoros: ").append(tuple.getT2()).append("\n");
+        info.append("Visitantes en IslaVoladores: ").append(tuple.getT3()).append("\n");
+        info.append("--------------------------------------------------\n");
+
+        String infoCarnivoros = "Visitantes en IslaCarnivoros: " + tuple.getT1() + "\nDinosaurios en IslaCarnivoros: " + distribuidorVisitantes.getIslaFlux("IslaCarnivoros").getTotalDinosaurios();
+        String infoHerbivoros = "Visitantes en IslaHerbivoros: " + tuple.getT2() + "\nDinosaurios en IslaHerbivoros: " + distribuidorVisitantes.getIslaFlux("IslaHerbivoros").getTotalDinosaurios();
+        String infoVoladores = "Visitantes en IslaVoladores: " + tuple.getT3() + "\nDinosaurios en IslaVoladores: " + distribuidorVisitantes.getIslaFlux("IslaVoladores").getTotalDinosaurios();
+        String infoEnfermeria = "Dinosaurios enfermos: " + dinosaurioService.getDinosauriosEnfermos();
+
+        // Enviar datos al frontend
+        sseController.sendEvent(info.toString());
+        sseController.sendEventToIsla("IslaCarnivoros", infoCarnivoros);
+        sseController.sendEventToIsla("IslaHerbivoros", infoHerbivoros);
+        sseController.sendEventToIsla("IslaVoladores", infoVoladores);
+        sseController.sendEventToEnfermeria(infoEnfermeria);
+
+        // Guardar datos en el archivo de notas
+        try (FileWriter writer = new FileWriter("informacion_simulacion.txt", true)) {
+            writer.write(info.toString());
+        } catch (IOException e) {
+            logger.error("Error al guardar la información en notas: ", e);
+        }
+
+    }).subscribe();
+}
 
     private void imprimirEstadoActual() {
         // Lista de huevos

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Isla Herbívoros</title>
+  <style>
+    body, html {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      font-family: 'Rock Salt', cursive;
+      display: flex;
+      overflow: hidden;
+    }
+
+    .aside-container {
+      width: 45%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      padding: 20px;
+      box-sizing: border-box;
+      overflow-y: auto;
+      font-family: 'Roboto', sans-serif;
+      font-size: 1.2em;
+      display: flex;
+      flex-direction: row;
+    }
+
+    .general-info, .island-info {
+      width: 50%;
+      overflow-y: auto;
+      height: 100%;
+    }
+
+    .image-container {
+      width: 55%;
+      height: 100%;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #background-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      z-index: 0;
+    }
+
+    #square {
+      width: 70px;
+      height: 70px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20px;
+      background-size: cover;
+      background-image: url("/static/izquierda.png");
+      background-color: red;
+      border: none;
+    }
+
+    .rectangle {
+      width: 25%;
+      height: 25%;
+      background-color: rgba(128, 128, 128, 0);
+      position: absolute;
+      pointer-events: none;
+      z-index: 1;
+      color: #fff;
+      font-size: 1.5em;
+      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    }
+
+    .rectangle[data-url="isla_herbivoros.html"] {
+      top: 7%;
+      left: 6%;
+    }
+
+    .rectangle[data-url="isla_carnivoros.html"] {
+      top: 1%;
+      left: 38%;
+    }
+
+    .rectangle[data-url="isla_voladores_3.html"] {
+      top: 95%;
+      left: 5%;
+    }
+
+    .rectangle[data-url="isla_voladores.html"] {
+      top: 15%;
+      left: 77%;
+    }
+
+    .rectangle[data-url="prueba.html"] {
+      top: 40%;
+      left: 1%;
+    }
+
+    .rectangle[data-url="enfermeria.html"] {
+      top: 39%;
+      left: 77%;
+    }
+
+    .rectangle[data-url="isla_herbivoros.html"][data-original-url="isla_herbivoros_2.html"] {
+      top: 71%;
+      left: 6%;
+    }
+
+    .rectangle[data-url="isla_carnivoros.html"][data-original-url="isla_carnivoros_2.html"] {
+      top: 72%;
+      left: 70%;
+    }
+
+    .rectangle[data-url="isla_voladores.html"][data-original-url="isla_voladores_2.html"] {
+      top: 7%;
+      left: 70%;
+    }
+
+    .rectangle[data-url="isla_voladores.html"][data-original-url="isla_voladores_3.html"] {
+      top: 75%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .rectangle[data-url="isla_carnivoros_2.html"] {
+      top: 82%;
+      left: 78%;
+    }
+
+    .rectangle[data-url="isla_voladores_2.html"] {
+      top: 15%;
+      left: 77%;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: #fff;
+    }
+
+    th, td {
+      border: 1px solid #fff;
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .instructions {
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
+      background-color: transparent;
+      color: #000;
+      padding: 5px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 1em;
+      z-index: 3;
+      display: flex;
+      gap: 10px;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+<div class="aside-container">
+  <div class="general-info">
+    <h2>Información General</h2>
+    <table>
+      <thead>
+      <!-- Encabezados eliminados para que la tabla esté vacía -->
+      </thead>
+      <tbody id="informacion">
+      <!-- Contenido dinámico que será llenado desde el backend -->
+      </tbody>
+    </table>
+  </div>
+  <div class="island-info">
+    <h2>Información de Isla Herbívoros</h2>
+    <table>
+      <thead>
+      <!-- Encabezados eliminados para que la tabla esté vacía -->
+      </thead>
+      <tbody id="informacion-isla">
+      <!-- Contenido dinámico que será llenado desde el backend -->
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="image-container">
+  <img id="background-image" src="prueba.webp" alt="Background Image">
+  <div id="square"></div>
+  <div class="rectangle" data-url="isla_herbivoros.html" data-original-url="isla_herbivoros_2.html">Herbívoros</div>
+  <div class="rectangle" data-url="isla_herbivoros.html" data-original-url="isla_herbivoros.html">Herbívoros</div>
+  <div class="rectangle" data-url="isla_carnivoros.html" data-original-url="isla_carnivoros_2.html">Carnívoros</div>
+  <div class="rectangle" data-url="isla_carnivoros.html" data-original-url="isla_carnivoros.html">Carnívoros</div>
+  <div class="rectangle" data-url="isla_voladores.html" data-original-url="isla_voladores_2.html">Voladores</div>
+  <div class="rectangle" data-url="isla_voladores.html" data-original-url="isla_voladores_3.html">Voladores</div>
+  <div class="rectangle" data-url="prueba.html" data-original-url="prueba.html">inicio</div>
+  <div class="rectangle" data-url="enfermeria.html" data-original-url="enfermeria.html">Enfermería</div>
+</div>
+
+<div class="instructions">
+  <p>W: Arriba</p>
+  <p>A: Izquierda</p>
+  <p>S: Abajo</p>
+  <p>D: Derecha</p>
+  <p>Enter: Seleccionar</p>
+</div>
+
+<audio id="audio" src="WhatsApp Audio 2024-11-16 at 23.50.45.mpeg"></audio>
+
+<script>
+  document.addEventListener('keydown', function(event) {
+    const square = document.getElementById('square');
+    const rectangles = document.querySelectorAll('.rectangle');
+    const step = 10;
+    let top = parseInt(window.getComputedStyle(square).top);
+    let left = parseInt(window.getComputedStyle(square).left);
+    const audio = document.getElementById('audio');
+
+    switch(event.key) {
+      case 'w':
+        square.style.top = (top - step) + 'px';
+        square.style.backgroundImage = 'url("/static/arriba.png")';
+        break;
+      case 'a':
+        square.style.left = (left - step) + 'px';
+        square.style.backgroundImage = 'url("/static/izquierda.png")';
+        break;
+      case 's':
+        square.style.top = (top + step) + 'px';
+        square.style.backgroundImage = 'url("/static/abajo.png")';
+        break;
+      case 'd':
+        square.style.left = (left + step) + 'px';
+        square.style.backgroundImage = 'url("/static/derecha.png")';
+        break;
+      case 'Enter':
+        rectangles.forEach(rect => {
+          const rectBounds = rect.getBoundingClientRect();
+          const squareBounds = square.getBoundingClientRect();
+          if (squareBounds.left >= rectBounds.left && squareBounds.right <= rectBounds.right &&
+              squareBounds.top >= rectBounds.top && squareBounds.bottom <= rectBounds.bottom) {
+            window.open(rect.getAttribute('data-url'), '_blank', 'width=800,height=600');
+            audio.play();
+          }
+        });
+        break;
+    }
+  });
+
+  const eventSource = new EventSource('/sse');
+
+  eventSource.onmessage = function(event) {
+    const info = event.data;
+    const infoElement = document.getElementById('informacion');
+    const newRow = document.createElement('tr');
+    const newCell = document.createElement('td');
+    newCell.textContent = info;
+    newRow.appendChild(newCell);
+    infoElement.appendChild(newRow);
+  };
+
+  const eventSourceIsla = new EventSource('/sse/IslaHerbivoros');
+
+  eventSourceIsla.onmessage = function(event) {
+    const info = event.data;
+    const infoElement = document.getElementById('informacion-isla');
+    const newRow = document.createElement('tr');
+    const newCell = document.createElement('td');
+    newCell.textContent = info;
+    newRow.appendChild(newCell);
+    infoElement.appendChild(newRow);
+  };
+</script>
+</body>
+</html>
