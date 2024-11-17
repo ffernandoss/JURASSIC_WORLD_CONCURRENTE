@@ -34,7 +34,7 @@ Este proyecto es una simulación concurrente de un parque de dinosaurios utiliza
     - [VisitanteGenerator](#visitantegenerator)
     - [JurassicWorldConcurrenteApplication](#jurassicworldconcurrenteapplication)
     - [fluxController](#fluxcontroller)
-2. [Interfaz Web: `index.html`](#interfaz-web-indexhtml)
+2. [Interfaz Web: `index.html`](#interfaz-web)
 3. [Tecnologías Usadas](#tecnologías-usadas)
 4. [Endpoints REST](#endpoints-rest)
 
